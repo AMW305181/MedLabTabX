@@ -1,0 +1,28 @@
+﻿<Window x:Class="testwpf.Views.OtherViews.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:testwpf.Views.OtherViews"
+        mc:Ignorable="d"
+        Title="Analysis" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Witamy w MedLab!" Margin="0,90,0,55" HorizontalAlignment="Center" FontSize="30"/>
+        <TextBlock Text="Login:" Margin="382,146,382,10"/>
+        <TextBox x:Name="LoginTextBox" Grid.Row="1" Margin="300,10,300,10" Width="200"/>
+
+        <TextBlock Text="Hasło:" Grid.Row="2" Margin="382,7,382,13"/>
+        <PasswordBox x:Name="PasswordBox" Grid.Row="2" Margin="300,28,300,171" Width="200" Grid.RowSpan="3"/>
+
+        <Button Content="Zaloguj" Grid.Row="4" Margin="0,22,0,136" Width="100" HorizontalAlignment="Center" Click="LoginButton_Click"/>
+        <Button Content="Zapomniałeś/aś hasła?" Grid.Row="4" Margin="0,101,0,52" Width="100" HorizontalAlignment="Center" Click="ZapomnialesHasla_Click"/>
+    </Grid>
+</Window>
