@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace testwpf.Views.OtherViews
+namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
     /// Interaction logic for AllVisits.xaml

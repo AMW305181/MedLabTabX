@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace testwpf
+namespace MedLabTab
 {
     /// <summary>
     /// Interaction logic for App.xaml

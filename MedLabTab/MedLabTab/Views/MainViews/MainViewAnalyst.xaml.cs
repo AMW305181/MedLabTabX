@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace testwpf.Views.MainViews
+namespace MedLabTab.Views.MainViews
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
