@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedLabTab.DatabaseModels;
 
-[Index("id", Name = "UQ__Users__3213E83E777F394D", IsUnique = true)]
 public partial class User
 {
     [Key]

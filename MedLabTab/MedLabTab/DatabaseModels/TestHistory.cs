@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 namespace MedLabTab.DatabaseModels;
 
 [Table("TestHistory")]
-[Index("id", Name = "UQ__TestHist__3213E83E92C1F4DE", IsUnique = true)]
 public partial class TestHistory
 {
     [Key]
