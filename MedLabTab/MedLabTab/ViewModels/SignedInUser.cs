@@ -10,14 +10,14 @@ namespace MedLabTab.ViewModels
     //to jest klasa tymczasowa, by katalog byl utworzony w mainie
     internal class SignedInUser : User
     {
-        public SignedInUser(User user) 
+        public SignedInUser(User user)
         {
-            this.id=user.id;
+            this.id = user.id;
             this.UserType = user.UserType;
             this.Name = user.Name;
             this.Surname = user.Surname;
             this.Password = user.Password;
-            this.PESEL=user.PESEL;
+            this.PESEL = user.PESEL;
             this.PhoneNumber = user.PhoneNumber;
         }
     }

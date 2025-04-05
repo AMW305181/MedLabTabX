@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 namespace MedLabTab.DatabaseModels;
 
 [Table("CategoryDictionary")]
-[Index("id", Name = "UQ__Category__3213E83EE18ACDD2", IsUnique = true)]
 public partial class CategoryDictionary
 {
     [Key]
