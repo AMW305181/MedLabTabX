@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedLabTab.DatabaseModels;
 
-[Index("id", Name = "UQ__Schedule__3213E83E703C9DB0", IsUnique = true)]
 public partial class Schedule
 {
     [Key]

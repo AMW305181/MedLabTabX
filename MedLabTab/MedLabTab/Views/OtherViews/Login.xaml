@@ -8,21 +8,40 @@
         Title="Analysis" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Witamy w MedLab!" Margin="0,90,0,55" HorizontalAlignment="Center" FontSize="30"/>
-        <TextBlock Text="Login:" Margin="382,146,382,10"/>
-        <TextBox x:Name="LoginTextBox" Grid.Row="1" Margin="300,10,300,10" Width="200"/>
-
-        <TextBlock Text="Hasło:" Grid.Row="2" Margin="382,7,382,13"/>
-        <PasswordBox x:Name="PasswordBox" Grid.Row="2" Margin="300,28,300,171" Width="200" Grid.RowSpan="3"/>
-
-        <Button Content="Zaloguj" Grid.Row="4" Margin="0,22,0,136" Width="100" HorizontalAlignment="Center" Click="LoginButton_Click"/>
-        <Button Content="Zapomniałeś/aś hasła?" Grid.Row="4" Margin="0,101,0,52" Width="100" HorizontalAlignment="Center" Click="ZapomnialesHasla_Click"/>
+        <TextBlock Text="Witamy w MedLab!" Grid.Row="0" Margin="0,50,0,10" HorizontalAlignment="Center" FontSize="30"/>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label Content="Login:"  Margin="0,0,0,10"/>
+            <TextBox x:Name="LoginTextBox"  Margin="0,0,0,10" Width="200"/>
+            <Label Content="Hasło:" Margin="0,0,0,10"/>
+            <PasswordBox x:Name="PasswordBox"  Margin="0,0,0,10" Width="200" />
+        </StackPanel>
+        <Label x:Name="ErrorLabel"
+       Content="Niepoprawne login/hasło"
+       Foreground="Red"
+       FontSize="14"
+       HorizontalAlignment="Center"
+       Visibility="Collapsed"
+       Grid.Row="2"
+       Grid.Column="1"
+       Margin="0,10,0,10"/>
+        <Label x:Name="InactiveLabel"
+        Content="Użytkownik nieaktywny"
+        Foreground="Red"
+        FontSize="14"
+        HorizontalAlignment="Center"
+        Visibility="Collapsed"
+        Grid.Row="2"
+        Grid.Column="1"
+        Margin="0,10,0,10"/>
+        <Button Content="Zaloguj" Grid.Row="3" Margin="0,10,0,10" Width="100" HorizontalAlignment="Center" Click="LoginButton_Click"/>
+        <Button Content="Zapomniałeś/aś hasła?" Grid.Row="4" Margin="0,10,0,10" Width="100" HorizontalAlignment="Center" Click="ZapomnialesHasla_Click"/>
+        
     </Grid>
 </Window>
