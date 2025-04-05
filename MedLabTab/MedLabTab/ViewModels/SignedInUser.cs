@@ -7,18 +7,30 @@ using MedLabTab.DatabaseModels;
 
 namespace MedLabTab.ViewModels
 {
-    //to jest klasa tymczasowa, by katalog byl utworzony w mainie
-    internal class SignedInUser : User
+    public class SignedInUser : User
     {
         public SignedInUser(User user)
         {
             this.id = user.id;
+            this.Login=user.Login;
             this.UserType = user.UserType;
+            this.Password = user.Password;
+            this.IsActive = user.IsActive;
             this.Name = user.Name;
             this.Surname = user.Surname;
-            this.Password = user.Password;
             this.PESEL = user.PESEL;
             this.PhoneNumber = user.PhoneNumber;
+        }
+        public SignedInUser()
+        {
+            this.id = 0;
+            this.Login = string.Empty;
+            this.Password = string.Empty;
+            this.IsActive = false;
+            this.Name = string.Empty;
+            this.Surname = string.Empty;           
+            this.PESEL = string.Empty;
+            this.PhoneNumber = string.Empty;
         }
     }
 }

@@ -17,9 +17,9 @@ namespace MedLabTab.Views.MainViews
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class MainViewAnalyst : Window
     {
-        public Window1()
+        public MainViewAnalyst()
         {
             InitializeComponent();
         }
