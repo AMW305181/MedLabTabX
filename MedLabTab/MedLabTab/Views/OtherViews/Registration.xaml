@@ -5,8 +5,87 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="Registration" Height="450" Width="800">
-    <Grid>
-        
+        Title="Registration" Height="500" Width="800"
+        Background="#f8f5ff">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF69B4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF5BA4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF4A94"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+    </Window.Resources>
+    <Grid RenderTransformOrigin="0.485,0.493">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#f8f5ff" Offset="0"/>
+                <GradientStop Color="#fff0f5" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="24*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Registration Form" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Name"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtName" Margin="0,0,0,15" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Surname"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtSurname" Margin="0,0,0,15" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="PESEL"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPesel" Margin="0,0,0,15" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Phone number"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPhone" Margin="0,0,0,15" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Login"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtLogin" Margin="0,0,0,15" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Password"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" Margin="0,0,0,20" Text=""/>
+            <StackPanel Orientation="Horizontal" Width="300">
+                <Button Style="{StaticResource ButtonStyle}" Content="Accept" Width="116" Margin="25,0,10,0" Height="22"/>
+                <Button Style="{StaticResource ButtonStyle}" Content="Cancel" Width="116" Margin="10,0,0,0" RenderTransformOrigin="0.967,0.83" Height="22"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
