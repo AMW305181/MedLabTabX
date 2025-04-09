@@ -4,42 +4,87 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Rejestracja" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <!-- Tytuł -->
-            <RowDefinition Height="*"/>
-            <!-- Formularz -->
-            <RowDefinition Height="Auto"/>
-            <!-- Przycisk -->
-        </Grid.RowDefinitions>
+        Title="Rejestracja" Height="500" Width="800"
+        Background="#f8f5ff">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF69B4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF5BA4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF4A94"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+    </Window.Resources>
+    <Grid RenderTransformOrigin="0.485,0.493">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#f8f5ff" Offset="0"/>
+                <GradientStop Color="#fff0f5" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="24*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Tytuł -->
-        <TextBlock Text="Rejestracja" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Formularz rejestracji" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
 
-        <!-- Środkowy panel (formularz) -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Imię"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtName" Margin="0,0,0,15" Text=""/>
 
-            <!-- Login -->
-            <Label Content="Login:" Margin="0,5,0,2"/>
-            <TextBox x:Name="LoginTextBox" Width="200" Margin="0,0,0,8"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Nazwisko"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtSurname" Margin="0,0,0,15" Text=""/>
 
-            <!-- Hasło -->
-            <Label Content="Hasło:" Margin="0,5,0,2"/>
-            <PasswordBox x:Name="PasswordBox" Width="200" Margin="0,0,0,8"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="PESEL"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPesel" Margin="0,0,0,15" Text=""/>
 
-            <!-- Typ konta -->
-            <Label Content="Typ konta:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="AccountTypeComboBox" Width="200" Margin="0,0,0,8">
-                <ComboBoxItem Content="Recepcja"/>
-                <ComboBoxItem Content="Pacjent"/>
-                <ComboBoxItem Content="Pielęgniarka"/>
-                <ComboBoxItem Content="Analityk"/>
-            </ComboBox>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Numer telefonu"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPhone" Margin="0,0,0,15" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Login"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtLogin" Margin="0,0,0,15" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Hasło"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" Margin="0,0,0,20" Text=""/>
+            <StackPanel Orientation="Horizontal" Width="300">
+                <Button Style="{StaticResource ButtonStyle}" Content="Zatwierdź" Width="116" Margin="25,0,10,0" Height="22"/>
+                <Button Style="{StaticResource ButtonStyle}" Content="Anuluj" Width="116" Margin="10,0,0,0" RenderTransformOrigin="0.967,0.83" Height="22"/>
+            </StackPanel>
         </StackPanel>
-
-        <!-- Przycisk Rejestruj -->
-        <Button Content="Zarejestruj" Grid.Row="2" Width="120" HorizontalAlignment="Center" Margin="0,10,0,20" Click="Rejestruj_Click"/>
     </Grid>
 </Window>
