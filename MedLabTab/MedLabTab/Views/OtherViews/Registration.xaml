@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="Rejestracja" Height="500" Width="800"
+        Title="Rejestracja" Height="450" Width="800"
         Background="#f8f5ff">
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
@@ -49,6 +49,13 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Margin" Value="0,0,0,15"/>
         </Style>
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
     </Window.Resources>
     <Grid RenderTransformOrigin="0.485,0.493">
         <Grid.Background>
@@ -62,7 +69,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
             <TextBlock Style="{StaticResource TextBlockStyle}" Text="Formularz rejestracji" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
 
             <TextBlock Style="{StaticResource TextBlockStyle}" Text="Imię"/>
@@ -82,10 +90,29 @@
 
             <TextBlock Style="{StaticResource TextBlockStyle}" Text="Hasło"/>
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" Margin="0,0,0,20" Text=""/>
-            <StackPanel Orientation="Horizontal" Width="300">
-                <Button Style="{StaticResource ButtonStyle}" Content="Zatwierdź" Width="116" Margin="25,0,10,0" Height="22"/>
-                <Button Style="{StaticResource ButtonStyle}" Content="Anuluj" Width="116" Margin="10,0,0,0" RenderTransformOrigin="0.967,0.83" Height="22"/>
-            </StackPanel>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Rola użytkownika"/>
+            <ComboBox Style="{StaticResource ComboBoxStyle}" Name="cmbUserRole">
+                <ComboBoxItem Content="Pacjent"/>
+                <ComboBoxItem Content="Recepcja"/>
+                <ComboBoxItem Content="Pielęgniarka"/>
+                <ComboBoxItem Content="Analityk"/>
+            </ComboBox>
+
+                <StackPanel Orientation="Horizontal" Width="300">
+                    <Button Style="{StaticResource ButtonStyle}" 
+                            Content="Zatwierdź" 
+                            Width="116" 
+                            Margin="25,0,10,0" 
+                            Height="22"
+                            Click="btnAccept_Click"/>
+                    <Button Style="{StaticResource ButtonStyle}" 
+                            Content="Anuluj" 
+                            Width="116" 
+                            Margin="10,0,0,0" 
+                            Height="22"
+                            Click="btnCancel_Click"/>
+                </StackPanel>
         </StackPanel>
+            </ScrollViewer>
     </Grid>
 </Window>
