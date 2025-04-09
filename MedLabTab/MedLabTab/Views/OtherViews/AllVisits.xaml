@@ -1,12 +1,44 @@
-﻿<Window x:Class="MedLabTab.Views.OtherViews.AllVisits"
+﻿<Window x:Class="MedLabTab.Views.OtherViews.Visits"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="AllVisits" Height="450" Width="800">
+        Title="Wizyty" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Tytuł -->
+            <RowDefinition Height="*"/>
+            <!-- Tabela -->
+            <RowDefinition Height="Auto"/>
+            <!-- Przycisk Dodaj -->
+        </Grid.RowDefinitions>
+
+        <!-- Tytuł -->
+        <TextBlock Text="Wizyty" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+
+        <!-- Tabela -->
+        <DataGrid x:Name="VisitsDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Wizyta" Binding="{Binding Wizyta}" Width="*" />
+                <DataGridTextColumn Header="Data" Binding="{Binding Data}" Width="*" />
+                <DataGridTextColumn Header="Pacjent" Binding="{Binding Pacjent}" Width="*" />
+                <DataGridTextColumn Header="Badania" Binding="{Binding Badania}" Width="*" />
+                <DataGridTemplateColumn Header="Akcje" Width="160">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Edytuj" Width="60" Margin="5,0" Click="EditVisit_Click" />
+                                <Button Content="Usuń" Width="60" Margin="5,0" Click="DeleteVisit_Click" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Przycisk Dodaj -->
+        <Button Content="Dodaj" Grid.Row="2" Width="120" Height="30" Margin="0,10,0,20" HorizontalAlignment="Center" Click="AddVisit_Click"/>
     </Grid>
 </Window>
