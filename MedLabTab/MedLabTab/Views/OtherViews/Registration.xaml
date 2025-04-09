@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="Registration" Height="500" Width="800"
+        Title="Rejestracja" Height="500" Width="800"
         Background="#f8f5ff">
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="Button">
@@ -63,28 +63,28 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Registration Form" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Formularz rejestracji" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Name"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Imię"/>
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtName" Margin="0,0,0,15" Text=""/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Surname"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Nazwisko"/>
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtSurname" Margin="0,0,0,15" Text=""/>
 
             <TextBlock Style="{StaticResource TextBlockStyle}" Text="PESEL"/>
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPesel" Margin="0,0,0,15" Text=""/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Phone number"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Numer telefonu"/>
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPhone" Margin="0,0,0,15" Text=""/>
 
             <TextBlock Style="{StaticResource TextBlockStyle}" Text="Login"/>
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtLogin" Margin="0,0,0,15" Text=""/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Password"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Hasło"/>
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" Margin="0,0,0,20" Text=""/>
             <StackPanel Orientation="Horizontal" Width="300">
-                <Button Style="{StaticResource ButtonStyle}" Content="Accept" Width="116" Margin="25,0,10,0" Height="22"/>
-                <Button Style="{StaticResource ButtonStyle}" Content="Cancel" Width="116" Margin="10,0,0,0" RenderTransformOrigin="0.967,0.83" Height="22"/>
+                <Button Style="{StaticResource ButtonStyle}" Content="Zatwierdź" Width="116" Margin="25,0,10,0" Height="22"/>
+                <Button Style="{StaticResource ButtonStyle}" Content="Anuluj" Width="116" Margin="10,0,0,0" RenderTransformOrigin="0.967,0.83" Height="22"/>
             </StackPanel>
         </StackPanel>
     </Grid>
