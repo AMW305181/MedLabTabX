@@ -39,12 +39,12 @@ public partial class MedLabContext : DbContext
     {
         modelBuilder.Entity<CategoryDictionary>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__Category__3213E83FD19C0623");
+            entity.HasKey(e => e.id).HasName("PK__Category__3213E83F11AD6524");
         });
 
         modelBuilder.Entity<Schedule>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__Schedule__3213E83F755348C9");
+            entity.HasKey(e => e.id).HasName("PK__Schedule__3213E83F7A28FD45");
 
             entity.HasOne(d => d.Nurse).WithMany(p => p.Schedules)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -53,12 +53,12 @@ public partial class MedLabContext : DbContext
 
         modelBuilder.Entity<StatusDictionary>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__StatusDi__3213E83F443501F1");
+            entity.HasKey(e => e.id).HasName("PK__StatusDi__3213E83FEA605655");
         });
 
         modelBuilder.Entity<Test>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__Tests__3213E83F5F99CC46");
+            entity.HasKey(e => e.id).HasName("PK__Tests__3213E83F863DB2D7");
 
             entity.HasOne(d => d.CategoryNavigation).WithMany(p => p.Tests)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -67,7 +67,7 @@ public partial class MedLabContext : DbContext
 
         modelBuilder.Entity<TestHistory>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__TestHist__3213E83FC3B070DA");
+            entity.HasKey(e => e.id).HasName("PK__TestHist__3213E83F282BBAFB");
 
             entity.HasOne(d => d.Analyst).WithMany(p => p.TestHistoryAnalysts).HasConstraintName("FK__TestHisto__Analy__398D8EEE");
 
@@ -90,7 +90,7 @@ public partial class MedLabContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__Users__3213E83F9638323E");
+            entity.HasKey(e => e.id).HasName("PK__Users__3213E83F579D563F");
 
             entity.HasOne(d => d.UserTypeNavigation).WithMany(p => p.Users)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -99,12 +99,12 @@ public partial class MedLabContext : DbContext
 
         modelBuilder.Entity<UserType>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__UserType__3213E83F1294A3FC");
+            entity.HasKey(e => e.id).HasName("PK__UserType__3213E83FB3B6A977");
         });
 
         modelBuilder.Entity<Visit>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__Visits__3213E83F6F38653F");
+            entity.HasKey(e => e.id).HasName("PK__Visits__3213E83F90220EF0");
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Visits)
                 .OnDelete(DeleteBehavior.ClientSetNull)

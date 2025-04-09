@@ -3,10 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="Samples" Height="450" Width="800">
+        Title="Próbki" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Tytuł -->
+            <RowDefinition Height="*"/>
+            <!-- Tabela -->
+        </Grid.RowDefinitions>
+
+        <!-- Tytuł -->
+        <TextBlock Text="Próbki" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+
+        <!-- Tabela -->
+        <DataGrid x:Name="SamplesDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Wizyta" Binding="{Binding Wizyta}" Width="*" />
+                <DataGridTextColumn Header="Badanie" Binding="{Binding Badania}" Width="*" />
+                <DataGridTextColumn Header="Data" Binding="{Binding Data}" Width="*" />
+                <DataGridTextColumn Header="Gotowe" Binding="{Binding Status}" Width="*" />
+                <DataGridTemplateColumn Header="Akcje" Width="160">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Gotowe" Width="60" Margin="5,0" Click="MarkReady_Click" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
 </Window>
