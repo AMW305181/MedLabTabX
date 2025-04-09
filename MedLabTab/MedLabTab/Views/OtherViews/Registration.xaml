@@ -3,10 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="Registration" Height="450" Width="800">
+        Title="Rejestracja" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Tytuł -->
+            <RowDefinition Height="*"/>
+            <!-- Formularz -->
+            <RowDefinition Height="Auto"/>
+            <!-- Przycisk -->
+        </Grid.RowDefinitions>
+
+        <!-- Tytuł -->
+        <TextBlock Text="Rejestracja" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+
+        <!-- Środkowy panel (formularz) -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <!-- Login -->
+            <Label Content="Login:" Margin="0,5,0,2"/>
+            <TextBox x:Name="LoginTextBox" Width="200" Margin="0,0,0,8"/>
+
+            <!-- Hasło -->
+            <Label Content="Hasło:" Margin="0,5,0,2"/>
+            <PasswordBox x:Name="PasswordBox" Width="200" Margin="0,0,0,8"/>
+
+            <!-- Typ konta -->
+            <Label Content="Typ konta:" Margin="0,5,0,2"/>
+            <ComboBox x:Name="AccountTypeComboBox" Width="200" Margin="0,0,0,8">
+                <ComboBoxItem Content="Recepcja"/>
+                <ComboBoxItem Content="Pacjent"/>
+                <ComboBoxItem Content="Pielęgniarka"/>
+                <ComboBoxItem Content="Analityk"/>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Przycisk Rejestruj -->
+        <Button Content="Zarejestruj" Grid.Row="2" Width="120" HorizontalAlignment="Center" Margin="0,10,0,20" Click="Rejestruj_Click"/>
     </Grid>
 </Window>
