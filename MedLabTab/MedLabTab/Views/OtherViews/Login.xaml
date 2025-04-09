@@ -41,7 +41,7 @@
         Grid.Column="1"
         Margin="0,10,0,10"/>
         <Button Content="Zaloguj" Grid.Row="3" Margin="0,10,0,10" Width="100" HorizontalAlignment="Center" Click="LoginButton_Click"/>
-        <Button Content="Zapomniałeś/aś hasła?" Grid.Row="4" Margin="0,10,0,10" Width="100" HorizontalAlignment="Center" Click="ZapomnialesHasla_Click"/>
+        <Button Content="Zapomniałeś/aś hasła?" Grid.Row="4" Margin="0,10,0,10" Width="170" HorizontalAlignment="Center" Click="ZapomnialesHasla_Click"/>
         
     </Grid>
 </Window>
