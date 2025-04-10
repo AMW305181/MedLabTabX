@@ -116,27 +116,29 @@
                 </StackPanel>
 
                 <!-- Menu nawigacyjne -->
-                <StackPanel Grid.Row="1">
-                    <!-- Sekcja WIZYTY -->
-                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
-                    <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
-                    <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Grid.Row="1">
+                        <!-- Sekcja WIZYTY -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
 
-                    <!-- Sekcja BADANIA -->
-                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
-                    <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie badania" x:Name="btnAllExams" Click="BtnAllExams_Click"/>
-                    <Button Style="{StaticResource NavButtonStyle}" Content="Nowe badanie" x:Name="btnNewExam" Click="BtnNewExam_Click"/>
+                        <!-- Sekcja BADANIA -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie badania" x:Name="btnAllExams" Click="BtnAllExams_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Nowe badanie" x:Name="btnNewExam" Click="BtnNewExam_Click"/>
 
-                    <!-- Sekcja KONTA -->
-                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA"/>
-                    <Button Style="{StaticResource NavButtonStyle}" Content="Wszyscy użytkownicy" x:Name="btnAllUsers" Click="BtnAllUsers_Click"/>
-                    <Button Style="{StaticResource NavButtonStyle}" Content="Zarejestruj" x:Name="btnRegister" Click="BtnRegister_Click"/>
+                        <!-- Sekcja KONTA -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszyscy użytkownicy" x:Name="btnAllUsers" Click="BtnAllUsers_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Zarejestruj" x:Name="btnRegister" Click="BtnRegister_Click"/>
 
-                    <!-- Sekcja RAPORTY -->
-                    <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
-                    <Button Style="{StaticResource NavButtonStyle}" Content="Raporty badań" x:Name="btnReports" Click="BtnReports_Click"/>
-                    <Button Style="{StaticResource NavButtonStyle}" Content="Statystyki" x:Name="btnStats" Click="BtnStats_Click"/>
-                </StackPanel>
+                        <!-- Sekcja RAPORTY -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Raporty badań" x:Name="btnReports" Click="BtnReports_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Statystyki" x:Name="btnStats" Click="BtnStats_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
 
                 <!-- Przycisk wylogowania -->
                 <Button Grid.Row="2" 
@@ -163,8 +165,22 @@
                 <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
 
                 <!-- Tutaj będzie wyświetlana zawartość wybranej sekcji -->
-                <ContentControl x:Name="MainContent" Margin="20"/>
+                <!-- Tutaj będzie wyświetlana zawartość wybranej sekcji -->
+                <ContentControl x:Name="MainContent" Margin="20">
+                    <Grid>
+                        <TextBlock Text="Witaj w panelu recepcji laboratorium medycznego" 
+                    FontSize="18" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,40,0,0"/>
+                        <TextBlock Text="Wybierz opcję z menu po lewej stronie, aby rozpocząć pracę" 
+                    FontSize="14" 
+                    Foreground="#666666" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,70,0,0"/>
+                    </Grid>
+                </ContentControl>
             </StackPanel>
+
         </Grid>
     </Grid>
 </Window>

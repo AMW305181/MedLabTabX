@@ -10,7 +10,6 @@ namespace MedLabTab.Views.MainViews
         public MainViewReception()
         {
             InitializeComponent();
-            // Domyślnie ładujemy widok wszystkich wizyt
             MainContent.Content = new AllVisits();
         }
 

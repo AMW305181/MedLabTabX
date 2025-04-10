@@ -23,5 +23,10 @@ namespace MedLabTab.Views.MainViews
         {
             InitializeComponent();
         }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
