@@ -82,6 +82,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+
         </Style>
     </Window.Resources>
 
@@ -110,31 +111,35 @@
                 <StackPanel Grid.Row="1" Margin="10,20,10,0">
                     <!-- Przycisk BADANIA -->
                     <Button Style="{StaticResource NavButtonStyle}" 
-                            x:Name="btnExams" 
-                            Margin="0,5,0,5"
-                            Content="BADANIA"
-                            FontWeight="SemiBold"/>
+                        x:Name="btnExams" 
+                        Margin="0,5,0,5"
+                        Content="BADANIA"
+                        FontWeight="SemiBold"
+                        Click="BtnExams_Click"/>
 
                     <!-- Przycisk PRÓBKI -->
                     <Button Style="{StaticResource NavButtonStyle}" 
-                            x:Name="btnSamples" 
-                            Margin="0,5,0,5"
-                            Content="PRÓBKI"
-                            FontWeight="SemiBold"/>
+                        x:Name="btnSamples" 
+                        Margin="0,5,0,5"
+                        Content="PRÓBKI"
+                        FontWeight="SemiBold"
+                        Click="BtnSamples_Click"/>                  
 
                     <!-- Przycisk RAPORT -->
                     <Button Style="{StaticResource NavButtonStyle}" 
-                            x:Name="btnReport" 
-                            Margin="0,5,0,5"
-                            Content="RAPORT"
-                            FontWeight="SemiBold"/>
+                        x:Name="btnReport" 
+                        Margin="0,5,0,5"
+                        Content="RAPORT"
+                        FontWeight="SemiBold"
+                        Click="BtnReport_Click"/>
 
                     <!-- Przycisk PROFIL -->
                     <Button Style="{StaticResource NavButtonStyle}" 
-                            x:Name="btnProfile" 
-                            Margin="0,5,0,5"
-                            Content="PROFIL"
-                            FontWeight="SemiBold"/>
+                        x:Name="btnProfile" 
+                        Margin="0,5,0,5"
+                        Content="PROFIL"
+                        FontWeight="SemiBold"
+                        Click="BtnProfile_Click"/>
                 </StackPanel>
 
                 <!-- Przycisk wylogowania -->
