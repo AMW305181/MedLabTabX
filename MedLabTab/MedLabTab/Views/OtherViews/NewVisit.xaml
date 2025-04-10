@@ -25,7 +25,7 @@
 
             <!-- Pacjent -->
             <Label Content="Pacjent:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="PacjentComboBox" Width="200" Margin="0,0,0,8"/>
+            <ComboBox x:Name="PacjentComboBox" Width="200" Margin="0,0,0,8" SelectionChanged="PacjentComboBox_SelectionChanged"/>
 
             <!-- Badania -->
             <Label Content="Badania:" Margin="0,5,0,2"/>
@@ -33,7 +33,7 @@
 
             <!-- Data -->
             <Label Content="Data:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="DataComboBox" Width="200" Margin="0,0,0,8"/>
+            <ComboBox x:Name="DataComboBox" Width="200" Margin="0,0,0,8" SelectionChanged="DataComboBox_SelectionChanged"/>
         </StackPanel>
 
         <!-- Koszt i czas -->

@@ -15,31 +15,16 @@ using System.Windows.Shapes;
 namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
-    /// Interaction logic for NewVisit.xaml
+    /// Interaction logic for Tests.xaml
     /// </summary>
-    public partial class NewVisit : Window
+    public partial class AllTests : Window
     {
-        public NewVisit()
+        public AllTests()
         {
             InitializeComponent();
         }
 
-        private void Zaplac_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Zarejestruj_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DataComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void PacjentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void AddTest_Click(object sender, RoutedEventArgs e)
         {
 
         }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="MedLabTab.Views.OtherViews.Badania"
+﻿<Window x:Class="MedLabTab.Views.OtherViews.AllTests"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -31,8 +31,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Edytuj" Width="60" Margin="5,0" Click="EditTest_Click"/>
-                                <Button Content="Usuń" Width="60" Margin="5,0" Click="DeleteTest_Click"/>
+                                <Button Content="Edytuj" Width="60" Margin="5,0"/>
+                                <Button Content="Usuń" Width="60" Margin="5,0"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

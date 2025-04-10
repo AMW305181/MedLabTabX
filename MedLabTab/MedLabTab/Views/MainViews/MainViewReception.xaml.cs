@@ -1,27 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MedLabTab.Views;
+using MedLabTab.Views.OtherViews;
 
 namespace MedLabTab.Views.MainViews
 {
-    /// <summary>
-    /// Interaction logic for MainViewReception.xaml
-    /// </summary>
     public partial class MainViewReception : Window
     {
         public MainViewReception()
         {
             InitializeComponent();
+            // Domyślnie ładujemy widok wszystkich wizyt
+            MainContent.Content = new AllVisits();
+        }
+
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new AllVisits();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new NewVisit();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new AllTests();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new NewTest();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new AllUsers();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new Registration();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new AllReports();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new Statistics();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var loginWindow = new Login();
+            loginWindow.Show();
+            this.Close();
         }
     }
 }

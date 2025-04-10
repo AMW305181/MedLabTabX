@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
-    /// Interaction logic for Tests.xaml
+    /// Logika interakcji dla klasy AllResports.xaml
     /// </summary>
-    public partial class Tests : Window
+    public partial class AllReports : Page
     {
-        public Tests()
+        public AllReports()
         {
             InitializeComponent();
         }

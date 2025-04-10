@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
-    /// Interaction logic for AllVisits.xaml
+    /// Logika interakcji dla klasy AllUsers.xaml
     /// </summary>
-    public partial class AllVisits : Window
+    public partial class AllUsers : Page
     {
-        public AllVisits()
+        public AllUsers()
         {
             InitializeComponent();
-        }
-
-        private void AddVisit_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
