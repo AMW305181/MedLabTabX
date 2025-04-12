@@ -10,7 +10,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MedLabTab.Views.OtherViews
@@ -18,7 +17,7 @@ namespace MedLabTab.Views.OtherViews
     /// <summary>
     /// Logika interakcji dla klasy Profile.xaml
     /// </summary>
-    public partial class Profile : Page
+    public partial class Profile : Window
     {
         public Profile()
         {

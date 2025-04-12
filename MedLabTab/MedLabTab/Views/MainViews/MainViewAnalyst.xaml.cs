@@ -14,33 +14,39 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new AllTests();
+            AllTests allTests = new AllTests();
+            allTests.Show();
         }
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            // Przejdź do widoku próbek
-            MainContent.Content = new Samples();
+            Samples samples = new Samples();
+            samples.Show();
         }
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            // Przejdź do widoku nowego raportu
-            MainContent.Content = new NewReport();
+            NewReport newReport = new NewReport();
+            newReport.Show();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            // Przejdź do widoku profilu
-            MainContent.Content = new Profile();
+            Profile profile = new Profile();
+            profile.Show();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
-            // Wylogowanie - wróć do ekranu logowania
-            var loginWindow = new Login();
-            loginWindow.Show();
-            this.Close();
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }

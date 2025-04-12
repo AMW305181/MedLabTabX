@@ -100,20 +100,20 @@ namespace MedLabTab.Views.MainViews
         //jak coś się spierniczy, to tutaj ----->
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();  
-            ContentArea.Children.Add(new AllVisits());  
+            AllVisits allVisits = new AllVisits();
+            allVisits.Show();
         }
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new Samples());
+            Samples samples = new Samples();
+            samples.Show();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Children.Clear();
-            ContentArea.Children.Add(new Profile());
+            Profile profile = new Profile();
+            profile.Show();
         }
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {

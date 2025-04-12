@@ -145,7 +145,7 @@
                             Content="Wyloguj się" 
                             x:Name="btnLogout"
                             Click="BtnLogout_Click"
-                            Margin="0,250,0,0"/>
+                            Margin="0,230,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>

@@ -10,54 +10,69 @@ namespace MedLabTab.Views.MainViews
         public MainViewReception()
         {
             InitializeComponent();
-            MainContent.Content = new AllVisits();
+            AllVisits allVisits = new AllVisits();
+            allVisits.Show();
         }
 
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new AllVisits();
+            AllVisits allVisits = new AllVisits();
+            allVisits.Show();
         }
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new NewVisit();
+        {   
+            NewVisit newVisit = new NewVisit();
+            newVisit.Show();
         }
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new AllTests();
+            AllTests allTests = new AllTests();
+            allTests.Show();
         }
 
         private void BtnNewExam_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new NewTest();
+            NewTest newTest = new NewTest();
+            newTest.Show();
         }
 
         private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new AllUsers();
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
         }
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new Registration();
+            Registration registration = new Registration();
+            registration.Show();
         }
 
         private void BtnReports_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new AllReports();
+            AllReports allReports = new AllReports();
+            allReports.Show();
         }
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new Statistics();
+            Statistics statistics = new Statistics();
+            statistics.Show();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
-            var loginWindow = new Login();
-            loginWindow.Show();
-            this.Close();
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }
