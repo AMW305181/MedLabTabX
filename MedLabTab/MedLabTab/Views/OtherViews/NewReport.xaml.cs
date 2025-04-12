@@ -15,21 +15,31 @@ using System.Windows.Shapes;
 namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
-    /// Interaction logic for NewVisit.xaml
+    /// Interaction logic for Report.xaml
     /// </summary>
-    public partial class NewVisit : Window
+    public partial class NewReport : Window
     {
-        public NewVisit()
+        public NewReport()
         {
             InitializeComponent();
         }
 
-        private void Zaplac_Click(object sender, RoutedEventArgs e)
+        private void BadanieComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
-        private void Zarejestruj_Click(object sender, RoutedEventArgs e)
+        private void PacjentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void PielegniarkaComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void AnalitykComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
@@ -39,7 +49,7 @@ namespace MedLabTab.Views.OtherViews
 
         }
 
-        private void PacjentComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Zapisz_Click(object sender, RoutedEventArgs e)
         {
 
         }

@@ -15,18 +15,13 @@ using System.Windows.Shapes;
 namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
-    /// Interaction logic for AllVisits.xaml
+    /// Logika interakcji dla klasy AllReports.xaml
     /// </summary>
-    public partial class AllVisits : Window
+    public partial class AllReports : Window
     {
-        public AllVisits()
+        public AllReports()
         {
             InitializeComponent();
-        }
-
-        private void AddVisit_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

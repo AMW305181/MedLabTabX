@@ -1,4 +1,4 @@
-﻿<Window x:Class="MedLabTab.Views.OtherViews.Report"
+﻿<Window x:Class="MedLabTab.Views.OtherViews.NewReport"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,7 +22,7 @@
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,10">
             <!-- Badanie -->
             <Label Content="Badanie:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="BadanieComboBox" Width="200" Margin="0,0,0,5">
+            <ComboBox x:Name="BadanieComboBox" Width="200" Margin="0,0,0,5" SelectionChanged="BadanieComboBox_SelectionChanged">
                 <ComboBoxItem Content="Badanie 1"/>
                 <ComboBoxItem Content="Badanie 2"/>
                 <ComboBoxItem Content="Badanie 3"/>
@@ -30,7 +30,7 @@
 
             <!-- Pacjent -->
             <Label Content="Pacjent:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="PacjentComboBox" Width="200" Margin="0,0,0,5">
+            <ComboBox x:Name="PacjentComboBox" Width="200" Margin="0,0,0,5" SelectionChanged="PacjentComboBox_SelectionChanged">
                 <ComboBoxItem Content="Pacjent 1"/>
                 <ComboBoxItem Content="Pacjent 2"/>
                 <ComboBoxItem Content="Pacjent 3"/>
@@ -38,7 +38,7 @@
 
             <!-- Pielęgniarka -->
             <Label Content="Pielęgniarka:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="PielegniarkaComboBox" Width="200" Margin="0,0,0,5">
+            <ComboBox x:Name="PielegniarkaComboBox" Width="200" Margin="0,0,0,5" SelectionChanged="PielegniarkaComboBox_SelectionChanged">
                 <ComboBoxItem Content="Pielęgniarka 1"/>
                 <ComboBoxItem Content="Pielęgniarka 2"/>
                 <ComboBoxItem Content="Pielęgniarka 3"/>
@@ -46,7 +46,7 @@
 
             <!-- Analityk -->
             <Label Content="Analityk:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="AnalitykComboBox" Width="200" Margin="0,0,0,5">
+            <ComboBox x:Name="AnalitykComboBox" Width="200" Margin="0,0,0,5" SelectionChanged="AnalitykComboBox_SelectionChanged">
                 <ComboBoxItem Content="Analityk 1"/>
                 <ComboBoxItem Content="Analityk 2"/>
                 <ComboBoxItem Content="Analityk 3"/>
@@ -54,7 +54,7 @@
 
             <!-- Data -->
             <Label Content="Data:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="DataComboBox" Width="200" Margin="0,0,0,5">
+            <ComboBox x:Name="DataComboBox" Width="200" Margin="0,0,0,5" SelectionChanged="DataComboBox_SelectionChanged">
                 <ComboBoxItem Content="2025-04-01"/>
                 <ComboBoxItem Content="2025-04-02"/>
                 <ComboBoxItem Content="2025-04-03"/>
