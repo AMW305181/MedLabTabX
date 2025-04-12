@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MedLabTab.DatabaseModels;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -19,9 +20,117 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class AllUsers : Window
     {
+        private User _selectedUser;
         public AllUsers()
         {
             InitializeComponent();
+        }
+
+        private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+        {
+            AllVisits allVisits = new AllVisits();
+            allVisits.Show();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit();
+            newVisit.Show();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests();
+            allTests.Show();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest();
+            newTest.Show();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
+            this.Close();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports();
+            allReports.Show();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics();
+            statistics.Show();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
+        }
+
+        private void CmbRoleFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void BtnEditUser_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void BtnDeleteUser_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void BtnCancelUser_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void BtnSaveUser_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void BtnCancelEdit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DgUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _selectedUser = dgUsers.SelectedItem as User;
+        }
+
+        private void txtSearch_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

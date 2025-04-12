@@ -42,6 +42,7 @@ namespace MedLabTab.Views.MainViews
         {
             AllUsers allUsers = new AllUsers();
             allUsers.Show();
+            this.Close();
         }
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
