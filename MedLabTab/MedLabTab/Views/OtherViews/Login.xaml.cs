@@ -23,6 +23,7 @@ namespace MedLabTab.Views.OtherViews
     public partial class Login : Window
     {
         private LoginVM LoginVM;
+
         public Login()
         {
             InitializeComponent();
@@ -31,7 +32,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void ZapomnialesHasla_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -56,19 +57,19 @@ namespace MedLabTab.Views.OtherViews
                     switch (User.UserType)
                     {
                         case 1:
-                            MainViewReception mainViewReception = new MainViewReception();
+                            MainViewReception mainViewReception = new MainViewReception(User);
                             mainViewReception.Show();
                             break;
                         case 2:
-                            MainViewNurse mainViewNurse = new MainViewNurse();
+                            MainViewNurse mainViewNurse = new MainViewNurse(User);
                             mainViewNurse.Show();
                             break;
                         case 3:
-                            MainViewAnalyst mainViewAnalyst = new MainViewAnalyst();
+                            MainViewAnalyst mainViewAnalyst = new MainViewAnalyst(User);
                             mainViewAnalyst.Show();
                             break;
                         case 4:
-                            MainViewPatient mainViewPatient = new MainViewPatient();
+                            MainViewPatient mainViewPatient = new MainViewPatient(User);
                             mainViewPatient.Show();
                             break;
                     }
