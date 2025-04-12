@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MedLabTab.Views.OtherViews;
 
 namespace MedLabTab.Views.MainViews
 {
@@ -22,6 +23,42 @@ namespace MedLabTab.Views.MainViews
         public MainViewPatient()
         {
             InitializeComponent();
+        }
+
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests();
+            allTests.Show();
+        }
+
+        private void BtnVisits_Click(object sender, RoutedEventArgs e)
+        {
+            AllVisits allVisits = new AllVisits();
+            allVisits.Show();
+        }
+
+        private void BtnResults_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            Profile profile = new Profile();
+            profile.Show();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }
