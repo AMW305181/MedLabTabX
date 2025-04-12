@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
-    /// Interaction logic for Tests.xaml
+    /// Logika interakcji dla klasy NewTest.xaml
     /// </summary>
-    public partial class Tests : Window
+    public partial class NewTest : Window
     {
-        public Tests()
+        public NewTest()
         {
             InitializeComponent();
         }
