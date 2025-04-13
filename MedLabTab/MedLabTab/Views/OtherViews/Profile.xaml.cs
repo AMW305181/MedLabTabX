@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
 using BCrypt.Net;
 using System.Text.RegularExpressions;
+using MedLabTab.DatabaseManager;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -40,41 +41,31 @@ namespace MedLabTab.Views.OtherViews
         {
             if (ValidateInputs())
             {
-                try
+                string newLogin = txtLogin.Text.Trim();
+                string newPassword = txtPassword.Text;
+                string newPhone = txtPhone.Text.Trim();
+
+                // Sprawdź, czy login nie jest zajęty przez innego użytkownika
+                if (DbManager.IsLoginTakenByAnotherUser(newLogin, _currentUser.id))
                 {
-                    using (var db = new MedLabContext())
-                    {
-                        var user = db.Users.FirstOrDefault(u => u.id == _currentUser.id);
-                        if (user != null)
-                        {
-                            // Sprawdź, czy login się nie powiela
-                            if (db.Users.Any(u => u.Login == txtLogin.Text.Trim() && u.id != user.id))
-                            {
-                                MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                                return;
-                            }
-
-                            user.PhoneNumber = txtPhone.Text.Trim();
-                            user.Login = txtLogin.Text.Trim();
-                            user.Password = BCrypt.Net.BCrypt.HashPassword(txtPassword.Text);
-
-                            db.SaveChanges();
-
-                            MessageBox.Show("Profil został zaktualizowany!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                            this.Close();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Nie znaleziono użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
+                    MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
-                catch (Exception ex)
+
+                // Aktualizacja profilu użytkownika
+                bool updated = DbManager.EditUserCommon(newLogin, newPassword, newPhone, _currentUser.id);
+                if (updated)
                 {
-                    MessageBox.Show($"Wystąpił błąd: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Profil został zaktualizowany!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Wystąpił błąd podczas aktualizacji.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
+
 
         private bool ValidateInputs()
         {
