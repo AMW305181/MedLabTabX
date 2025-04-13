@@ -5,43 +5,204 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="Login" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        Title="Login" Height="500" Width="800"
+        Background="#f8f5ff">
+    <Window.Resources>
+        <!-- Style dla TextBox -->
+        <Style x:Key="InputBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#FF69B4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <TextBlock Text="Witamy w MedLab!" Grid.Row="0" Margin="0,50,0,10" HorizontalAlignment="Center" FontSize="30"/>
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label Content="Login:"  Margin="0,0,0,10"/>
-            <TextBox x:Name="LoginTextBox"  Margin="0,0,0,10" Width="200"/>
-            <Label Content="Hasło:" Margin="0,0,0,10"/>
-            <PasswordBox x:Name="PasswordBox"  Margin="0,0,0,10" Width="200" />
-        </StackPanel>
-        <Label x:Name="ErrorLabel"
-       Content="Niepoprawne login/hasło"
-       Foreground="Red"
-       FontSize="14"
-       HorizontalAlignment="Center"
-       Visibility="Collapsed"
-       Grid.Row="2"
-       Grid.Column="1"
-       Margin="0,10,0,10"/>
-        <Label x:Name="InactiveLabel"
-        Content="Użytkownik nieaktywny"
-        Foreground="Red"
-        FontSize="14"
-        HorizontalAlignment="Center"
-        Visibility="Collapsed"
-        Grid.Row="2"
-        Grid.Column="1"
-        Margin="0,10,0,10"/>
-        <Button Content="Zaloguj" Grid.Row="3" Margin="0,10,0,10" Width="100" HorizontalAlignment="Center" Click="LoginButton_Click"/>
-        <Button Content="Zapomniałeś/aś hasła?" Grid.Row="4" Margin="0,10,0,10" Width="170" HorizontalAlignment="Center" Click="ZapomnialesHasla_Click"/>
-        
+        <!-- Style dla PasswordBox -->
+        <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#FF69B4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla przycisków -->
+        <Style x:Key="LoginButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF4AA0"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF3A90"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla przycisku zapomniałeś hasła -->
+        <Style x:Key="ForgotPasswordButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Foreground" Value="#FF69B4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#FF4AA0"/>
+                                <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla etykiet -->
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#f8f5ff" Offset="0"/>
+                <GradientStop Color="#fff0f5" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Border Width="400" Height="400" 
+                Background="White" 
+                CornerRadius="10" 
+                BorderBrush="#EEEEEE" 
+                BorderThickness="1">
+
+            <Grid x:Name="Content" Margin="25">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo i nazwa -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                    <TextBlock Text="MedLabTab" FontSize="30" FontWeight="Bold" Foreground="#FF69B4" HorizontalAlignment="Center"/>
+                    <TextBlock Text="System laboratoryjny" FontSize="14" Foreground="#888888" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                </StackPanel>
+
+                <Separator Grid.Row="1" Background="#EEEEEE" Height="1" Margin="0,0,0,20"/>
+
+                <!-- Formularz logowania -->
+                <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label Content="Login:" Style="{StaticResource LabelStyle}"/>
+                    <TextBox x:Name="LoginTextBox" Style="{StaticResource InputBoxStyle}"/>
+
+                    <Label Content="Hasło:" Style="{StaticResource LabelStyle}"/>
+                    <PasswordBox x:Name="PasswordBox" Style="{StaticResource PasswordBoxStyle}"/>
+
+                    <!-- Komunikaty błędów -->
+                    <Label x:Name="ErrorLabel"
+                           Content="Niepoprawne login/hasło"
+                           Foreground="#FF4040"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           Visibility="Collapsed"
+                           Margin="0,0,0,10"/>
+
+                    <Label x:Name="InactiveLabel"
+                           Content="Użytkownik nieaktywny"
+                           Foreground="#FF4040"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           Visibility="Collapsed"
+                           Margin="0,0,0,10"/>
+                </StackPanel>
+
+                <!-- Przyciski -->
+                <Button Content="Zaloguj" 
+                        Grid.Row="3" 
+                        Style="{StaticResource LoginButtonStyle}" 
+                        Click="LoginButton_Click"/>
+
+                <Button Content="Zapomniałeś/aś hasła?" 
+                        Grid.Row="4" 
+                        Style="{StaticResource ForgotPasswordButtonStyle}" 
+                        Click="ZapomnialesHasla_Click"
+                        Margin="0,5,0,0"/>
+            </Grid>
+        </Border>
     </Grid>
 </Window>
