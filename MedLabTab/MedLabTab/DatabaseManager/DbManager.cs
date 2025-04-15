@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
 using MedLabTab.ViewModels;
+using MedLabTab.Views.OtherViews;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedLabTab.DatabaseManager
@@ -100,6 +101,7 @@ namespace MedLabTab.DatabaseManager
                     user.Login = login;
                     user.Password = password;
                     user.PhoneNumber = phoneNumber;
+                    db.SaveChanges();
                     return true;
                 }
                 return false; 
@@ -116,12 +118,6 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return null; }
         }
-        //zobaczyc czy podany caly user czy pojedynczo
-        //public static bool EditUserAdmin (string login, int type, string password, )
-        //{
-        //    try { return true; }
-        //    catch { return false; }
-        //}
 
         public static bool IsTestNameTaken(string testName)
         {
@@ -131,6 +127,182 @@ namespace MedLabTab.DatabaseManager
                 if(test != null)   { return true; }
                 return false;
             }  catch { return false; }
+        }
+        //@Matylda usun niepotrzebne
+        public static bool AddTest(string testName, string description, float price, int category, bool isActive=true)
+        {
+            try {
+                db.Tests.Add(new Test { TestName = testName, Description = description, Price = price, Category = category, IsActive = isActive });
+                db.SaveChanges();
+                return true; }
+            catch { return false; }
+        }
+        public static bool AddTest(Test test)
+        {
+            try
+            {
+                db.Tests.Add(test);
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public static bool EditTest(Test test, Test newData)
+        {
+            try 
+            {
+                test.TestName= newData.TestName;
+                test.Description= newData.Description;
+                test.Price= newData.Price;
+                test.Category= newData.Category;
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+        public static bool EditTest(Test test, string testName, string description, float price, int category)
+        {
+            try
+            {
+                test.TestName = testName;
+                test.Description = description;
+                test.Price = price;
+                test.Category = category;
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+        public static bool ChangeTestStatus(Test test)
+        {
+            try
+            {
+                if (test != null)
+                {
+                    test.IsActive = !test.IsActive;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+        public static bool ChangeTestStatus(int testId)
+        {
+            try
+            {
+                var test=db.Tests.Where(t=>t.id==testId).FirstOrDefault();
+                if (test != null)
+                {
+                    test.IsActive = !test.IsActive;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+        public static List<CategoryDictionary> GetCategories()
+        {
+            try { return db.CategoryDictionaries.ToList();  }
+            catch { return null; }
+        }
+
+        public static List<User> LoadUsers()
+        {
+            try { return db.Users.ToList(); }
+            catch { return null; }
+        }
+        //@Victoria wybierz, ktora wygodniejsza
+        public static bool ChangeUserStatus(int userId)
+        {
+            try {
+                var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
+                if (user != null)
+                {
+                    user.IsActive = !user.IsActive;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false; }
+            catch { return false; }
+        }
+        public static bool ChangeUserStatus(User user)
+        {
+            try
+            {
+                if (user != null)
+                {
+                    user.IsActive = !user.IsActive;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+        //tu są 3 opcje
+        public static bool EditUserAdmin(int userId, string login, int userType, string password, string name, string surname, string PESEL, string? phone=null )
+        {
+            try 
+            {
+                var user=db.Users.Where(u=>u.id == userId).FirstOrDefault();
+                if (user != null)
+                {
+                    user.Login = login;
+                    user.UserType = userType;
+                    user.Password = password;
+                    user.Name = name;
+                    user.Surname = surname;
+                    user.PESEL = PESEL;
+                    user.PhoneNumber = phone;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+        public static bool EditUserAdmin(User user, string login, int userType, string password, string name, string surname, string PESEL, string? phone = null)
+        {
+            try
+            {
+                if (user != null)
+                {
+                    user.Login = login;
+                    user.UserType = userType;
+                    user.Password = password;
+                    user.Name = name;
+                    user.Surname = surname;
+                    user.PESEL = PESEL;
+                    user.PhoneNumber = phone;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }    
+        public static bool EditUserAdmin(User user, User newData)
+        {
+            try
+            {
+                if (user != null&&newData!=null)
+                {
+                    user.Login = newData.Login;
+                    user.UserType = newData.UserType;
+                    user.Password = newData.Password;
+                    user.Name = newData.Name;
+                    user.Surname = newData.Surname;
+                    user.PESEL = newData.PESEL;
+                    user.PhoneNumber = newData.PhoneNumber;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
         }
 
     }
