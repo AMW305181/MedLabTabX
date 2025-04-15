@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MedLabTab.ViewModels;
 using MedLabTab.Views.OtherViews;
 
 namespace MedLabTab.Views.MainViews
@@ -20,9 +21,11 @@ namespace MedLabTab.Views.MainViews
     /// </summary>
     public partial class MainViewPatient : Window
     {
-        public MainViewPatient()
+        private SignedInUser currentUser;
+        public MainViewPatient(SignedInUser user)
         {
             InitializeComponent();
+            currentUser = user;
         }
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
@@ -41,12 +44,12 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnResults_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            Profile profile = new Profile();
+            var profile = new Profile(currentUser);
             profile.Show();
             this.Close();
         }

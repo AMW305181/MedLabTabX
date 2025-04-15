@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using MedLabTab.ViewModels;
 using MedLabTab.Views;
 using MedLabTab.Views.OtherViews;
 
@@ -7,9 +8,11 @@ namespace MedLabTab.Views.MainViews
 {
     public partial class MainViewAnalyst : Window
     {
-        public MainViewAnalyst()
+        private SignedInUser currentUser;
+        public MainViewAnalyst(SignedInUser user)
         {
             InitializeComponent();
+            currentUser = user;
         }
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
@@ -35,7 +38,7 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            Profile profile = new Profile();
+            Profile profile = new Profile(currentUser);
             profile.Show();
             this.Close();
         }

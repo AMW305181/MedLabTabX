@@ -6,6 +6,7 @@ using MedLabTab.Views.OtherViews;
 using System.Linq;
 using MedLabTab.DatabaseModels;
 using System.Collections.ObjectModel;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.MainViews
 {
@@ -14,13 +15,15 @@ namespace MedLabTab.Views.MainViews
         private readonly MedLabContext _context;
         public ObservableCollection<Test> UpcomingTests { get; set; }
 
-        public MainViewNurse()
+        private SignedInUser currentUser;
+        public MainViewNurse(SignedInUser user)
         {
             InitializeComponent();
             _context = new MedLabContext();
             LoadUpcomingTests();
             ShowUpcomingTests();
             DataContext = this;
+            currentUser = user;
         }
 
         private void LoadUpcomingTests()
@@ -114,7 +117,7 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            Profile profile = new Profile();
+            Profile profile = new Profile(currentUser);
             profile.Show();
             this.Close();
         }

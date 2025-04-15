@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using MedLabTab.ViewModels;
 using MedLabTab.Views;
 using MedLabTab.Views.OtherViews;
 
@@ -20,7 +21,7 @@ namespace MedLabTab.Views.MainViews
         }
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
-        {   
+        {
             NewVisit newVisit = new NewVisit();
             newVisit.Show();
             this.Close();

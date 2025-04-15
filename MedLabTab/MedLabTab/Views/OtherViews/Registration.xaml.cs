@@ -6,6 +6,7 @@ using MedLabTab.DatabaseModels;
 using BCrypt.Net;
 using System.Text.RegularExpressions;
 using MedLabTab.Views.MainViews;
+using MedLabTab.DatabaseManager;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -121,48 +122,40 @@ namespace MedLabTab.Views.OtherViews
         {
             if (ValidateInputs())
             {
-                try
-                {
                     var selectedRole = (ComboBoxItem)cmbUserRole.SelectedItem;
                     int userType = (int)selectedRole.Tag;
 
-                    var newUser = new User
-                    {
-                        Name = txtName.Text.Trim(),
-                        Surname = txtSurname.Text.Trim(),
-                        PESEL = txtPesel.Text.Trim(),
-                        PhoneNumber = txtPhone.Text.Trim(),
-                        Login = txtLogin.Text.Trim(),
-                        Password = BCrypt.Net.BCrypt.HashPassword(txtPassword.Text),
+                var newUser = new User
+                {
+                    Name = txtName.Text.Trim(),
+                    Surname = txtSurname.Text.Trim(),
+                    PESEL = txtPesel.Text.Trim(),
+                    PhoneNumber = txtPhone.Text.Trim(),
+                    Login = txtLogin.Text.Trim(),
+                    Password = txtPassword.Text,//BCrypt.Net.BCrypt.HashPassword(txtPassword.Text),
                         UserType = userType,
-                        IsActive = true
-                    };
+                    IsActive = true
+                };
 
-                    using (var db = new MedLabContext())
-                    {
-                        if (db.Users.Any(u => u.Login == newUser.Login))
+                        if (DbManager.IsLoginTaken(newUser.Login))
                         {
                             MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return;
                         }
 
-                        if (db.Users.Any(u => u.PESEL == newUser.PESEL))
+                        if (DbManager.IsPESELTaken(newUser.PESEL))
                         {
                             MessageBox.Show("Użytkownik z tym PESEL już istnieje.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return;
                         }
 
-                        db.Users.Add(newUser);
-                        db.SaveChanges();
-                    }
+                       bool userAdded= DbManager.AddUser(newUser);
+                if (userAdded) { MessageBox.Show("Rejestracja zakończona pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information); }
+                else { MessageBox.Show("Wystąpił błąd.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning); }
 
-                    MessageBox.Show("Rejestracja zakończona pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Wystąpił błąd: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+               
+               
             }
         }
 
