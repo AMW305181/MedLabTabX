@@ -5,8 +5,572 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="AllUsers" Height="450" Width="800">
+        Title="Zarządzanie użytkownikami" Height="600" Width="1000"
+        Background="#f8f5ff">
+    <Window.Resources>
+        <!-- Style dla nagłówka -->
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Style dla etykiet -->
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Style dla TextBox -->
+        <Style x:Key="InputBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#FF69B4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla ComboBox -->
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDDDDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Style dla przycisków -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF4AA0"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF3A90"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla przycisku Usuń -->
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Background" Value="#FF5555"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF3333"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla DataGrid -->
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFF8FB"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEEEEE"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+        </Style>
+
+        <!-- Style dla DataGridColumnHeader -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#FFF0F5"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Style dla DataGridRow -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Height" Value="36"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFF0F8"/>
+                    <Setter Property="BorderBrush" Value="#FF69B4"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFEFF5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style dla DataGridCell -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="#333333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style dla Separator -->
+        <Style x:Key="SeparatorStyle" TargetType="Separator">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
+        </Style>
+
+        <!-- Style dla przycisków nawigacyjnych (skopiowane z MainViewReception) -->
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFE6F0"/>
+                                <Setter Property="Foreground" Value="#FF69B4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FFD6E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla przycisku wylogowania (skopiowane z MainViewReception) -->
+        <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
+            <Setter Property="Background" Value="#FFF0F0"/>
+            <Setter Property="Foreground" Value="#FF5555"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFE0E0"/>
+                                <Setter Property="Foreground" Value="#FF3333"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FFD0D0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla nagłówków sekcji (skopiowane z MainViewReception) -->
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#FF69B4"/>
+            <Setter Property="Margin" Value="10,15,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Style dla pola wyszukiwania z lupą -->
+        <Style x:Key="SearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource InputBoxStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Ikona lupy -->
+                                    <TextBlock Grid.Column="0" 
+                                       Text="🔍" 
+                                       FontSize="14" 
+                                       Margin="10,0,0,0" 
+                                       VerticalAlignment="Center"/>
+
+                                    <!-- Główna zawartość -->
+                                    <ScrollViewer Grid.Column="1" 
+                                          x:Name="PART_ContentHost"
+                                          Margin="5,0,10,0"
+                                          VerticalAlignment="Center"
+                                          Foreground="#999999"/>
+
+                                    <!-- Tekst podpowiedzi -->
+                                    <TextBlock Grid.Column="1"
+                                       x:Name="placeholderText"
+                                       Text="Wyszukaj użytkownika..."
+                                       Foreground="#999999"
+                                       FontStyle="Italic"
+                                       Margin="15,0,10,0"
+                                       VerticalAlignment="Center"
+                                       Visibility="Collapsed"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="placeholderText" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="placeholderText" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Pasek nawigacyjny (lewa strona) - skopiowany z MainViewReception -->
+        <Border Grid.Column="0" Background="White" BorderBrush="#EEEEEE" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo i nazwa -->
+                <StackPanel Grid.Row="0" Margin="0,20,0,20">
+                    <TextBlock Text="MedLabTab" FontSize="22" FontWeight="Bold" Foreground="#FF69B4" HorizontalAlignment="Center"/>
+                    <TextBlock Text="System Laboratoryjny" FontSize="12" Foreground="#888888" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Menu nawigacyjne -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Grid.Row="1">
+                        <!-- Sekcja WIZYTY -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+
+                        <!-- Sekcja BADANIA -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie badania" x:Name="btnAllExams" Click="BtnAllExams_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Nowe badanie" x:Name="btnNewExam" Click="BtnNewExam_Click"/>
+
+                        <!-- Sekcja KONTA -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszyscy użytkownicy" x:Name="btnAllUsers" Click="BtnAllUsers_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Zarejestruj" x:Name="btnRegister" Click="BtnRegister_Click"/>
+
+                        <!-- Sekcja RAPORTY -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Raporty badań" x:Name="btnReports" Click="BtnReports_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Statystyki" x:Name="btnStats" Click="BtnStats_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Przycisk wylogowania -->
+                <Button Grid.Row="2" 
+                        Style="{StaticResource LogoutButtonStyle}" 
+                        Content="Wyloguj się" 
+                        x:Name="btnLogout"
+                        Click="BtnLogout_Click"
+                        Margin="10,20,10,20"/>
+            </Grid>
+        </Border>
+
+        <!-- Główna treść (prawa strona) -->
+        <Grid Grid.Column="1">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#f8f5ff" Offset="0"/>
+                    <GradientStop Color="#fff0f5" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Nagłówek -->
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Zarządzanie użytkownikami" Style="{StaticResource HeaderStyle}"/>
+                    <TextBlock Text="Zarządzaj użytkownikami i ich danymi" 
+                               Foreground="#666666" 
+                               FontSize="14"
+                               HorizontalAlignment="Center"
+                               Margin="0,-15,0,15"/>
+                    <Separator Style="{StaticResource SeparatorStyle}"/>
+                </StackPanel>
+
+                <!-- Panel filtrownia i sortowania -->
+                <Grid Grid.Row="1" Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Wyszukiwanie z lupą i placeholderm -->
+                    <TextBox Grid.Column="0"
+                         x:Name="txtSearch"
+                         Style="{StaticResource SearchTextBoxStyle}"
+                         Margin="0,0,10,0"
+                         Height="36"
+                         VerticalAlignment="Top"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <!-- Filtrowanie po roli -->
+                    <ComboBox Grid.Column="1" 
+                          x:Name="cmbRoleFilter"
+                          Style="{StaticResource ComboBoxStyle}"
+                          Width="180"
+                          Margin="0,0,10,0"
+                          SelectionChanged="CmbRoleFilter_SelectionChanged">        
+                        <ComboBoxItem Content="Wszystkie role" IsSelected="True"/>
+                        <ComboBoxItem Content="Recepcja"/>
+                        <ComboBoxItem Content="Pielęgniarka"/>
+                        <ComboBoxItem Content="Pacjent"/>
+                        <ComboBoxItem Content="Analityk"/>
+                    </ComboBox>
+
+                    <!-- Sortowanie -->
+                    <ComboBox Grid.Column="2" 
+                          x:Name="cmbSort"
+                          Style="{StaticResource ComboBoxStyle}"
+                          Width="180"
+                          Margin="0,0,10,0"
+                          SelectionChanged="CmbSort_SelectionChanged">      
+                        <ComboBoxItem Content="Sortuj wg nazwiska" IsSelected="True"/>
+                        <ComboBoxItem Content="Sortuj wg imienia"/>
+                        <ComboBoxItem Content="Sortuj wg loginu"/>
+                        <ComboBoxItem Content="Sortuj wg roli"/>
+                    </ComboBox>
+                </Grid>
+
+
+                <!-- DataGrid z użytkownikami -->
+                <DataGrid Grid.Row="2" 
+                          x:Name="dgUsers"
+                          Style="{StaticResource DataGridStyle}"
+                          SelectionChanged="DgUsers_SelectionChanged"
+                          AutoGenerateColumns="False"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="Auto"/>
+                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="Auto"/>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="Auto"/>
+                        <DataGridTextColumn Header="Rola" Binding="{Binding Role}" Width="Auto"/>
+                        <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}" Width="Auto"/>
+                        <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="Auto"/>
+                        <DataGridTemplateColumn Header="Akcje" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <Button Content="Edytuj" 
+                                                Style="{StaticResource ButtonStyle}" 
+                                                Width="80"
+                                                Click="BtnEditUser_Click"/>
+                                        <Button Content="Usuń" 
+                                                Style="{StaticResource DeleteButtonStyle}" 
+                                                Width="80"
+                                                Click="BtnDeleteUser_Click"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Panel edycji/dodawania użytkownika -->
+                <Border Grid.Row="3" 
+                        Background="White" 
+                        BorderBrush="#EEEEEE" 
+                        BorderThickness="1" 
+                        CornerRadius="5"
+                        Margin="0,15,0,0"
+                        Padding="20"
+                        x:Name="panelEdit"
+                        Visibility="Collapsed">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Tytuł panelu -->
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" 
+                                   x:Name="txtEditHeader"
+                                   Text="Edycja użytkownika" 
+                                   FontSize="18" 
+                                   FontWeight="SemiBold" 
+                                   Margin="0,0,0,15"/>
+
+                        <!-- Kolumna 1 -->
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,0">
+                            <TextBlock Text="Login:" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtLogin" Style="{StaticResource InputBoxStyle}"/>
+
+                            <TextBlock Text="Imię:" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtFirstName" Style="{StaticResource InputBoxStyle}"/>
+
+                            <TextBlock Text="Nazwisko:" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtLastName" Style="{StaticResource InputBoxStyle}"/>
+                        </StackPanel>
+
+                        <!-- Kolumna 2 -->
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,10,0">
+                            <TextBlock Text="Hasło:" Style="{StaticResource LabelStyle}"/>
+                            <PasswordBox x:Name="txtPassword" 
+                                         Height="32"
+                                         FontSize="14"
+                                         Padding="8,5"
+                                         Margin="0,0,0,15"/>
+
+                            <TextBlock Text="PESEL:" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtPesel" Style="{StaticResource InputBoxStyle}" MaxLength="11"/>
+
+                            <TextBlock Text="Nr telefonu:" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtPhone" Style="{StaticResource InputBoxStyle}"/>
+                        </StackPanel>
+
+                        <!-- Kolumna 3 -->
+                        <StackPanel Grid.Row="1" Grid.Column="2" Margin="10,0,0,0">
+                            <TextBlock Text="Rola:" Style="{StaticResource LabelStyle}"/>
+                            <ComboBox x:Name="cmbRole" Style="{StaticResource ComboBoxStyle}">
+                                <ComboBoxItem Content="Recepcja"/>
+                                <ComboBoxItem Content="Pielęgniarka"/>
+                                <ComboBoxItem Content="Pacjent"/>
+                                <ComboBoxItem Content="Analityk"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Przyciski -->
+                        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" 
+                                    Orientation="Horizontal" 
+                                    HorizontalAlignment="Right" 
+                                    Margin="0,15,0,0">
+                            <Button Content="Anuluj" 
+                                    Style="{StaticResource ButtonStyle}" 
+                                    Background="#DDDDDD"
+                                    Foreground="#555555"
+                                    Width="100"
+                                    Click="BtnCancelEdit_Click"/>
+                            <Button Content="Zapisz" 
+                                    Style="{StaticResource ButtonStyle}" 
+                                    Width="100"
+                                    Click="BtnSaveUser_Click"
+                                    Margin="10,5,0,5"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

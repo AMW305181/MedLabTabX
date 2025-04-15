@@ -32,12 +32,14 @@ namespace MedLabTab.Views.MainViews
         {
             AllTests allTests = new AllTests();
             allTests.Show();
+            this.Close();
         }
 
         private void BtnVisits_Click(object sender, RoutedEventArgs e)
         {
             AllVisits allVisits = new AllVisits();
             allVisits.Show();
+            this.Close();
         }
 
         private void BtnResults_Click(object sender, RoutedEventArgs e)
@@ -49,6 +51,7 @@ namespace MedLabTab.Views.MainViews
         {
             var profile = new Profile(currentUser);
             profile.Show();
+            this.Close();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
