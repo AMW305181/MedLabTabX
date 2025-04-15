@@ -19,24 +19,28 @@ namespace MedLabTab.Views.MainViews
         {
             AllTests allTests = new AllTests();
             allTests.Show();
+            this.Close();
         }
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples();
             samples.Show();
+            this.Close();
         }
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
             NewReport newReport = new NewReport();
             newReport.Show();
+            this.Close();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
             Profile profile = new Profile(currentUser);
             profile.Show();
+            this.Close();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
