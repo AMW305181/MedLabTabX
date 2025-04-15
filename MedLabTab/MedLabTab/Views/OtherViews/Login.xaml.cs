@@ -57,7 +57,7 @@ namespace MedLabTab.Views.OtherViews
                     switch (User.UserType)
                     {
                         case 1:
-                            MainViewReception mainViewReception = new MainViewReception(User);
+                            MainViewReception mainViewReception = new MainViewReception();
                             mainViewReception.Show();
                             break;
                         case 2:
