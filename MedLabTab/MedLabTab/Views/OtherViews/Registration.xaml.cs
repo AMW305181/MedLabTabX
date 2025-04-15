@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
 using BCrypt.Net;
 using System.Text.RegularExpressions;
+using MedLabTab.Views.MainViews;
 using MedLabTab.DatabaseManager;
 
 namespace MedLabTab.Views.OtherViews
@@ -19,6 +20,75 @@ namespace MedLabTab.Views.OtherViews
 
             txtPesel.PreviewTextInput += NumberValidationTextBox;
             txtPhone.PreviewTextInput += NumberValidationTextBox;
+        }
+
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+        {
+            AllVisits allVisits = new AllVisits();
+            allVisits.Show();
+            this.Close();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit();
+            newVisit.Show();
+            this.Close();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests();
+            allTests.Show();
+            this.Close();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest();
+            newTest.Show();
+            this.Close();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
+            this.Close();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports();
+            allReports.Show();
+            this.Close();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics();
+            statistics.Show();
+            this.Close();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
 
         private void InitializeUserRoles()
@@ -125,6 +195,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("Czy na pewno chcesz wyjść bez zapisanych zmian.?", "Wyjście bez zapisu", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MainViewReception reception = new MainViewReception();
+            reception.Show();
             this.Close();
         }
     }

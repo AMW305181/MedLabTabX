@@ -54,6 +54,11 @@ namespace MedLabTab.DatabaseManager
             else  { return true; }
         }
 
+        public static bool IsLoginTakenByAnotherUser(string login, int userId)
+        {
+            return db.Users.Any(u => u.Login == login && u.id != userId);
+        }
+
         public static bool AddUser(User user)
         {
             try
