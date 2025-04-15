@@ -208,6 +208,21 @@ namespace MedLabTab.DatabaseManager
             try { return db.CategoryDictionaries.ToList();  }
             catch { return null; }
         }
+        public static Dictionary<int, string> GetCategoriesDictionary()
+        {
+            try 
+            {
+                Dictionary<int, string> categories = new Dictionary<int, string>();
+                List<CategoryDictionary> categoryDictionaries = db.CategoryDictionaries.ToList();
+                foreach (var category in categoryDictionaries) 
+                {
+                    categories.Add(category.id,category.CategoryName);
+                }
+                return categories;
+
+            }
+            catch { return null; }
+        }
 
         public static List<User> LoadUsers()
         {
