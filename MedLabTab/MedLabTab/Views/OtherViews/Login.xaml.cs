@@ -61,15 +61,15 @@ namespace MedLabTab.Views.OtherViews
                             mainViewReception.Show();
                             break;
                         case 2:
-                            MainViewNurse mainViewNurse = new MainViewNurse();
+                            MainViewNurse mainViewNurse = new MainViewNurse(User);
                             mainViewNurse.Show();
                             break;
                         case 3:
-                            MainViewAnalyst mainViewAnalyst = new MainViewAnalyst();
+                            MainViewAnalyst mainViewAnalyst = new MainViewAnalyst(User);
                             mainViewAnalyst.Show();
                             break;
                         case 4:
-                            MainViewPatient mainViewPatient = new MainViewPatient();
+                            MainViewPatient mainViewPatient = new MainViewPatient(User);
                             mainViewPatient.Show();
                             break;
                     }
