@@ -102,18 +102,21 @@ namespace MedLabTab.Views.MainViews
         {
             AllVisits allVisits = new AllVisits();
             allVisits.Show();
+            this.Close();
         }
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples();
             samples.Show();
+            this.Close();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
             Profile profile = new Profile();
             profile.Show();
+            this.Close();
         }
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {

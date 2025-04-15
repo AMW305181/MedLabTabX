@@ -260,31 +260,49 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
+        <!-- Style dla pola wyszukiwania z lupą -->
         <Style x:Key="SearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource InputBoxStyle}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
                         <Grid>
-                            <!-- Tło i obramowanie -->
                             <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="4"/>
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                            <!-- Tekst podpowiedzi (widoczny tylko gdy TextBox jest pusty i nie ma focusu) -->
-                            <TextBlock x:Name="placeholderText"
-                                   Text="Wyszukaj użytkownika..."
-                                   Foreground="#999999"
-                                   FontStyle="Italic"
-                                   Margin="12,10"
-                                   Visibility="Collapsed"/>
+                                    <!-- Ikona lupy -->
+                                    <TextBlock Grid.Column="0" 
+                                       Text="🔍" 
+                                       FontSize="14" 
+                                       Margin="10,0,0,0" 
+                                       VerticalAlignment="Center"/>
 
-                            <!-- Główna zawartość TextBox -->
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                     Margin="{TemplateBinding Padding}"/>
+                                    <!-- Główna zawartość -->
+                                    <ScrollViewer Grid.Column="1" 
+                                          x:Name="PART_ContentHost"
+                                          Margin="5,0,10,0"
+                                          VerticalAlignment="Center"
+                                          Foreground="#999999"/>
+
+                                    <!-- Tekst podpowiedzi -->
+                                    <TextBlock Grid.Column="1"
+                                       x:Name="placeholderText"
+                                       Text="Wyszukaj użytkownika..."
+                                       Foreground="#999999"
+                                       FontStyle="Italic"
+                                       Margin="15,0,10,0"
+                                       VerticalAlignment="Center"
+                                       Visibility="Collapsed"/>
+                                </Grid>
+                            </Border>
                         </Grid>
                         <ControlTemplate.Triggers>
-                            <!-- Pokazuj placeholder, gdy TextBox jest pusty i nie ma focusu -->
                             <Trigger Property="Text" Value="">
                                 <Setter TargetName="placeholderText" Property="Visibility" Value="Visible"/>
                             </Trigger>
@@ -296,6 +314,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -391,45 +410,22 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Wyszukiwanie -->
-                    <Border Grid.Column="0" 
-                            Background="White" 
-                            BorderBrush="#DDDDDD" 
-                            BorderThickness="1" 
-                            CornerRadius="4"
-                            Margin="0,0,10,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="🔍" 
-                                       Grid.Column="0" 
-                                       FontSize="16" 
-                                       Margin="10,0,0,0" 
-                                       VerticalAlignment="Center" 
-                                       Foreground="#999999"/>
-                            <TextBox 
-                                     x:Name="txtSearch"
-                                     BorderThickness="0"
-                                     Padding="12,12"
-                                     FontSize="14"
-                                     VerticalAlignment="Top"
-                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{StaticResource SearchTextBoxStyle}" 
-                                     Height="42" 
-                                     Grid.ColumnSpan="2" 
-                                     Margin="22,10,10,0"/>
-                        </Grid>
-                    </Border>
+                    <!-- Wyszukiwanie z lupą i placeholderm -->
+                    <TextBox Grid.Column="0"
+                         x:Name="txtSearch"
+                         Style="{StaticResource SearchTextBoxStyle}"
+                         Margin="0,0,10,0"
+                         Height="36"
+                         VerticalAlignment="Top"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <!-- Filtrowanie po roli -->
                     <ComboBox Grid.Column="1" 
-                              x:Name="cmbRoleFilter"
-                              Style="{StaticResource ComboBoxStyle}"
-                              Width="180"
-                              Margin="0,0,10,0"
-                              SelectionChanged="CmbRoleFilter_SelectionChanged">
+                          x:Name="cmbRoleFilter"
+                          Style="{StaticResource ComboBoxStyle}"
+                          Width="180"
+                          Margin="0,0,10,0"
+                          SelectionChanged="CmbRoleFilter_SelectionChanged">        
                         <ComboBoxItem Content="Wszystkie role" IsSelected="True"/>
                         <ComboBoxItem Content="Recepcja"/>
                         <ComboBoxItem Content="Pielęgniarka"/>
@@ -439,18 +435,18 @@
 
                     <!-- Sortowanie -->
                     <ComboBox Grid.Column="2" 
-                              x:Name="cmbSort"
-                              Style="{StaticResource ComboBoxStyle}"
-                              Width="180"
-                              Margin="0,0,10,0"
-                              SelectionChanged="CmbSort_SelectionChanged">
+                          x:Name="cmbSort"
+                          Style="{StaticResource ComboBoxStyle}"
+                          Width="180"
+                          Margin="0,0,10,0"
+                          SelectionChanged="CmbSort_SelectionChanged">      
                         <ComboBoxItem Content="Sortuj wg nazwiska" IsSelected="True"/>
                         <ComboBoxItem Content="Sortuj wg imienia"/>
                         <ComboBoxItem Content="Sortuj wg loginu"/>
                         <ComboBoxItem Content="Sortuj wg roli"/>
                     </ComboBox>
-
                 </Grid>
+
 
                 <!-- DataGrid z użytkownikami -->
                 <DataGrid Grid.Row="2" 
