@@ -166,6 +166,20 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return false; }
         }
+        public static bool DeleteTest(Test test)
+        {
+            try
+            {
+                if (test != null)
+                {
+                    test.IsActive = false;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
         public static bool ChangeTestStatus(Test test)
         {
             try

@@ -50,14 +50,14 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests();
+            AllTests allTests = new AllTests(this);
             allTests.Show();
             this.Close();
         }
 
         private void BtnNewExam_Click(object sender, RoutedEventArgs e)
         {
-            NewTest newTest = new NewTest();
+            NewTest newTest = new NewTest(this);
             newTest.Show();
             this.Close();
         }

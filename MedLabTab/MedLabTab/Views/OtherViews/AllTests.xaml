@@ -15,30 +15,42 @@
             <!-- Przycisk Dodaj -->
         </Grid.RowDefinitions>
 
-        <!-- Tytuł -->
-        <TextBlock Text="Badania" Grid.Row="0" Margin="0,20,0,10"
-                   HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+        <!-- Powrót + Tytuł -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Przycisk Powrót -->
+            <Button Content="←" Width="30" Height="30" Margin="10,20,10,10"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Click="Back_Click"/>
+
+            <!-- Tytuł -->
+            <TextBlock Text="Badania" Grid.Column="1" Margin="0,20,0,10"
+                       HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+        </Grid>
 
         <!-- Tabela -->
         <DataGrid x:Name="BadaniaDataGrid" Grid.Row="1"
                   AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nazwa" Binding="{Binding Nazwa}" Width="*" />
-                <DataGridTextColumn Header="Opis" Binding="{Binding Opis}" Width="2*" />
-                <DataGridTextColumn Header="Koszt" Binding="{Binding Koszt}" Width="*" />
-                <DataGridTextColumn Header="Typ" Binding="{Binding Typ}" Width="*" />
+                <DataGridTextColumn Header="Nazwa" Binding="{Binding TestName}" Width="*" />
+                <DataGridTextColumn Header="Opis" Binding="{Binding Description}" Width="2*" />
+                <DataGridTextColumn Header="Koszt" Binding="{Binding Price}" Width="*" />
+                <DataGridTextColumn Header="Typ" Binding="{Binding Category}" Width="*" />
                 <DataGridTemplateColumn Header="Akcje" Width="160">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Edytuj" Width="60" Margin="5,0"/>
-                                <Button Content="Usuń" Width="60" Margin="5,0"/>
+                                <Button Content="Edytuj" Width="60" Margin="5,0" Click="Edit_Click"/>
+                                <Button Content="Usuń" Width="60" Margin="5,0" Click="Delete_Click"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-
         </DataGrid>
 
         <!-- Przycisk Dodaj -->

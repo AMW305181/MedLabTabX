@@ -30,7 +30,7 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests();
+            AllTests allTests = new AllTests(this);
             allTests.Show();
             this.Close();
         }
