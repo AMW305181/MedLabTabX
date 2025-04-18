@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
 using MedLabTab.DatabaseManager;
+using System.Globalization;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -20,19 +21,19 @@ namespace MedLabTab.Views.OtherViews
 
         private void InitializeCategories()
         {
-            //CategoryComboBox.Items.Clear();
-            //var categories = DbManager.GetCategories(); 
-            //foreach (var cat in categories)
-            //{
-            //    CategoryComboBox.Items.Add(new ComboBoxItem
-            //    {
-            //        Content = cat.Name,
-            //        Tag = cat.Id
-            //    });
-            //}
+            CategoryComboBox.Items.Clear();
+            var categories = DbManager.GetCategories();
+            foreach (var cat in categories)
+            {
+                CategoryComboBox.Items.Add(new ComboBoxItem
+                {
+                    Content = cat.CategoryName,
+                    Tag = cat.id
+                });
+            }
 
-            //if (CategoryComboBox.Items.Count > 0)
-            //    CategoryComboBox.SelectedIndex = 0;
+            if (CategoryComboBox.Items.Count > 0)
+                CategoryComboBox.SelectedIndex = 0;
         }
 
         private void ClearForm()
@@ -60,22 +61,22 @@ namespace MedLabTab.Views.OtherViews
                 {
                     TestName = TestNameTextBox.Text.Trim(),
                     Description = DescriptionTextBox.Text.Trim(),
-                    Price = float.Parse(PriceTextBox.Text.Replace(',', '.')), // Ujednolicenie separatora
+                    Price = float.Parse(PriceTextBox.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                     Category = categoryId,
                     IsActive = IsActiveCheckBox.IsChecked == true
                 };
 
-                //bool added = DbManager.AddTest(newTest); // zakładamy że zwraca bool
+                bool added = DbManager.AddTest(newTest); // zakładamy że zwraca bool
 
-                //if (added)
-                //{
-                //    MessageBox.Show("Badanie zostało dodane pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                //    this.Close();
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Wystąpił błąd podczas dodawania badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //}
+                if (added)
+                {
+                    MessageBox.Show("Badanie zostało dodane pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Wystąpił błąd podczas dodawania badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
 
@@ -95,7 +96,15 @@ namespace MedLabTab.Views.OtherViews
                 return false;
             }
 
-            if (!float.TryParse(PriceTextBox.Text.Replace(',', '.'), out float price) || price < 0)
+            string input = PriceTextBox.Text.Replace(',', '.');
+
+            if (!float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out float price))
+            {
+                MessageBox.Show("Cena musi być liczbą.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (price < 0)
             {
                 MessageBox.Show("Cena musi być liczbą dodatnią.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;

@@ -129,14 +129,6 @@ namespace MedLabTab.DatabaseManager
             }  catch { return false; }
         }
         //@Matylda usun niepotrzebne
-        public static bool AddTest(string testName, string description, float price, int category, bool isActive=true)
-        {
-            try {
-                db.Tests.Add(new Test { TestName = testName, Description = description, Price = price, Category = category, IsActive = isActive });
-                db.SaveChanges();
-                return true; }
-            catch { return false; }
-        }
         public static bool AddTest(Test test)
         {
             try
