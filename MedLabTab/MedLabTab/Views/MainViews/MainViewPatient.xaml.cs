@@ -49,9 +49,9 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            var profile = new Profile(currentUser);
+            var profile = new Profile(currentUser, this);
             profile.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)

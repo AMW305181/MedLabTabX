@@ -12,11 +12,12 @@ namespace MedLabTab.Views.OtherViews
     public partial class Profile : Window
     {
         private User _currentUser; //tu powinien być zalogowany użytkownik
-
-        public Profile(User currentUser)
+        private Window _parentWindow;
+        public Profile(User currentUser, Window parentWindow)
         {
             InitializeComponent();
             _currentUser = currentUser;
+            _parentWindow = parentWindow;
             FillForm();
             txtPhone.PreviewTextInput += NumberValidationTextBox;
         }
@@ -25,9 +26,13 @@ namespace MedLabTab.Views.OtherViews
         {
             if (_currentUser != null)
             {
+                txtName.Text = _currentUser.Name + " " + _currentUser.Surname;
+                txtPesel.Text = _currentUser.PESEL;
                 txtPhone.Text = _currentUser.PhoneNumber;
                 txtLogin.Text = _currentUser.Login;
                 txtPassword.Text = _currentUser.Password;
+                txtRepeatPassword.Text = _currentUser.Password;
+                txtRole.Text = _currentUser.GetType().Name;
             }
         }
 
@@ -42,8 +47,16 @@ namespace MedLabTab.Views.OtherViews
             if (ValidateInputs())
             {
                 string newLogin = txtLogin.Text.Trim();
-                string newPassword = txtPassword.Text;
+                string newPassword = txtPassword.Text.Trim();
+                string repeatPassword = txtRepeatPassword.Text.Trim();
                 string newPhone = txtPhone.Text.Trim();
+
+                // Sprawdzenie czy hasła się zgadzają
+                if (newPassword != repeatPassword)
+                {
+                    MessageBox.Show("Hasła się nie zgadzają.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
                 // Sprawdź, czy login nie jest zajęty przez innego użytkownika
                 if (DbManager.IsLoginTakenByAnotherUser(newLogin, _currentUser.id))
@@ -57,6 +70,7 @@ namespace MedLabTab.Views.OtherViews
                 if (updated)
                 {
                     MessageBox.Show("Profil został zaktualizowany!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _parentWindow.Show();
                     this.Close();
                 }
                 else
@@ -65,7 +79,6 @@ namespace MedLabTab.Views.OtherViews
                 }
             }
         }
-
 
         private bool ValidateInputs()
         {
@@ -94,6 +107,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
+            _parentWindow.Show();
             this.Close();
         }
     }

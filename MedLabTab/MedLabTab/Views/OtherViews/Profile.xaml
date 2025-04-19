@@ -37,16 +37,16 @@
             </Setter>
         </Style>
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="13"/>
             <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
         <Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="Padding" Value="5,3"/>
             <Setter Property="BorderBrush" Value="#CCCCCC"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
         </Style>
         <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Padding" Value="5,3"/>
@@ -70,6 +70,12 @@
                HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
 
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Imię i nazwisko"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtName" Text="" IsReadOnly="True"/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="PESEL"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPesel" Text="" IsReadOnly="True"/>
+
             <TextBlock Style="{StaticResource TextBlockStyle}" Text="Numer telefonu"/>
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPhone" Text=""/>
 
@@ -77,10 +83,16 @@
             <TextBox Style="{StaticResource TextBoxStyle}" Name="txtLogin" Text=""/>
 
             <TextBlock Style="{StaticResource TextBlockStyle}" Text="Hasło"/>
-            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" Text=""/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" />
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Powtórz hasło"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtRepeatPassword" />
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Rola użytkownika"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtRole" IsReadOnly="True"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,10">
             <Button Style="{StaticResource ButtonStyle}" 
                 Content="Zatwierdź" 
                 Width="116" 
