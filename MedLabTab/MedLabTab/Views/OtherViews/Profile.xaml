@@ -3,10 +3,96 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="Profile" Height="450" Width="800">
+        Title="Profil" Height="450" Width="800"
+        Background="#f8f5ff">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF69B4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF5BA4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF4A94"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Nagłówek -->
+            <RowDefinition Height="*"/>
+            <!-- Formularz -->
+            <RowDefinition Height="Auto"/>
+            <!-- Przyciski -->
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Edycja profilu" Grid.Row="0" Margin="0,20,0,10"
+               HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Numer telefonu"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPhone" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Login"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtLogin" Text=""/>
+
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Hasło"/>
+            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" Text=""/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+            <Button Style="{StaticResource ButtonStyle}" 
+                Content="Zatwierdź" 
+                Width="116" 
+                Margin="10,0" 
+                Height="30"
+                Click="btnAccept_Click"/>
+            <Button Style="{StaticResource ButtonStyle}" 
+                Content="Anuluj" 
+                Width="116" 
+                Margin="10,0" 
+                Height="30"
+                Click="btnCancel_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
