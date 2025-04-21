@@ -32,7 +32,8 @@ namespace MedLabTab.Views.OtherViews
 
         private void ZapomnialesHasla_Click(object sender, RoutedEventArgs e)
         {
-
+            ResettingPassword resetWindow = new ResettingPassword();
+            resetWindow.Show();
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
