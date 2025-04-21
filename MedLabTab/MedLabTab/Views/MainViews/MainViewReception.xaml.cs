@@ -57,9 +57,9 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnReports_Click(object sender, RoutedEventArgs e)
         {
-            AllReports allReports = new AllReports();
+            AllReports allReports = new AllReports(this);
             allReports.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)

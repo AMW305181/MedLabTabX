@@ -66,7 +66,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnReports_Click(object sender, RoutedEventArgs e)
         {
-            AllReports allReports = new AllReports();
+            AllReports allReports = new AllReports(this);
             allReports.Show();
             this.Close();
         }
