@@ -45,7 +45,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Content="Edytuj" Width="60" Margin="5,0" Click="Edit_Click"/>
-                                <Button Content="Usuń" Width="60" Margin="5,0" Click="Delete_Click"/>
+                                <Button Content="Dezaktywuj" Width="60" Margin="5,0" Click="Deactivate_Click"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

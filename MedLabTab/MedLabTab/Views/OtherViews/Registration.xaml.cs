@@ -94,10 +94,10 @@ namespace MedLabTab.Views.OtherViews
         private void InitializeUserRoles()
         {
             cmbUserRole.Items.Clear();
-            cmbUserRole.Items.Add(new ComboBoxItem { Content = "Pacjent", Tag = 3 });
-            cmbUserRole.Items.Add(new ComboBoxItem { Content = "Recepcja", Tag = 2 });
-            cmbUserRole.Items.Add(new ComboBoxItem { Content = "Pielęgniarka", Tag = 4 });
-            cmbUserRole.Items.Add(new ComboBoxItem { Content = "Analityk", Tag = 5 });
+            cmbUserRole.Items.Add(new ComboBoxItem { Content = "Pacjent", Tag = 4 });
+            cmbUserRole.Items.Add(new ComboBoxItem { Content = "Recepcja", Tag = 1 });
+            cmbUserRole.Items.Add(new ComboBoxItem { Content = "Pielęgniarka", Tag = 2 });
+            cmbUserRole.Items.Add(new ComboBoxItem { Content = "Analityk", Tag = 3 });
             cmbUserRole.SelectedIndex = 0;
         }
 
@@ -153,9 +153,11 @@ namespace MedLabTab.Views.OtherViews
                 if (userAdded) { MessageBox.Show("Rejestracja zakończona pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information); }
                 else { MessageBox.Show("Wystąpił błąd.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning); }
 
-                    this.Close();
-               
-               
+                MainViewReception newMain = new MainViewReception();
+                newMain.Show();
+                this.Close();
+
+
             }
         }
 

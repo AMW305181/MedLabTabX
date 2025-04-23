@@ -92,7 +92,7 @@
             <TextBlock Style="{StaticResource TextBlockStyle}" Text="Kategoria"/>
             <ComboBox x:Name="CategoryComboBox" Style="{StaticResource ComboBoxStyle}"/>
 
-            <CheckBox x:Name="IsActiveCheckBox" Content="Aktywne" Margin="0,0,0,15" FontSize="14" Foreground="#333"/>
+            <CheckBox x:Name="IsActiveCheckBox" Content="Aktywne" Margin="0,0,0,15" FontSize="14" Foreground="#333" />
         </StackPanel>
 
         <!-- Przyciski -->

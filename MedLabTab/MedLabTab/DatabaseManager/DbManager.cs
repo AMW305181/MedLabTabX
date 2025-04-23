@@ -148,6 +148,7 @@ namespace MedLabTab.DatabaseManager
                 test.Description= newData.Description;
                 test.Price= newData.Price;
                 test.Category= newData.Category;
+                test.IsActive = newData.IsActive;
                 db.SaveChanges();
                 return true;
             }
@@ -161,6 +162,7 @@ namespace MedLabTab.DatabaseManager
                 test.Description = description;
                 test.Price = price;
                 test.Category = category;
+              
                 db.SaveChanges();
                 return true;
             }

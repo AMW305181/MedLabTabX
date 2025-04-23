@@ -32,7 +32,25 @@ namespace MedLabTab.Views.OtherViews
                 txtLogin.Text = _currentUser.Login;
                 txtPassword.Text = _currentUser.Password;
                 txtRepeatPassword.Text = _currentUser.Password;
-                txtRole.Text = _currentUser.GetType().Name;
+
+                int typeId= _currentUser.UserType;
+                switch (typeId) 
+                {
+                    case 1:
+                        txtRole.Text = "Recepcja";
+                        break;
+                    case 2:
+                        txtRole.Text = "Pielęgniarka";
+                        break;
+                    case 3:
+                        txtRole.Text = "Analityk";
+                        break;
+                    case 4:
+                        txtRole.Text = "Pacjent";
+                        break;
+                }
+                    
+                
             }
         }
 

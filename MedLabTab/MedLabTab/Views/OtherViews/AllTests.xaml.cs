@@ -68,7 +68,7 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private void Deactivate_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             Test selectedTest = button?.DataContext as Test;

@@ -12,6 +12,7 @@ namespace MedLabTab.Views.OtherViews
     {
         private Test _originalTest;
         private Window _parentWindow;
+       
 
         public EditTest(Test testToEdit, Window parentWindow)
         {
@@ -52,6 +53,7 @@ namespace MedLabTab.Views.OtherViews
             DescriptionTextBox.Text = _originalTest.Description;
             PriceTextBox.Text = _originalTest.Price.ToString(CultureInfo.InvariantCulture);
             IsActiveCheckBox.IsChecked = _originalTest.IsActive;
+           
         }
 
         private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -73,7 +75,7 @@ namespace MedLabTab.Views.OtherViews
                     Description = DescriptionTextBox.Text.Trim(),
                     Price = float.Parse(PriceTextBox.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                     Category = categoryId,
-                    IsActive = IsActiveCheckBox.IsChecked == true
+                    IsActive = IsActiveCheckBox.IsChecked == true,
                 };
 
                 bool success = DbManager.EditTest(_originalTest, updatedTest);
