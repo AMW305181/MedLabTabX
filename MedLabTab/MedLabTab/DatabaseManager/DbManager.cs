@@ -320,6 +320,7 @@ namespace MedLabTab.DatabaseManager
                     user.Surname = newData.Surname;
                     user.PESEL = newData.PESEL;
                     user.PhoneNumber = newData.PhoneNumber;
+                    user.IsActive = newData.IsActive;
                     db.SaveChanges();
                     return true;
                 }
