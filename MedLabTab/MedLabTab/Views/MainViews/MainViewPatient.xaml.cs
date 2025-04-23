@@ -32,7 +32,7 @@ namespace MedLabTab.Views.MainViews
         {
             AllTests allTests = new AllTests(this);
             allTests.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnVisits_Click(object sender, RoutedEventArgs e)

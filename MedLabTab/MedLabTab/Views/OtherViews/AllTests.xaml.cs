@@ -25,16 +25,16 @@ namespace MedLabTab.Views.OtherViews
         public AllTests(Window parentWindow)
         {
             InitializeComponent();
-            LoadActiveTests(); // Załaduj dane po inicjalizacji okna
+            LoadTests(); // Załaduj dane po inicjalizacji okna
             _parentWindow = parentWindow;
         }
 
-        private void LoadActiveTests()
+        private void LoadTests()
         {
-            var activeTests = DbManager.GetActiveTests(); // <-- Zmienna klasa, np. TestRepository
-            if (activeTests != null)
+            var tests = DbManager.GetAllTests(); // <-- Zmienna klasa, np. TestRepository
+            if (tests != null)
             {
-                BadaniaDataGrid.ItemsSource = activeTests;
+                BadaniaDataGrid.ItemsSource = tests;
             }
             else
             {
@@ -88,7 +88,7 @@ namespace MedLabTab.Views.OtherViews
                     if (deleted)
                     {
                         MessageBox.Show("Badanie zostało usunięte.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadActiveTests(); // Odświeżenie tabeli
+                        LoadTests(); // Odświeżenie tabeli
                     }
                     else
                     {
