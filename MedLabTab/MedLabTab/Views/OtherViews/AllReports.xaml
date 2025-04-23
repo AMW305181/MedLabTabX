@@ -3,10 +3,52 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="AllReports" Height="450" Width="800">
+        Title="Raporty" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Tytuł -->
+            <RowDefinition Height="*"/>
+            <!-- Tabela -->
+            <RowDefinition Height="Auto"/>
+            <!-- Przycisk Dodaj -->
+        </Grid.RowDefinitions>
+
+        <!-- Powrót + Tytuł -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Przycisk Powrót -->
+            <Button Content="←" Width="30" Height="30" Margin="10,20,10,10"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Click="Back_Click"/>
+
+            <!-- Tytuł -->
+            <TextBlock Text="Raporty" Grid.Column="1" Margin="301,20,0,10"
+                       HorizontalAlignment="Left" FontSize="26" FontWeight="Bold"/>
+        </Grid>
+
+        <!-- Tabela -->
+        <DataGrid x:Name="RaportyDataGrid" Grid.Row="1"
+                  AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Badanie" Binding="{Binding TestName}" Width="*" />
+                <DataGridTextColumn Header="Data" Binding="{Binding Description}" Width="*" />
+                <DataGridTextColumn Header="Pacjent" Binding="{Binding Price}" Width="*" />
+                <DataGridTemplateColumn Header="Akcje" Width="160">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Raport" Width="60" Margin="5,0" Click="ShowReport_Click"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

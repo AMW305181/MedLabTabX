@@ -28,8 +28,11 @@
                 <DataGridTemplateColumn Header="Akcje" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Dodaj" Width="80" HorizontalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Dodaj wyniki" Width="60" Margin="5,0"/>
+                            </StackPanel>
                         </DataTemplate>
+            
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>

@@ -1,0 +1,59 @@
+﻿<Window x:Class="MedLabTab.Views.OtherViews.ShowReport"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Raport" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tytuł -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Przycisk Powrót -->
+            <Button Content="←" Width="30" Height="30" Margin="10,20,10,10"
+            HorizontalAlignment="Left" VerticalAlignment="Top"
+            Click="Back_Click"/>
+
+            <!-- Tytuł -->
+            <TextBlock Text="Raport" Grid.Column="1" Margin="301,20,0,10"
+               HorizontalAlignment="Left" FontSize="26" FontWeight="Bold"/>
+        </Grid>
+
+        <!-- Środkowy panel (formularz) -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,10">
+            <!-- Badanie -->
+            <Label Content="Badanie:" Margin="0,5,0,0"/>
+            <TextBlock x:Name="TestTextBlock" Width="200" Margin="0,0,0,2"/>
+
+            <!-- Pacjent -->
+            <Label Content="Pacjent:" Margin="0,5,0,0"/>
+            <TextBlock x:Name="PatientTextBlock" Width="200" Margin="0,0,0,2"/>
+
+            <!-- Pielęgniarka -->
+            <Label Content="Pielęgniarka:" Margin="0,5,0,0"/>
+            <TextBlock x:Name="NurseTextBlock" Width="200" Margin="0,0,0,2"/>
+
+            <!-- Analityk -->
+            <Label Content="Analityk:" Margin="0,5,0,0"/>
+            <TextBlock x:Name="AnalystTextBlock" Width="200" Margin="0,0,0,2"/>
+
+            <!-- Data -->
+            <Label Content="Data:" Margin="0,5,0,0"/>
+            <TextBlock x:Name="DateTextBlock" Width="200" Margin="0,0,0,2"/>
+
+            <!-- Wyniki -->
+            <Label Content="Wyniki:" Margin="0,5,0,2"/>
+            <TextBox x:Name="ResultTextBox" Width="200" Height="80" Margin="0,0,0,2" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+        </StackPanel>
+    </Grid>
+</Window>
