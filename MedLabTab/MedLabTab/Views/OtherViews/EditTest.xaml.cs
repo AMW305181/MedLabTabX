@@ -1,24 +1,27 @@
 ﻿using System;
-using System.Linq;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
 using MedLabTab.DatabaseManager;
-using System.Globalization;
 
 namespace MedLabTab.Views.OtherViews
 {
-    public partial class NewTest : Window
+    public partial class EditTest : Window
     {
+        private Test _originalTest;
         private Window _parentWindow;
-        public NewTest(Window parentWindow)
+       
+
+        public EditTest(Test testToEdit, Window parentWindow)
         {
             InitializeComponent();
-            InitializeCategories();
-            ClearForm();
-            PriceTextBox.PreviewTextInput += NumberValidationTextBox;
+            _originalTest = testToEdit;
             _parentWindow = parentWindow;
+            InitializeCategories();
+            FillFormWithData();
+            PriceTextBox.PreviewTextInput += NumberValidationTextBox;
         }
 
         private void InitializeCategories()
@@ -27,23 +30,30 @@ namespace MedLabTab.Views.OtherViews
             var categories = DbManager.GetCategories();
             foreach (var cat in categories)
             {
-                CategoryComboBox.Items.Add(new ComboBoxItem
+                var item = new ComboBoxItem
                 {
                     Content = cat.CategoryName,
                     Tag = cat.id
-                });
+                };
+
+                CategoryComboBox.Items.Add(item);
+
+                // zaznacz kategorię testu
+                if (cat.id == _originalTest.Category)
+                    CategoryComboBox.SelectedItem = item;
             }
 
-            if (CategoryComboBox.Items.Count > 0)
+            if (CategoryComboBox.SelectedItem == null && CategoryComboBox.Items.Count > 0)
                 CategoryComboBox.SelectedIndex = 0;
         }
 
-        private void ClearForm()
+        private void FillFormWithData()
         {
-            TestNameTextBox.Text = string.Empty;
-            DescriptionTextBox.Text = string.Empty;
-            PriceTextBox.Text = string.Empty;
-            IsActiveCheckBox.IsChecked = true;
+            TestNameTextBox.Text = _originalTest.TestName;
+            DescriptionTextBox.Text = _originalTest.Description;
+            PriceTextBox.Text = _originalTest.Price.ToString(CultureInfo.InvariantCulture);
+            IsActiveCheckBox.IsChecked = _originalTest.IsActive;
+           
         }
 
         private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -59,26 +69,26 @@ namespace MedLabTab.Views.OtherViews
                 var selectedCategory = (ComboBoxItem)CategoryComboBox.SelectedItem;
                 int categoryId = (int)selectedCategory.Tag;
 
-                var newTest = new Test
+                var updatedTest = new Test
                 {
                     TestName = TestNameTextBox.Text.Trim(),
                     Description = DescriptionTextBox.Text.Trim(),
                     Price = float.Parse(PriceTextBox.Text.Replace(',', '.'), CultureInfo.InvariantCulture),
                     Category = categoryId,
-                    IsActive = IsActiveCheckBox.IsChecked == true
+                    IsActive = IsActiveCheckBox.IsChecked == true,
                 };
 
-                bool added = DbManager.AddTest(newTest); // zakładamy że zwraca bool
+                bool success = DbManager.EditTest(_originalTest, updatedTest);
 
-                if (added)
+                if (success)
                 {
-                    MessageBox.Show("Badanie zostało dodane pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Badanie zostało zaktualizowane!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
                     _parentWindow?.Show();
                 }
                 else
                 {
-                    MessageBox.Show("Wystąpił błąd podczas dodawania badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Wystąpił błąd podczas edycji badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
         }
@@ -115,7 +125,6 @@ namespace MedLabTab.Views.OtherViews
 
             return true;
         }
-
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {

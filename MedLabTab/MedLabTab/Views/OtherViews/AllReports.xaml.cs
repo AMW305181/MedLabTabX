@@ -1,6 +1,9 @@
-﻿using System;
+﻿using MedLabTab.DatabaseManager;
+using MedLabTab.DatabaseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,9 +22,49 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class AllReports : Window
     {
-        public AllReports()
+        private Window _parentWindow;
+        public AllReports(Window parentWindow)
         {
             InitializeComponent();
+            LoadDoneTests();
+            _parentWindow = parentWindow;
+        }
+
+        private void LoadDoneTests()
+        {
+            var doneTests = DbManager.GetActiveTests(); // do zmiany na GetDoneTests()
+            if (doneTests != null)
+            {
+                RaportyDataGrid.ItemsSource = doneTests;
+            }
+            else
+            {
+                MessageBox.Show("Błąd podczas ładowania gotowych testów.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ShowReport_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            // odnalezienie kontekstu wiersza - czyli obiektu testu
+            Test selectedTest = button?.DataContext as Test;
+
+            if (selectedTest != null)
+            {
+                var viewReportWindow = new ShowReport(/*selectedTest,*/ this);
+                viewReportWindow.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            _parentWindow?.Show();
         }
     }
 }
