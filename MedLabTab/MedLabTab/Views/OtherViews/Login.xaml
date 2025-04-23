@@ -166,7 +166,7 @@
                 <Separator Grid.Row="1" Background="#EEEEEE" Height="1" Margin="0,0,0,20"/>
 
                 <!-- Formularz logowania -->
-                <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="194" Margin="0,7,0,0" Grid.RowSpan="3">
                     <Label Content="Login:" Style="{StaticResource LabelStyle}"/>
                     <TextBox x:Name="LoginTextBox" Style="{StaticResource InputBoxStyle}"/>
 
