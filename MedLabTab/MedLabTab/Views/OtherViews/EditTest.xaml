@@ -1,12 +1,14 @@
-﻿<Window x:Class="MedLabTab.Views.OtherViews.Profile"
+﻿<Window x:Class="MedLabTab.Views.OtherViews.EditTest"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Profil" Height="450" Width="800"
+        Title="Nowe badanie" Height="450" Width="800"
         Background="#f8f5ff">
+
     <Window.Resources>
+        <!-- Style przycisków -->
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#FF69B4"/>
             <Setter Property="Foreground" Value="White"/>
@@ -36,18 +38,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Style tekstów -->
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="Margin" Value="0,0,0,1"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
+
+        <!-- Style pól tekstowych -->
         <Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="Padding" Value="5,3"/>
             <Setter Property="BorderBrush" Value="#CCCCCC"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Margin" Value="0,0,0,1"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <!-- Dodałem rozciąganie w poziomie -->
         </Style>
+
+        <!-- Style ComboBoxa -->
         <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Padding" Value="5,3"/>
             <Setter Property="BorderBrush" Value="#CCCCCC"/>
@@ -56,55 +66,39 @@
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
     </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Nagłówek -->
             <RowDefinition Height="*"/>
-            <!-- Formularz -->
             <RowDefinition Height="Auto"/>
-            <!-- Przyciski -->
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Edycja profilu" Grid.Row="0" Margin="0,20,0,10"
-               HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+        <!-- Tytuł -->
+        <TextBlock Text="Edycja badania" Grid.Row="0" Margin="0,10,0,10"
+                   HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
 
+        <!-- Formularz -->
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Imię i nazwisko"/>
-            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtName" Text="" IsReadOnly="True"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Nazwa badania"/>
+            <TextBox x:Name="TestNameTextBox" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch" MinWidth="200"/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="PESEL"/>
-            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPesel" Text="" IsReadOnly="True"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Opis"/>
+            <TextBox x:Name="DescriptionTextBox" Style="{StaticResource TextBoxStyle}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Numer telefonu"/>
-            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPhone" Text=""/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Cena (zł)"/>
+            <TextBox x:Name="PriceTextBox" Style="{StaticResource TextBoxStyle}"/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Login"/>
-            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtLogin" Text=""/>
+            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Kategoria"/>
+            <ComboBox x:Name="CategoryComboBox" Style="{StaticResource ComboBoxStyle}"/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Hasło"/>
-            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" />
-
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Powtórz hasło"/>
-            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtRepeatPassword" />
-
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Rola użytkownika"/>
-            <TextBox Style="{StaticResource TextBoxStyle}" Name="txtRole" IsReadOnly="True"/>
+            <CheckBox x:Name="IsActiveCheckBox" Content="Aktywne" Margin="0,0,0,15" FontSize="14" Foreground="#333" />
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,10">
-            <Button Style="{StaticResource ButtonStyle}" 
-                Content="Zatwierdź" 
-                Width="116" 
-                Margin="10,0" 
-                Height="30"
-                Click="btnAccept_Click"/>
-            <Button Style="{StaticResource ButtonStyle}" 
-                Content="Anuluj" 
-                Width="116" 
-                Margin="10,0" 
-                Height="30"
-                Click="btnCancel_Click"/>
+        <!-- Przyciski -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20">
+            <Button Content="Zapisz" Style="{StaticResource ButtonStyle}" Width="120" Margin="10,0" Click="Save_Click"/>
+            <Button Content="Anuluj" Style="{StaticResource ButtonStyle}" Width="120" Margin="10,0" Click="Cancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>

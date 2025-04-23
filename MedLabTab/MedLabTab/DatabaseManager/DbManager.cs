@@ -129,14 +129,6 @@ namespace MedLabTab.DatabaseManager
             }  catch { return false; }
         }
         //@Matylda usun niepotrzebne
-        public static bool AddTest(string testName, string description, float price, int category, bool isActive=true)
-        {
-            try {
-                db.Tests.Add(new Test { TestName = testName, Description = description, Price = price, Category = category, IsActive = isActive });
-                db.SaveChanges();
-                return true; }
-            catch { return false; }
-        }
         public static bool AddTest(Test test)
         {
             try
@@ -156,6 +148,7 @@ namespace MedLabTab.DatabaseManager
                 test.Description= newData.Description;
                 test.Price= newData.Price;
                 test.Category= newData.Category;
+                test.IsActive = newData.IsActive;
                 db.SaveChanges();
                 return true;
             }
@@ -169,8 +162,23 @@ namespace MedLabTab.DatabaseManager
                 test.Description = description;
                 test.Price = price;
                 test.Category = category;
+              
                 db.SaveChanges();
                 return true;
+            }
+            catch { return false; }
+        }
+        public static bool DeleteTest(Test test)
+        {
+            try
+            {
+                if (test != null)
+                {
+                    test.IsActive = false;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
             }
             catch { return false; }
         }
@@ -328,6 +336,7 @@ namespace MedLabTab.DatabaseManager
                     user.Surname = newData.Surname;
                     user.PESEL = newData.PESEL;
                     user.PhoneNumber = newData.PhoneNumber;
+                    user.IsActive = newData.IsActive;
                     db.SaveChanges();
                     return true;
                 }

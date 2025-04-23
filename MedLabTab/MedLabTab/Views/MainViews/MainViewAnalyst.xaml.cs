@@ -17,9 +17,9 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests();
+            AllTests allTests = new AllTests(this);
             allTests.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
@@ -31,16 +31,16 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            NewReport newReport = new NewReport();
+            AllReports newReport = new AllReports(this);
             newReport.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            Profile profile = new Profile(currentUser);
+            Profile profile = new Profile(currentUser, this);
             profile.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
