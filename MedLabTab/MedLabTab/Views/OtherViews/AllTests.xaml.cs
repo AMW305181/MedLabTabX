@@ -28,17 +28,27 @@ namespace MedLabTab.Views.OtherViews
             LoadTests(); // Załaduj dane po inicjalizacji okna
             _parentWindow = parentWindow;
         }
-
         private void LoadTests()
         {
-            var tests = DbManager.GetAllTests(); // <-- Zmienna klasa, np. TestRepository
-            if (tests != null)
+            var tests = DbManager.GetAllTests();
+            var categoryDict = DbManager.GetCategoriesDictionary();
+
+            if (tests != null && categoryDict != null)
             {
-                BadaniaDataGrid.ItemsSource = tests;
+                var mappedTests = tests.Select(t => new
+                {
+                    t.TestName,
+                    t.Description,
+                    t.Price,
+                    Category = categoryDict.TryGetValue(t.Category, out var catName) ? catName : "Nieznana",
+                    OriginalTest = t // jeśli chcesz móc edytować dalej test - tego trochę nie czaje
+                }).ToList();
+
+                BadaniaDataGrid.ItemsSource = mappedTests;
             }
             else
             {
-                MessageBox.Show("Błąd podczas ładowania aktywnych testów.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Błąd podczas ładowania danych.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
