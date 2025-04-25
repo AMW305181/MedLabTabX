@@ -28,7 +28,7 @@ namespace MedLabTab.Views.OtherViews
             LoadTests(); // Załaduj dane po inicjalizacji okna
             _parentWindow = parentWindow;
         }
-        private void LoadTests()
+        public void LoadTests()
         {
             var tests = DbManager.GetAllTests();
             var categoryDict = DbManager.GetCategoriesDictionary();
@@ -52,19 +52,12 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void AddTest_Click(object sender, RoutedEventArgs e)
-        {
-            var newTestWindow = new NewTest(this);
-            newTestWindow.Show();
-            this.Hide();
-        }
-
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
 
             // odnalezienie kontekstu wiersza - czyli obiektu testu
-            Test selectedTest = button?.DataContext as Test;
+            Test selectedTest = (sender as Button)?.CommandParameter as Test;
 
             if (selectedTest != null)
             {
@@ -81,7 +74,7 @@ namespace MedLabTab.Views.OtherViews
         private void Deactivate_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            Test selectedTest = button?.DataContext as Test;
+            Test selectedTest = (sender as Button)?.CommandParameter as Test;
 
             if (selectedTest != null)
             {

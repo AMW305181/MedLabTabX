@@ -44,8 +44,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Edytuj" Width="60" Margin="5,0" Click="Edit_Click"/>
-                                <Button Content="Dezaktywuj" Width="60" Margin="5,0" Click="Deactivate_Click"/>
+                                <Button Content="Edytuj" Width="60" Margin="5,0" CommandParameter="{Binding OriginalTest}" Click="Edit_Click"/>
+                                <Button Content="Dezaktywuj" Width="60" Margin="5,0" CommandParameter="{Binding OriginalTest}" Click="Deactivate_Click"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -53,8 +53,5 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Przycisk Dodaj -->
-        <Button Content="Dodaj" Grid.Row="2" Width="120" Height="30"
-                Margin="0,10,0,20" HorizontalAlignment="Center" Click="AddTest_Click"/>
     </Grid>
 </Window>
