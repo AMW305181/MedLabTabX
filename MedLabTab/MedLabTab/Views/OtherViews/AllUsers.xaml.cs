@@ -50,16 +50,16 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests(this);
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
             allTests.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnNewExam_Click(object sender, RoutedEventArgs e)
         {
             NewTest newTest = new NewTest(this);
             newTest.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
@@ -80,7 +80,7 @@ namespace MedLabTab.Views.OtherViews
         {
             AllReports allReports = new AllReports(this);
             allReports.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)

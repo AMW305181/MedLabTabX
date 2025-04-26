@@ -38,7 +38,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests(this);
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
             allTests.Show();
             this.Close();
         }

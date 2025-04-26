@@ -16,9 +16,6 @@ using MedLabTab.DatabaseModels;
 
 namespace MedLabTab.Views.OtherViews
 {
-    /// <summary>
-    /// Interaction logic for Tests.xaml
-    /// </summary>
     public partial class AllTests : Window
     {
         private Window _parentWindow;
@@ -30,7 +27,7 @@ namespace MedLabTab.Views.OtherViews
         }
         public void LoadTests()
         {
-            var tests = DbManager.GetAllTests();
+            var tests = DbManager.GetActiveTests();
             var categoryDict = DbManager.GetCategoriesDictionary();
 
             if (tests != null && categoryDict != null)
@@ -49,59 +46,6 @@ namespace MedLabTab.Views.OtherViews
             else
             {
                 MessageBox.Show("Błąd podczas ładowania danych.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void Edit_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-
-            // odnalezienie kontekstu wiersza - czyli obiektu testu
-            Test selectedTest = (sender as Button)?.CommandParameter as Test;
-
-            if (selectedTest != null)
-            {
-                var editTestWindow = new EditTest(selectedTest, this);
-                editTestWindow.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Nie udało się wczytać danych badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void Deactivate_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            Test selectedTest = (sender as Button)?.CommandParameter as Test;
-
-            if (selectedTest != null)
-            {
-                var result = MessageBox.Show(
-                    $"Czy na pewno chcesz usunąć badanie \"{selectedTest.TestName}\"?",
-                    "Potwierdzenie usunięcia",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    bool deleted = DbManager.DeleteTest(selectedTest);
-
-                    if (deleted)
-                    {
-                        MessageBox.Show("Badanie zostało usunięte.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadTests(); // Odświeżenie tabeli
-                    }
-                    else
-                    {
-                        MessageBox.Show("Wystąpił błąd podczas usuwania badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Nie udało się pobrać wybranego badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

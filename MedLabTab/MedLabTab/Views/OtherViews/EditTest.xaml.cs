@@ -11,8 +11,8 @@ namespace MedLabTab.Views.OtherViews
     public partial class EditTest : Window
     {
         private Test _originalTest;
-        private AllTests _parentWindow;
-        public EditTest(Test testToEdit, AllTests parentWindow)
+        private AllTestsAdmin _parentWindow;
+        public EditTest(Test testToEdit, AllTestsAdmin parentWindow)
         {
             InitializeComponent();
             _originalTest = testToEdit;
