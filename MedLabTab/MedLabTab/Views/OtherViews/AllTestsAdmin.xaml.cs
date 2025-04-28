@@ -83,7 +83,7 @@ namespace MedLabTab.Views.OtherViews
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    bool deleted = DbManager.DeleteTest(selectedTest);
+                    bool deleted = DbManager.DeactivateTest(selectedTest);
 
                     if (deleted)
                     {

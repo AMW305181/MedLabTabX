@@ -168,7 +168,7 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return false; }
         }
-        public static bool DeleteTest(Test test)
+        public static bool DeactivateTest(Test test)
         {
             try
             {

@@ -36,9 +36,9 @@ namespace MedLabTab.Views.OtherViews
         }
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisits allVisits = new AllVisits();
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
             allVisits.Show();
-            this.Close();  
+            this.Hide();  
         }
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
