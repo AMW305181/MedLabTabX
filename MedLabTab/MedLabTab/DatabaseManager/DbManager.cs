@@ -247,7 +247,6 @@ namespace MedLabTab.DatabaseManager
                                "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             return null; }
         }
-        //@Victoria wybierz, ktora wygodniejsza
         public static bool ChangeUserStatus(int userId)
         {
             try {

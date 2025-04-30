@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,39 +34,57 @@ namespace MedLabTab.Views.OtherViews
 
         private void LoadUsers()
         {
-            var users = DbManager.LoadUsers();
-            if (users != null)
+            _allUsers = DbManager.LoadUsers();
+            if (_allUsers != null)
             {
-                dgUsers.ItemsSource = users;
+                _filteredUsers = new List<User>(_allUsers);
+                dgUsers.ItemsSource = _filteredUsers;
             }
             else
             {
-                MessageBox.Show("Błąd podczas ładowania aktywnych testów.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Błąd podczas ładowania użytkowników.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            /*
-            if (string.IsNullOrWhiteSpace(txtSearch.Text))
-            {
-                dgUsers.ItemsSource = _allUsers;
-                _filteredUsers = new List<User>(_allUsers);
-            }
-            else
-            {
-                var searchText = txtSearch.Text.ToLower();
-                _filteredUsers = _allUsers.Where(u =>
-                    u.Login.ToLower().Contains(searchText) ||
-                    u.Name.ToLower().Contains(searchText) ||
-                    u.Surname.ToLower().Contains(searchText)).ToList();
+            if (_allUsers == null || _filteredUsers == null) return;
 
+            var searchText = txtSearch.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
                 dgUsers.ItemsSource = _filteredUsers;
+                return;
             }
-            */
+
+            var searchParts = searchText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            dgUsers.ItemsSource = _filteredUsers.Where(u =>
+            {
+                string name = u.Name?.ToLower() ?? string.Empty;
+                string surname = u.Surname?.ToLower() ?? string.Empty;
+                string login = u.Login?.ToLower() ?? string.Empty;
+
+                bool matchesSingleField =
+                    login.Contains(searchText) ||
+                    name.Contains(searchText) ||
+                    surname.Contains(searchText);
+
+                bool matchesFullName = false;
+
+                if (searchParts.Length > 1)
+                {
+                    matchesFullName =
+                        (name.Contains(searchParts[0]) && surname.Contains(searchParts[1])) ||
+                        (name.Contains(searchParts[1]) && surname.Contains(searchParts[0]));
+                }
+
+                return matchesSingleField || matchesFullName;
+            }).ToList();
         }
 
-        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             AllVisits allVisits = new AllVisits();
             allVisits.Show();
@@ -138,32 +157,40 @@ namespace MedLabTab.Views.OtherViews
         {
             if (cmbRoleFilter.SelectedItem == null || _allUsers == null) return;
 
-            var selectedRole = (cmbRoleFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
+            var selectedDisplayRole = (cmbRoleFilter.SelectedItem as ComboBoxItem)?.Content?.ToString();
 
-            if (selectedRole == "Wszystkie role")
+            if (selectedDisplayRole == "Wszystkie role")
             {
-                dgUsers.ItemsSource = _allUsers;
-                _filteredUsers = new List<User>(_allUsers);
+                dgUsers.ItemsSource = new List<User>(_allUsers);
+                return;
             }
-            else
+
+            if (_roleMapping.TryGetValue(selectedDisplayRole, out var dbRoleValue))
             {
                 using (var db = new MedLabContext())
                 {
-                    var role = db.UserTypes.FirstOrDefault(ut => ut.TypeName == selectedRole);
+                    var role = db.UserTypes.FirstOrDefault(ut => ut.TypeName == dbRoleValue);
 
                     if (role != null)
                     {
-                        _filteredUsers = _allUsers.Where(u => u.UserTypeNavigation?.id == role.id).ToList();
-                        dgUsers.ItemsSource = _filteredUsers;
-                    }
-                    else
-                    {
-                        _filteredUsers = new List<User>(_allUsers);
-                        dgUsers.ItemsSource = _filteredUsers;
+                        dgUsers.ItemsSource = _allUsers
+                            .Where(u => u.UserTypeNavigation?.id == role.id)
+                            .ToList();
+                        return;
                     }
                 }
             }
+
+            dgUsers.ItemsSource = new List<User>(_allUsers);
         }
+
+        private readonly Dictionary<string, string> _roleMapping = new Dictionary<string, string>
+    {
+        {"Analityk", "analyst"},
+        {"Pielęgniarka", "nurse"},
+        {"Recepcja", "receptionist"},
+        {"Pacjent", "patient"}
+        };
 
         private void BtnEditUser_Click(object sender, RoutedEventArgs e)
         {
@@ -245,11 +272,6 @@ namespace MedLabTab.Views.OtherViews
         private void DgUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _selectedUser = dgUsers.SelectedItem as User;
-        }
-
-        private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }
