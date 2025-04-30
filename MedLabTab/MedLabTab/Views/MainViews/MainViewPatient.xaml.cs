@@ -37,9 +37,9 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisits allVisits = new AllVisits();
+            MyVisits allVisits = new MyVisits(this);
             allVisits.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnResults_Click(object sender, RoutedEventArgs e)

@@ -82,6 +82,16 @@ namespace MedLabTab.DatabaseManager
             catch { return null; }
         }
 
+        public static List<User> GetActivePatients()
+        {
+            try
+            {
+                List<User> ActiveUsers = db.Users.Where(t => t.IsActive == true && t.UserType == 4).ToList();
+                return ActiveUsers;
+            }
+            catch { return null; }
+        }
+
         public static List<Test> GetAllTests()
         {
             try
@@ -169,7 +179,7 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return false; }
         }
-        public static bool DeleteTest(Test test)
+        public static bool DeactivateTest(Test test)
         {
             try
             {

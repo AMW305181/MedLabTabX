@@ -6,6 +6,7 @@ using MedLabTab.DatabaseModels;
 using BCrypt.Net;
 using System.Text.RegularExpressions;
 using MedLabTab.DatabaseManager;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -30,8 +31,8 @@ namespace MedLabTab.Views.OtherViews
                 txtPesel.Text = _currentUser.PESEL;
                 txtPhone.Text = _currentUser.PhoneNumber;
                 txtLogin.Text = _currentUser.Login;
-                txtPassword.Text = _currentUser.Password;
-                txtRepeatPassword.Text = _currentUser.Password;
+                txtPassword.Password = _currentUser.Password;
+                txtRepeatPassword.Password = _currentUser.Password;
 
                 int typeId= _currentUser.UserType;
                 switch (typeId) 
@@ -48,9 +49,7 @@ namespace MedLabTab.Views.OtherViews
                     case 4:
                         txtRole.Text = "Pacjent";
                         break;
-                }
-                    
-                
+                } 
             }
         }
 
@@ -65,8 +64,8 @@ namespace MedLabTab.Views.OtherViews
             if (ValidateInputs())
             {
                 string newLogin = txtLogin.Text.Trim();
-                string newPassword = txtPassword.Text.Trim();
-                string repeatPassword = txtRepeatPassword.Text.Trim();
+                string newPassword = txtPassword.Password.Trim();
+                string repeatPassword = txtRepeatPassword.Password.Trim();
                 string newPhone = txtPhone.Text.Trim();
 
                 // Sprawdzenie czy hasła się zgadzają
@@ -102,7 +101,7 @@ namespace MedLabTab.Views.OtherViews
         {
             if (string.IsNullOrWhiteSpace(txtPhone.Text) ||
                 string.IsNullOrWhiteSpace(txtLogin.Text) ||
-                string.IsNullOrWhiteSpace(txtPassword.Text))
+                string.IsNullOrWhiteSpace(txtPassword.Password))
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
@@ -114,7 +113,7 @@ namespace MedLabTab.Views.OtherViews
                 return false;
             }
 
-            if (txtPassword.Text.Length < 6)
+            if (txtPassword.Password.Length < 6)
             {
                 MessageBox.Show("Hasło musi zawierać co najmniej 6 znaków.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;

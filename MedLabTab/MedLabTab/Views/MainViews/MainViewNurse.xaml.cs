@@ -103,9 +103,9 @@ namespace MedLabTab.Views.MainViews
         //jak coś się spierniczy, to tutaj ----->
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllVisits allVisits = new AllVisits();
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
             allVisits.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
