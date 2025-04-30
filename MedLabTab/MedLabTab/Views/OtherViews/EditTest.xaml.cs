@@ -11,10 +11,8 @@ namespace MedLabTab.Views.OtherViews
     public partial class EditTest : Window
     {
         private Test _originalTest;
-        private Window _parentWindow;
-       
-
-        public EditTest(Test testToEdit, Window parentWindow)
+        private AllTestsAdmin _parentWindow;
+        public EditTest(Test testToEdit, AllTestsAdmin parentWindow)
         {
             InitializeComponent();
             _originalTest = testToEdit;
@@ -83,8 +81,10 @@ namespace MedLabTab.Views.OtherViews
                 if (success)
                 {
                     MessageBox.Show("Badanie zostało zaktualizowane!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                    this.Close();
+                   
+                    _parentWindow.LoadTests();
                     _parentWindow?.Show();
+                    this.Close();
                 }
                 else
                 {
