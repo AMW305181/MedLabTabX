@@ -173,7 +173,9 @@ namespace MedLabTab.Views.OtherViews
 
             if (selectedUser != null)
             {
-
+                Profile profile = new Profile(selectedUser, this);
+                profile.Show();
+                this.Close();
             }
             else
             {
@@ -187,24 +189,50 @@ namespace MedLabTab.Views.OtherViews
 
             if (selectedUser != null)
             {
-                var result = MessageBox.Show(
-                    $"Czy na pewno chcesz usunąć użytkownika \"{selectedUser.Name} { selectedUser.Surname}\"?",
-                    "Potwierdzenie usunięcia",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
+                if (selectedUser.IsActive == false)
                 {
-                    bool deleted = DbManager.ChangeUserStatus(selectedUser.id);
+                    var result2 = MessageBox.Show(
+                        $"Czy na pewno chcesz przywrócić użytkownika \"{selectedUser.Name} {selectedUser.Surname}\"?",
+                        "Potwierdzenie przywrócenia",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
 
-                    if (deleted)
+                    if (result2 == MessageBoxResult.Yes)
                     {
-                        MessageBox.Show("Użytkownik został usunięty.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadUsers();
+                        bool deleted = DbManager.ChangeUserStatus(selectedUser.id);
+
+                        if (deleted)
+                        {
+                            MessageBox.Show("Użytkownik został przywrócony.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                            LoadUsers();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Wystąpił błąd podczas przywracania użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
-                    else
+                }
+                else
+                {
+                    var result = MessageBox.Show(
+                        $"Czy na pewno chcesz usunąć użytkownika \"{selectedUser.Name} {selectedUser.Surname}\"?",
+                        "Potwierdzenie usunięcia",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
                     {
-                        MessageBox.Show("Wystąpił błąd podczas usuwania użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                        bool deleted = DbManager.ChangeUserStatus(selectedUser.id);
+
+                        if (deleted)
+                        {
+                            MessageBox.Show("Użytkownik został usunięty.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                            LoadUsers();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Wystąpił błąd podczas usuwania użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                 }
             }
@@ -213,35 +241,10 @@ namespace MedLabTab.Views.OtherViews
                 MessageBox.Show("Nie udało się pobrać wybranego użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void BtnCancelUser_Click(object sender, RoutedEventArgs e)
-        {
-            panelEdit.Visibility = Visibility.Collapsed;
-            ClearEditFields();
-        }
-        private void BtnSaveUser_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void BtnCancelEdit_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void DgUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _selectedUser = dgUsers.SelectedItem as User;
-        }
-
-        private void ClearEditFields()
-        {
-            txtLogin.Text = string.Empty;
-            txtFirstName.Text = string.Empty;
-            txtLastName.Text = string.Empty;
-            txtPesel.Text = string.Empty;
-            txtPhone.Text = string.Empty;
-            txtPassword.Password = string.Empty;
-            cmbRole.SelectedIndex = -1;
-            _selectedUser = null;
         }
 
         private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)

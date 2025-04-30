@@ -451,18 +451,19 @@
                         <DataGridTextColumn Header="Rola" Binding="{Binding UserTypeNavigation.TypeName}" Width="*"/>
                         <DataGridTextColumn Header="PESEL" Binding="{Binding PESEL}" Width="*"/>
                         <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="*"/>
+                        <DataGridTextColumn Header="Aktywność" Binding="{Binding IsActive}" Width="*"/>
                         <DataGridTemplateColumn Header="Akcje" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button Content="Edytuj" 
                                                 Style="{StaticResource ButtonStyle}" 
-                                                Width="80"
+                                                Width="100"
                                                 Margin="5,0"
                                                 Click="BtnEditUser_Click"/>
-                                        <Button Content="Usuń" 
+                                        <Button Content="Usuń/Przywróć" 
                                                 Style="{StaticResource DeleteButtonStyle}" 
-                                                Width="80"
+                                                Width="100"
                                                 Margin="5,0"
                                                 Click="BtnDeleteUser_Click"/>
                                     </StackPanel>
@@ -541,23 +542,6 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <!-- Przyciski -->
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" 
-                                    Orientation="Horizontal" 
-                                    HorizontalAlignment="Right" 
-                                    Margin="0,15,0,0">
-                            <Button Content="Anuluj" 
-                                    Style="{StaticResource ButtonStyle}" 
-                                    Background="#DDDDDD"
-                                    Foreground="#555555"
-                                    Width="100"
-                                    Click="BtnCancelEdit_Click"/>
-                            <Button Content="Zapisz" 
-                                    Style="{StaticResource ButtonStyle}" 
-                                    Width="100"
-                                    Click="BtnSaveUser_Click"
-                                    Margin="10,5,0,5"/>
-                        </StackPanel>
                     </Grid>
                 </Border>
             </Grid>
