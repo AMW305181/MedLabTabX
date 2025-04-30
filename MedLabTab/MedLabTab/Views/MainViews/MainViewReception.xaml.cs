@@ -15,21 +15,21 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisits allVisits = new AllVisits();
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
             allVisits.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit();
+            NewVisit newVisit = new NewVisit(this);
             newVisit.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests(this);
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
             allTests.Show();
             this.Hide();
         }

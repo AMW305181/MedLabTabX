@@ -66,9 +66,9 @@
 
         <!-- Style dla przycisków -->
         <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="36"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Padding" Value="15,5"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#FF69B4"/>
@@ -433,18 +433,6 @@
                         <ComboBoxItem Content="Analityk"/>
                     </ComboBox>
 
-                    <!-- Sortowanie -->
-                    <ComboBox Grid.Column="2" 
-                          x:Name="cmbSort"
-                          Style="{StaticResource ComboBoxStyle}"
-                          Width="180"
-                          Margin="0,0,10,0"
-                          SelectionChanged="CmbSort_SelectionChanged">      
-                        <ComboBoxItem Content="Sortuj wg nazwiska" IsSelected="True"/>
-                        <ComboBoxItem Content="Sortuj wg imienia"/>
-                        <ComboBoxItem Content="Sortuj wg loginu"/>
-                        <ComboBoxItem Content="Sortuj wg roli"/>
-                    </ComboBox>
                 </Grid>
 
 
@@ -457,23 +445,43 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Auto"
                           ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="Auto"/>
-                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="Auto"/>
-                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="Auto"/>
-                        <DataGridTextColumn Header="Rola" Binding="{Binding Role}" Width="Auto"/>
-                        <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}" Width="Auto"/>
-                        <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="Auto"/>
+                        <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="*"/>
+                        <DataGridTextColumn Header="Imię" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}" Width="*"/>
+                        <DataGridTextColumn Header="Rola" Binding="{Binding UserTypeNavigation.TypeName}" Width="*"/>
+                        <DataGridTextColumn Header="PESEL" Binding="{Binding PESEL}" Width="*"/>
+                        <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="*"/>
+                        <DataGridTemplateColumn Header="Aktywny" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="Nie"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="Text" Value="Tak"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Akcje" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button Content="Edytuj" 
                                                 Style="{StaticResource ButtonStyle}" 
-                                                Width="80"
+                                                Width="100"
+                                                Margin="5,0"
                                                 Click="BtnEditUser_Click"/>
-                                        <Button Content="Usuń" 
+                                        <Button Content="Usuń/Przywróć" 
                                                 Style="{StaticResource DeleteButtonStyle}" 
-                                                Width="80"
+                                                Width="100"
+                                                Margin="5,0"
                                                 Click="BtnDeleteUser_Click"/>
                                     </StackPanel>
                                 </DataTemplate>
@@ -551,23 +559,6 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <!-- Przyciski -->
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" 
-                                    Orientation="Horizontal" 
-                                    HorizontalAlignment="Right" 
-                                    Margin="0,15,0,0">
-                            <Button Content="Anuluj" 
-                                    Style="{StaticResource ButtonStyle}" 
-                                    Background="#DDDDDD"
-                                    Foreground="#555555"
-                                    Width="100"
-                                    Click="BtnCancelEdit_Click"/>
-                            <Button Content="Zapisz" 
-                                    Style="{StaticResource ButtonStyle}" 
-                                    Width="100"
-                                    Click="BtnSaveUser_Click"
-                                    Margin="10,5,0,5"/>
-                        </StackPanel>
                     </Grid>
                 </Border>
             </Grid>
