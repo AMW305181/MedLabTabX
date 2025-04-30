@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
 
 namespace MedLabTab.Views.OtherViews
@@ -26,14 +27,44 @@ namespace MedLabTab.Views.OtherViews
         public AllUsers()
         {
             InitializeComponent();
-            //loadUsers();
+            LoadUsers();
             txtSearch.TextChanged += TxtSearch_TextChanged;
+        }
+
+        private void LoadUsers()
+        {
+            var users = DbManager.LoadUsers();
+            if (users != null)
+            {
+                dgUsers.ItemsSource = users;
+            }
+            else
+            {
+                MessageBox.Show("Błąd podczas ładowania aktywnych testów.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
+            /*
+            if (string.IsNullOrWhiteSpace(txtSearch.Text))
+            {
+                dgUsers.ItemsSource = _allUsers;
+                _filteredUsers = new List<User>(_allUsers);
+            }
+            else
+            {
+                var searchText = txtSearch.Text.ToLower();
+                _filteredUsers = _allUsers.Where(u =>
+                    u.Login.ToLower().Contains(searchText) ||
+                    u.Name.ToLower().Contains(searchText) ||
+                    u.Surname.ToLower().Contains(searchText)).ToList();
 
+                dgUsers.ItemsSource = _filteredUsers;
+            }
+            */
         }
+
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             AllVisits allVisits = new AllVisits();
@@ -105,21 +136,82 @@ namespace MedLabTab.Views.OtherViews
 
         private void CmbRoleFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (cmbRoleFilter.SelectedItem == null || _allUsers == null) return;
 
-        }
+            var selectedRole = (cmbRoleFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-        private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+            if (selectedRole == "Wszystkie role")
+            {
+                dgUsers.ItemsSource = _allUsers;
+                _filteredUsers = new List<User>(_allUsers);
+            }
+            else
+            {
+                using (var db = new MedLabContext())
+                {
+                    var role = db.UserTypes.FirstOrDefault(ut => ut.TypeName == selectedRole);
 
+                    if (role != null)
+                    {
+                        _filteredUsers = _allUsers.Where(u => u.UserTypeNavigation?.id == role.id).ToList();
+                        dgUsers.ItemsSource = _filteredUsers;
+                    }
+                    else
+                    {
+                        _filteredUsers = new List<User>(_allUsers);
+                        dgUsers.ItemsSource = _filteredUsers;
+                    }
+                }
+            }
         }
 
         private void BtnEditUser_Click(object sender, RoutedEventArgs e)
         {
+            Button button = sender as Button;
 
+            User selectedUser = button?.DataContext as User;
+
+            if (selectedUser != null)
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("Nie udało się wczytać danych użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void BtnDeleteUser_Click(object sender, RoutedEventArgs e)
         {
+            Button button = sender as Button;
+            User selectedUser = button?.DataContext as User;
 
+            if (selectedUser != null)
+            {
+                var result = MessageBox.Show(
+                    $"Czy na pewno chcesz usunąć użytkownika \"{selectedUser.Name} { selectedUser.Surname}\"?",
+                    "Potwierdzenie usunięcia",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    bool deleted = DbManager.ChangeUserStatus(selectedUser.id);
+
+                    if (deleted)
+                    {
+                        MessageBox.Show("Użytkownik został usunięty.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                        LoadUsers();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Wystąpił błąd podczas usuwania użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Nie udało się pobrać wybranego użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void BtnCancelUser_Click(object sender, RoutedEventArgs e)
         {
@@ -152,5 +244,9 @@ namespace MedLabTab.Views.OtherViews
             _selectedUser = null;
         }
 
+        private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

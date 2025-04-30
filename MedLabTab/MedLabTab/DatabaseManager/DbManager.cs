@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
 using MedLabTab.ViewModels;
@@ -212,21 +213,6 @@ namespace MedLabTab.DatabaseManager
             catch { return false; }
         }
 
-        public static bool DeleteTest(Test test)
-        {
-            try
-            {
-                if (test != null)
-                {
-                    test.IsActive = false;
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch { return false; }
-        }
-
         public static List<CategoryDictionary> GetCategories()
         {
             try { return db.CategoryDictionaries.ToList();  }
@@ -250,8 +236,16 @@ namespace MedLabTab.DatabaseManager
 
         public static List<User> LoadUsers()
         {
-            try { return db.Users.ToList(); }
-            catch { return null; }
+            try {
+                return db.Users
+                                 .Include(u => u.UserTypeNavigation)
+                                 .ToList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas ładowania użytkowników: {ex.Message}",
+                               "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            return null; }
         }
         //@Victoria wybierz, ktora wygodniejsza
         public static bool ChangeUserStatus(int userId)
@@ -267,21 +261,7 @@ namespace MedLabTab.DatabaseManager
                 return false; }
             catch { return false; }
         }
-        public static bool ChangeUserStatus(User user)
-        {
-            try
-            {
-                if (user != null)
-                {
-                    user.IsActive = !user.IsActive;
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch { return false; }
-        }
-        //tu są 3 opcje
+
         public static bool EditUserAdmin(int userId, string login, int userType, string password, string name, string surname, string PESEL, string? phone=null )
         {
             try 

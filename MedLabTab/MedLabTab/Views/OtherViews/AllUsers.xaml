@@ -66,9 +66,9 @@
 
         <!-- Style dla przycisków -->
         <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="36"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Padding" Value="15,5"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#FF69B4"/>
@@ -433,18 +433,6 @@
                         <ComboBoxItem Content="Analityk"/>
                     </ComboBox>
 
-                    <!-- Sortowanie -->
-                    <ComboBox Grid.Column="2" 
-                          x:Name="cmbSort"
-                          Style="{StaticResource ComboBoxStyle}"
-                          Width="180"
-                          Margin="0,0,10,0"
-                          SelectionChanged="CmbSort_SelectionChanged">      
-                        <ComboBoxItem Content="Sortuj wg nazwiska" IsSelected="True"/>
-                        <ComboBoxItem Content="Sortuj wg imienia"/>
-                        <ComboBoxItem Content="Sortuj wg loginu"/>
-                        <ComboBoxItem Content="Sortuj wg roli"/>
-                    </ComboBox>
                 </Grid>
 
 
@@ -457,12 +445,12 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Auto"
                           ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="Auto"/>
-                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="Auto"/>
-                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="Auto"/>
-                        <DataGridTextColumn Header="Rola" Binding="{Binding Role}" Width="Auto"/>
-                        <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}" Width="Auto"/>
-                        <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="Auto"/>
+                        <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="*"/>
+                        <DataGridTextColumn Header="Imię" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}" Width="*"/>
+                        <DataGridTextColumn Header="Rola" Binding="{Binding UserTypeNavigation.TypeName}" Width="*"/>
+                        <DataGridTextColumn Header="PESEL" Binding="{Binding PESEL}" Width="*"/>
+                        <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="*"/>
                         <DataGridTemplateColumn Header="Akcje" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -470,10 +458,12 @@
                                         <Button Content="Edytuj" 
                                                 Style="{StaticResource ButtonStyle}" 
                                                 Width="80"
+                                                Margin="5,0"
                                                 Click="BtnEditUser_Click"/>
                                         <Button Content="Usuń" 
                                                 Style="{StaticResource DeleteButtonStyle}" 
                                                 Width="80"
+                                                Margin="5,0"
                                                 Click="BtnDeleteUser_Click"/>
                                     </StackPanel>
                                 </DataTemplate>
