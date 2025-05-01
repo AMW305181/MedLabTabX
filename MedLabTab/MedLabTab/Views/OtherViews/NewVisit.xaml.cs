@@ -108,24 +108,52 @@ namespace MedLabTab.Views.OtherViews
         {
             if (ValidateInputs())
             {
-                //do uzupełnienie po dodaniu harmonogramu
-                //patientId, paymentStatus, isActive, timeSlotId, cost, cos z badaniami musi byc
-
+                //do uzupełnienia po dodaniu harmonogramu
 
                 //var selectedPatient = (ComboBoxItem)PatientComboBox.SelectedItem;
                 //string patientPESEL = (string)selectedPatient.Tag;
 
+                //var selectedTimeSlot = (ComboBoxItem)DateComboBox.SelectedItem;
+                //int timeSlotId = (int)selectedTimeSlot.Tag;
+
                 //var newVisit = new Visit
                 //{
                 //    Cost = visitCost,
-                //    PatientId = (DbManager.GetUser(patientPESEL)).id,
                 //    PaymentStatus = IsPaidCheckBox.IsChecked == true,
-                //    IsActive = IsActiveCheckBox.IsChecked == true
+                //    IsActive = IsActiveCheckBox.IsChecked == true,
+                //    PatientId = (DbManager.GetUser(patientPESEL)).id,
+                //    TimeSlotId = timeSlotId,
                 //};
 
-                //bool added = DbManager.AddVisit(newVisit);
+                //bool addedVisit = DbManager.AddVisit(newVisit);
+                //bool addedAllTests = true;
 
-                //if (added)
+
+                //foreach (ListBoxItem item in TestsListBox.Items)
+                //{
+                //    if (item.Tag is int testId)
+                //    {
+                //        var test = DbManager.GetTest(testId);
+
+                //        var newTestHistory = new TestHistory
+                //        {
+                //            VisitId = newVisit.id,
+                //            TestId = test.id,
+                //            PatientId = DbManager.GetUser(patientPESEL).id,
+                //            Status = 1, // to chyba oznacza ze jest pierwszy etap jakby
+                //            AnalystId = null,
+                //        };
+
+                //        bool added = DbManager.AddTestHistory(newTestHistory);
+
+                //        if (!added)
+                //        {
+                //            addedAllTests = false;
+                //        }
+                //    }
+                //}
+
+                //if (addedVisit && addedAllTests)
                 //{
                 //    MessageBox.Show("Wizyta została dodana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                 //    this.Close();
