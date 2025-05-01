@@ -202,7 +202,7 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
             {
                 Profile profile = new Profile(selectedUser, this);
                 profile.Show();
-                this.Close();
+                this.Hide();
             }
             else
             {

@@ -102,6 +102,17 @@ namespace MedLabTab.DatabaseManager
             catch { return null; }
         }
 
+        public static Test GetTest(int Id)
+        {
+            try
+            {
+                var test = db.Tests.Where(t => t.id == Id).FirstOrDefault();
+                if (test != null) { return test; }
+                return null;
+            }
+            catch { return null; }
+        }
+
         public static bool EditUserCommon(string login, string password, string phoneNumber, int userId)
         {
             try
@@ -332,6 +343,16 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
+        }
+
+        public static List<Schedule> GetAllDates()
+        {
+            try
+            {
+                List<Schedule> AvailableDates = db.Schedules.ToList();
+                return AvailableDates;
+            }
+            catch { return null; }
         }
 
     }
