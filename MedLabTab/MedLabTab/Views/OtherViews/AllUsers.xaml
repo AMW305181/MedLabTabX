@@ -440,6 +440,7 @@
                 <DataGrid Grid.Row="2" 
                           x:Name="dgUsers"
                           Style="{StaticResource DataGridStyle}"
+                          IsReadOnly="true"
                           SelectionChanged="DgUsers_SelectionChanged"
                           AutoGenerateColumns="False"
                           ScrollViewer.HorizontalScrollBarVisibility="Auto"

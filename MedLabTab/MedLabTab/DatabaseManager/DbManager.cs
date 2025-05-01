@@ -27,7 +27,7 @@ namespace MedLabTab.DatabaseManager
 
                 return true;
             }
-            catch (Exception)  { return false;}
+            catch (Exception) { return false; }
         }
         public static bool CheckUser(string username, string password)
         {
@@ -39,21 +39,21 @@ namespace MedLabTab.DatabaseManager
                 else
                     return false;
             }
-            catch (Exception){return false;}
+            catch (Exception) { return false; }
         }
 
         public static bool IsPESELTaken(string PESEL)
         {
             var user = db.Users.Where(u => u.PESEL == PESEL).FirstOrDefault();
-            if (user == null){  return false; }
-            else { return true;}
+            if (user == null) { return false; }
+            else { return true; }
         }
 
         public static bool IsLoginTaken(string login)
         {
             var user = db.Users.Where(u => u.Login == login).FirstOrDefault();
-            if (user == null) {  return false; }
-            else  { return true; }
+            if (user == null) { return false; }
+            else { return true; }
         }
 
         public static bool IsLoginTakenByAnotherUser(string login, int userId)
@@ -115,15 +115,16 @@ namespace MedLabTab.DatabaseManager
                     db.SaveChanges();
                     return true;
                 }
-                return false; 
-            }catch { return false; }
+                return false;
+            }
+            catch { return false; }
         }
 
         public static User GetUser(string PESEL)
         {
-            try 
+            try
             {
-                var user = db.Users.Where(u=>u.PESEL==PESEL).FirstOrDefault();
+                var user = db.Users.Where(u => u.PESEL == PESEL).FirstOrDefault();
                 if (user != null) { return user; }
                 return null;
             }
@@ -134,10 +135,11 @@ namespace MedLabTab.DatabaseManager
         {
             try
             {
-                var test =db.Tests.Where(t=>t.TestName== testName).FirstOrDefault();
-                if(test != null)   { return true; }
+                var test = db.Tests.Where(t => t.TestName == testName).FirstOrDefault();
+                if (test != null) { return true; }
                 return false;
-            }  catch { return false; }
+            }
+            catch { return false; }
         }
         //@Matylda usun niepotrzebne
         public static bool AddTest(Test test)
@@ -153,12 +155,12 @@ namespace MedLabTab.DatabaseManager
 
         public static bool EditTest(Test test, Test newData)
         {
-            try 
+            try
             {
-                test.TestName= newData.TestName;
-                test.Description= newData.Description;
-                test.Price= newData.Price;
-                test.Category= newData.Category;
+                test.TestName = newData.TestName;
+                test.Description = newData.Description;
+                test.Price = newData.Price;
+                test.Category = newData.Category;
                 test.IsActive = newData.IsActive;
                 db.SaveChanges();
                 return true;
@@ -173,7 +175,7 @@ namespace MedLabTab.DatabaseManager
                 test.Description = description;
                 test.Price = price;
                 test.Category = category;
-              
+
                 db.SaveChanges();
                 return true;
             }
@@ -192,7 +194,7 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
-        }
+        }/*
         public static bool ChangeTestStatus(Test test)
         {
             try
@@ -221,22 +223,22 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
-        }
+        }*/
 
         public static List<CategoryDictionary> GetCategories()
         {
-            try { return db.CategoryDictionaries.ToList();  }
+            try { return db.CategoryDictionaries.ToList(); }
             catch { return null; }
         }
         public static Dictionary<int, string> GetCategoriesDictionary()
         {
-            try 
+            try
             {
                 Dictionary<int, string> categories = new Dictionary<int, string>();
                 List<CategoryDictionary> categoryDictionaries = db.CategoryDictionaries.ToList();
-                foreach (var category in categoryDictionaries) 
+                foreach (var category in categoryDictionaries)
                 {
-                    categories.Add(category.id,category.CategoryName);
+                    categories.Add(category.id, category.CategoryName);
                 }
                 return categories;
 
@@ -246,7 +248,8 @@ namespace MedLabTab.DatabaseManager
 
         public static List<User> LoadUsers()
         {
-            try {
+            try
+            {
                 return db.Users
                                  .Include(u => u.UserTypeNavigation)
                                  .ToList();
@@ -255,11 +258,13 @@ namespace MedLabTab.DatabaseManager
             {
                 MessageBox.Show($"Błąd podczas ładowania użytkowników: {ex.Message}",
                                "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            return null; }
+                return null;
+            }
         }
         public static bool ChangeUserStatus(int userId)
         {
-            try {
+            try
+            {
                 var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
                 if (user != null)
                 {
@@ -267,15 +272,16 @@ namespace MedLabTab.DatabaseManager
                     db.SaveChanges();
                     return true;
                 }
-                return false; }
+                return false;
+            }
             catch { return false; }
         }
 
-        public static bool EditUserAdmin(int userId, string login, int userType, string password, string name, string surname, string PESEL, string? phone=null )
+        public static bool EditUserAdmin(int userId, string login, int userType, string password, string name, string surname, string PESEL, string? phone = null)
         {
-            try 
+            try
             {
-                var user=db.Users.Where(u=>u.id == userId).FirstOrDefault();
+                var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
                 if (user != null)
                 {
                     user.Login = login;
@@ -291,7 +297,7 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
-        }
+        }/*
         public static bool EditUserAdmin(User user, string login, int userType, string password, string name, string surname, string PESEL, string? phone = null)
         {
             try
@@ -332,8 +338,36 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
+        }*/
+
+        public static List<Visit> GetMyVisits(int userId)
+        {
+            return db.Visits
+                .Include(v => v.TimeSlot)     
+                    .ThenInclude(ts => ts.Nurse)  
+                .Include(v => v.TestHistories)    
+                    .ThenInclude(th => th.Test)   
+                .Where(v => v.PatientId == userId)
+                .AsNoTracking() 
+                .ToList();
         }
 
+        public static bool DeactivateVisit(Visit visit)
+        {
+            try
+            {
+                var visitToUpdate = db.Visits.FirstOrDefault(v => v.id == visit.id);
+                if (visitToUpdate == null) return false;
+
+                visitToUpdate.IsActive = false;
+                db.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
 

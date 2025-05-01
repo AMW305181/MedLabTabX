@@ -32,6 +32,7 @@ namespace MedLabTab.Views.OtherViews
             txtSearch.TextChanged += TxtSearch_TextChanged;
         }
 
+
         private void LoadUsers()
         {
             _allUsers = DbManager.LoadUsers();

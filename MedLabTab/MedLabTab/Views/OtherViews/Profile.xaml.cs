@@ -12,7 +12,7 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class Profile : Window
     {
-        private User _currentUser; //tu powinien być zalogowany użytkownik
+        private User _currentUser;
         private Window _parentWindow;
         public Profile(User currentUser, Window parentWindow)
         {
@@ -21,6 +21,22 @@ namespace MedLabTab.Views.OtherViews
             _parentWindow = parentWindow;
             FillForm();
             txtPhone.PreviewTextInput += NumberValidationTextBox;
+
+            switch (_currentUser.UserType)
+            {
+                case 1:
+                    ReceptionMenu.Visibility = Visibility.Visible;
+                    break;
+                case 2: 
+                    NurseMenu.Visibility = Visibility.Visible;
+                    break;
+                case 3: 
+                    AnalystMenu.Visibility = Visibility.Visible;
+                    break;
+                case 4: 
+                    PatientMenu.Visibility = Visibility.Visible;
+                    break;
+            }
         }
 
         private void FillForm()
@@ -126,6 +142,116 @@ namespace MedLabTab.Views.OtherViews
         {
             _parentWindow.Show();
             this.Close();
+        }
+
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+        {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
+            this.Close();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics();
+            statistics.Show();
+            this.Close();
+        }
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests(this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnVisits_Click(object sender, RoutedEventArgs e)
+        {
+            MyVisits allVisits = new MyVisits(_currentUser, this);
+            allVisits.Show();
+            this.Hide();
+        }
+
+
+
+        private void BtnResults_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var profile = new Profile(_currentUser, this);
+            profile.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples();
+            samples.Show();
+            this.Close();
+        }
+
+        private void BtnReport_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports newReport = new AllReports(this);
+            newReport.Show();
+            this.Hide();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }

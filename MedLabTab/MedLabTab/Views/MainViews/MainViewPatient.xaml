@@ -63,12 +63,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="5">
+                 BorderBrush="{TemplateBinding BorderBrush}" 
+                 BorderThickness="{TemplateBinding BorderThickness}"
+                 CornerRadius="5">
                             <ContentPresenter Margin="{TemplateBinding Padding}" 
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                      VerticalAlignment="Center"/>
+                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                               VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -107,46 +107,47 @@
                 </StackPanel>
 
                 <!-- Menu nawigacyjne -->
-                <StackPanel Grid.Row="1" Margin="10,20,10,0">
-                    <!-- Przycisk BADANIA -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <!-- Przycisk BADANIA -->
                     <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnExams" 
                             Content="BADANIA"
-                            FontWeight="SemiBold"
-                            Click="BtnExams_Click"
-                            Margin="0,5,0,5"/>
+                            Click="BtnExams_Click"/>
 
                     <!-- Przycisk WIZYTY -->
                     <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnVisits" 
-                            Content="WIZYTY"
-                            FontWeight="SemiBold"
-                            Click="BtnVisits_Click"
-                            Margin="0,5,0,5"/>
+                            Content="TWOJE WIZYTY"
+                            Click="BtnVisits_Click"/>
+                        
+                    <Button Style="{StaticResource NavButtonStyle}" 
+                            x:Name="btnNewVisit" 
+                            Content="NOWA WIZYTA"
+                            Click="BtnNewVisit_Click"/>
 
-                    <!-- Przycisk WYNIKI -->
+                        <!-- Przycisk WYNIKI -->
                     <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnResults" 
                             Content="WYNIKI"
-                            FontWeight="SemiBold"
-                            Click="BtnResults_Click"
-                            Margin="0,5,0,5"/>          
+                            Click="BtnResults_Click"/>          
 
                     <!-- Przycisk PROFIL -->
                     <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnProfile" 
                             Content="PROFIL"
-                            FontWeight="SemiBold"
-                            Click="BtnProfile_Click"
-                            Margin="0,5,0,5"/>
+                            Click="BtnProfile_Click"/>
+                    
+                    </StackPanel>
+                </ScrollViewer>
 
-                    <!-- Przycisk wylogowania -->
-                    <Button Style="{StaticResource LogoutButtonStyle}" 
+                <!-- Przycisk wylogowania -->
+                <Button Grid.Row="2" 
+                            Style="{StaticResource LogoutButtonStyle}" 
                             Content="Wyloguj się" 
-                            x:Name="btnLogout"
                             Click="BtnLogout_Click"
-                            Margin="0,230,0,0"/>
-                </StackPanel>
+                            Margin="10,20,10,20"/>
+
             </Grid>
         </Border>
 
