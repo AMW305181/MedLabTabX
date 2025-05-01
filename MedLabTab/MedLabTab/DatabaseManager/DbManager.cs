@@ -141,6 +141,28 @@ namespace MedLabTab.DatabaseManager
             catch { return null; }
         }
 
+        public static User GetUserById(int Id)
+        {
+            try
+            {
+                var user = db.Users.Where(u => u.id == Id).FirstOrDefault();
+                if (user != null) { return user; }
+                return null;
+            }
+            catch { return null; }
+        }
+
+        public static Schedule GetSchedule(int Id)
+        {
+            try
+            {
+                var schedule = db.Schedules.Where(s => s.id == Id).FirstOrDefault();
+                if (schedule != null) { return schedule; }
+                return null;
+            }
+            catch { return null; }
+        }
+
         public static bool IsTestNameTaken(string testName)
         {
             try
@@ -197,6 +219,21 @@ namespace MedLabTab.DatabaseManager
                 if (test != null)
                 {
                     test.IsActive = false;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+
+        public static bool DeactivateVisit(Visit visit)
+        {
+            try
+            {
+                if (visit != null)
+                {
+                    visit.IsActive = false;
                     db.SaveChanges();
                     return true;
                 }
@@ -351,6 +388,16 @@ namespace MedLabTab.DatabaseManager
             {
                 List<Schedule> AvailableDates = db.Schedules.ToList();
                 return AvailableDates;
+            }
+            catch { return null; }
+        }
+
+        public static List<Visit> GetAllVisits()
+        {
+            try
+            {
+                List<Visit> AllVisits = db.Visits.ToList();
+                return AllVisits;
             }
             catch { return null; }
         }

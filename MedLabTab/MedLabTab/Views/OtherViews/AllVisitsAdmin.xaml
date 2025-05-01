@@ -35,16 +35,19 @@
         <!-- Tabela -->
         <DataGrid x:Name="VisitsDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Wizyta" Binding="{Binding Wizyta}" Width="*" />
-                <DataGridTextColumn Header="Data" Binding="{Binding Data}" Width="*" />
-                <DataGridTextColumn Header="Pacjent" Binding="{Binding Pacjent}" Width="*" />
-                <DataGridTextColumn Header="Badania" Binding="{Binding Badania}" Width="*" />
-                <DataGridTemplateColumn Header="Akcje" Width="160">
+                <DataGridTextColumn Header="Wizyta" Binding="{Binding Id}" Width="0.5*" />
+                <DataGridTextColumn Header="Data i godzina" Binding="{Binding DateTime}" Width="*" />
+                <DataGridTextColumn Header="Koszt" Binding="{Binding Cost}" Width="*" />
+                <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
+                <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*" />
+                <DataGridTextColumn Header="Status płatności" Binding="{Binding PaymentStatus}" Width="*" />
+                <DataGridTextColumn Header="Badanie aktywne" Binding="{Binding IsActive}" Width="*" />
+                <DataGridTemplateColumn Header="Akcje" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Edytuj" Width="60" Margin="5,0"/>
-                                <Button Content="Usuń" Width="60" Margin="5,0"/>
+                                <Button Content="Edytuj" Width="60" Margin="5,0" CommandParameter="{Binding OriginalVisit}" Click="Edit_Click"/>
+                                <Button Content="Usuń" Width="60" Margin="5,0" CommandParameter="{Binding OriginalVisit}" Click="Deactivate_Click"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
