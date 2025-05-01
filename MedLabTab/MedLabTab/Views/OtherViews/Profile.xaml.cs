@@ -208,10 +208,12 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnVisits_Click(object sender, RoutedEventArgs e)
         {
-            MyVisits allVisits = new MyVisits(this);
+            MyVisits allVisits = new MyVisits(_currentUser, this);
             allVisits.Show();
             this.Hide();
         }
+
+
 
         private void BtnResults_Click(object sender, RoutedEventArgs e)
         {

@@ -118,10 +118,15 @@
                     <!-- Przycisk WIZYTY -->
                     <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnVisits" 
-                            Content="WIZYTY"
+                            Content="TWOJE WIZYTY"
                             Click="BtnVisits_Click"/>
+                        
+                    <Button Style="{StaticResource NavButtonStyle}" 
+                            x:Name="btnNewVisit" 
+                            Content="NOWA WIZYTA"
+                            Click="BtnNewVisit_Click"/>
 
-                    <!-- Przycisk WYNIKI -->
+                        <!-- Przycisk WYNIKI -->
                     <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnResults" 
                             Content="WYNIKI"
@@ -132,7 +137,7 @@
                             x:Name="btnProfile" 
                             Content="PROFIL"
                             Click="BtnProfile_Click"/>
-    
+                    
                     </StackPanel>
                 </ScrollViewer>
 

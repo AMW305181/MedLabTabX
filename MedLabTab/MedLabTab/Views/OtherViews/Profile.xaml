@@ -199,7 +199,8 @@
                         <!-- Pacjent -->
                         <StackPanel x:Name="PatientMenu" Visibility="Collapsed">
                             <Button Style="{StaticResource NavButtonStyle}" Content="BADANIA" Click="BtnExams_Click"/>
-                            <Button Style="{StaticResource NavButtonStyle}" Content="WIZYTY" Click="BtnVisits_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="TWOJE WIZYTY" Click="BtnVisits_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="NOWA WIZYTA" Click="BtnNewVisit_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="WYNIKI" Click="BtnResults_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
                         </StackPanel>
