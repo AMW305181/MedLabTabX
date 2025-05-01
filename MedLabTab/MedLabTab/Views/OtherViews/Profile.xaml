@@ -42,17 +42,6 @@
             </Setter>
         </Style>
         
-
-        <!-- Style dla głównego nagłówka -->
-        <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="Margin" Value="20"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-        </Style>
-
-
         <!-- Style dla przycisku wylogowania -->
         <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
             <Setter Property="Background" Value="#FFF0F0"/>

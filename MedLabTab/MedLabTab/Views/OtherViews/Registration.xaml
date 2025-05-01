@@ -89,7 +89,7 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#333333"/>
             <Setter Property="Margin" Value="20"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
 
         <!-- Style dla przycisków formularza -->
@@ -213,7 +213,7 @@
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,20,0,0">
-                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Formularz rejestracji" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+                    <TextBlock Style="{StaticResource MainHeaderStyle}" Text="Formularz rejestracji" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
 
                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Imię"/>
                     <TextBox Style="{StaticResource TextBoxStyle}" Name="txtName" Margin="0,0,0,15" Text=""/>
