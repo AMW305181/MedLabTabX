@@ -351,6 +351,23 @@ namespace MedLabTab.DatabaseManager
                 .AsNoTracking() 
                 .ToList();
         }
+
+        public static bool DeactivateVisit(Visit visit)
+        {
+            try
+            {
+                var visitToUpdate = db.Visits.FirstOrDefault(v => v.id == visit.id);
+                if (visitToUpdate == null) return false;
+
+                visitToUpdate.IsActive = false;
+                db.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
 

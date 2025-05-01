@@ -12,7 +12,7 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class Profile : Window
     {
-        private User _currentUser; //tu powinien być zalogowany użytkownik
+        private User _currentUser;
         private Window _parentWindow;
         public Profile(User currentUser, Window parentWindow)
         {

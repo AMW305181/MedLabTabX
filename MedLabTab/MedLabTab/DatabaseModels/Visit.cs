@@ -39,5 +39,4 @@ public partial class Visit
         ? string.Join(", ", TestHistories.Select(th => th.Test?.TestName ?? "Nieznane badanie"))
         : "Brak badań";
     public string DisplayCost => Cost.ToString("0.00") + " zł";
-
 }

@@ -286,21 +286,33 @@
                                Margin="0,-15,0,15"/>
                     <Separator Style="{StaticResource SeparatorStyle}"/>
                 </StackPanel>
-
                 <!-- Tabela -->
                 <DataGrid x:Name="VisitsDataGrid" Grid.Row="1" 
-                          Style="{StaticResource DataGridStyle}"
-                          IsReadOnly="True" 
-                          CanUserAddRows="False" 
-                          AutoGenerateColumns="False"
-                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                      Style="{StaticResource DataGridStyle}"
+                      IsReadOnly="True" 
+                      CanUserAddRows="False" 
+                      AutoGenerateColumns="False"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                    <Setter Property="Background" Value="#FAFAFA"/>
+                                    <Setter Property="Foreground" Value="#888888"/>
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Data wizyty" Binding="{Binding DisplayDate}" Width="*"/>
                         <DataGridTextColumn Header="Godzina" Binding="{Binding DisplayTime}" Width="*"/>
                         <DataGridTextColumn Header="Badania" Binding="{Binding DisplayTests}" Width="Auto"/>
                         <DataGridTextColumn Header="Koszt" Binding="{Binding DisplayCost}" Width="*"/>
                         <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding DisplayNurse}" Width="*"/>
+
                         <DataGridTemplateColumn Header="Status zapłaty" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -308,9 +320,14 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Text" Value="Nieopłacone"/>
+                                                <Setter Property="Foreground" Value="Red"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding PaymentStatus}" Value="True">
                                                         <Setter Property="Text" Value="Opłacone"/>
+                                                        <Setter Property="Foreground" Value="Green"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Foreground" Value="#888888"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -319,6 +336,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
                         <DataGridTemplateColumn Header="Odbyta wizyta" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -330,6 +348,9 @@
                                                     <DataTrigger Binding="{Binding IsActive}" Value="True">
                                                         <Setter Property="Text" Value="Tak"/>
                                                     </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Foreground" Value="#888888"/>
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
@@ -337,20 +358,39 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
                         <DataGridTemplateColumn Header="Akcje" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <Button Content="Edytuj" 
-                                                Style="{StaticResource PrimaryButtonStyle}" 
-                                                Width="80"
-                                                Margin="5,0"
-                                                Click="BtnEditVisit_Click"/>
+                                        <Button Content="Edytuj"  
+                                            Width="80"
+                                            Margin="5,0"
+                                            Click="BtnEditVisit_Click">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
                                         <Button Content="Anuluj" 
-                                                Style="{StaticResource DeleteButtonStyle}" 
-                                                Width="80"
-                                                Margin="5,0"
-                                                Click="BtnCancelVisit_Click"/>
+                                            Width="80"
+                                            Margin="5,0"
+                                            Click="BtnCancelVisit_Click">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource DeleteButtonStyle}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

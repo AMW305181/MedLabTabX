@@ -37,15 +37,6 @@ namespace MedLabTab.Views.OtherViews
         {
             var visits = DbManager.GetMyVisits(_currentUser.id);
 
-            // Tymczasowe debugowanie
-            foreach (var visit in visits)
-            {
-                Console.WriteLine($"ID: {visit.id}");
-                Console.WriteLine($"TimeSlot: {visit.TimeSlot != null}");
-                Console.WriteLine($"Nurse: {visit.TimeSlot?.Nurse != null}");
-                Console.WriteLine($"TestHistories: {visit.TestHistories?.Count ?? 0}");
-            }
-
             VisitsDataGrid.ItemsSource = visits;
         }
 
@@ -61,9 +52,8 @@ namespace MedLabTab.Views.OtherViews
                             .ToList();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"Error getting visits: {ex}");
                 return new List<Visit>();
             }
         }
@@ -87,40 +77,6 @@ namespace MedLabTab.Views.OtherViews
             //}
         }
 
-        private void Deactivate_Click(object sender, RoutedEventArgs e)
-        {
-            //Button button = sender as Button;
-            //Visit selectedVisit = (sender as Button)?.CommandParameter as Visit;
-
-            //if (selectedVisit != null)
-            //{
-            //    var result = MessageBox.Show(
-            //        $"Czy na pewno chcesz anulować wizytę \"{selectedVisit.id}\"?",
-            //        "Potwierdzenie anulowania",
-            //        MessageBoxButton.YesNo,
-            //        MessageBoxImage.Warning);
-
-            //    if (result == MessageBoxResult.Yes)
-            //    {
-            //        bool deleted = DbManager.DeactivateVisit(selectedVisit);
-
-            //        if (deleted)
-            //        {
-            //            MessageBox.Show("Wizyta została anulowana.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-            //            LoadVisits(); // Odświeżenie tabeli
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show("Wystąpił błąd podczas anulowania wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Nie udało się pobrać wybranej wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-        }
-
         private void BtnEditVisit_Click(object sender, RoutedEventArgs e)
         {
 
@@ -128,7 +84,52 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnCancelVisit_Click(object sender, RoutedEventArgs e)
         {
+            if (!(sender is Button button)) return;
 
+            if (!(button.DataContext is Visit selectedVisit))
+            {
+                MessageBox.Show("Nie udało się pobrać wybranej wizyty.",
+                              "Błąd",
+                              MessageBoxButton.OK,
+                              MessageBoxImage.Error);
+                return;
+            }
+
+            var result = MessageBox.Show(
+                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.DisplayDate} o {selectedVisit.DisplayTime}?",
+                "Potwierdzenie anulowania",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes) return;
+
+            try
+            {
+                bool success = DbManager.DeactivateVisit(selectedVisit);
+
+                if (success)
+                {
+                    MessageBox.Show("Wizyta została anulowana.",
+                                  "Sukces",
+                                  MessageBoxButton.OK,
+                                  MessageBoxImage.Information);
+                    LoadVisits();
+                }
+                else
+                {
+                    MessageBox.Show("Nie udało się anulować wizyty.",
+                                  "Błąd",
+                                  MessageBoxButton.OK,
+                                  MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Wystąpił błąd: {ex.Message}",
+                              "Błąd",
+                              MessageBoxButton.OK,
+                              MessageBoxImage.Error);
+            }
         }
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
