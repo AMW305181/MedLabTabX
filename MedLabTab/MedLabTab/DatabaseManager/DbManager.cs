@@ -194,7 +194,7 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
-        }/*
+        }
         public static bool ChangeTestStatus(Test test)
         {
             try
@@ -223,7 +223,7 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
-        }*/
+        }
 
         public static List<CategoryDictionary> GetCategories()
         {
