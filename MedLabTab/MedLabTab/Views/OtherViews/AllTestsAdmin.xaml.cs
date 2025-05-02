@@ -43,7 +43,7 @@ namespace MedLabTab.Views.OtherViews
                     OriginalTest = t,
                     StatusText = t.IsActive ? "Dezaktywuj" : "Aktywuj",
                     StatusColor = t.IsActive ?
-                new SolidColorBrush(Color.FromRgb(255, 85, 85)) :
+                new SolidColorBrush(Color.FromRgb(205, 92, 92)) :
                 new SolidColorBrush(Color.FromRgb(76, 175, 80))
                 }).ToList();
 

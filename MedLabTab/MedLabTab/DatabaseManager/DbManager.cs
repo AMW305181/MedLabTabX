@@ -302,6 +302,7 @@ namespace MedLabTab.DatabaseManager
                 return db.Users
                                  .Include(u => u.UserTypeNavigation)
                                  .ToList();
+
             }
             catch (Exception ex)
             {
