@@ -21,21 +21,21 @@ namespace MedLabTab.Views.OtherViews
     public partial class ShowReport : Window
     {
         private Window _parentWindow;
-        private readonly Visit _visit;
-        public ShowReport(Visit visit, Window parentWindow)
+        private readonly TestHistory _testHistory;
+        public ShowReport(TestHistory testHistory, Window parentWindow)
         {
             InitializeComponent();
             _parentWindow = parentWindow;
-            _visit = visit;
+            _testHistory = testHistory;
             FillReportWithData();
         }
         private void FillReportWithData()
         {
-            TestTextBlock.Text = _visit.DisplayTests;
-            PatientTextBlock.Text = _visit.DisplayPatient;
-            NurseTextBlock.Text = _visit.DisplayNurse;
-            //AnalystTextBlock.Text = _visit.Analyst;
-            DateTextBlock.Text = $"{_visit.DisplayDate} {_visit.DisplayTime}";
+            TestTextBlock.Text = _testHistory.DisplayTest;
+            PatientTextBlock.Text = _testHistory.DisplayPatient;
+            NurseTextBlock.Text = _testHistory.DisplayNurse;
+            AnalystTextBlock.Text = _testHistory.DisplayAnalyst;
+            DateTextBlock.Text = $"{_testHistory.DisplayDate} {_testHistory.DisplayTime}";
             //ResultTextBox.Text = _testReport.Result;
         }
 

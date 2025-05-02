@@ -273,7 +273,7 @@
                     <DataGridTextColumn Header="Pacjent" Binding="{Binding DisplayPatient}" Width="*" />
                     <DataGridTextColumn Header="Data" Binding="{Binding DisplayDate}" Width="*" />
                     <DataGridTextColumn Header="Godzina" Binding="{Binding DisplayTime}" Width="*" />
-                    <DataGridTextColumn Header="Badanie" Binding="{Binding DisplayTests}" Width="Auto" />
+                    <DataGridTextColumn Header="Badanie" Binding="{Binding DisplayTest}" Width="Auto" />
                     <DataGridTemplateColumn Header="Akcje" Width="160">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

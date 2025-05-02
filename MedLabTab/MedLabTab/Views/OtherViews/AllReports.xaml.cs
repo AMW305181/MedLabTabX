@@ -26,34 +26,44 @@ namespace MedLabTab.Views.OtherViews
         public AllReports(Window parentWindow)
         {
             InitializeComponent();
-            LoadDoneTests();
+            LoadCompletedTests();
             _parentWindow = parentWindow;
         }
 
-        private void LoadDoneTests()
+        private void LoadCompletedTests()
         {
-            var completedVisits = DbManager.GetCompletedVisits();
-            if (completedVisits != null && completedVisits.Any())
+            try
             {
-                RaportyDataGrid.ItemsSource = completedVisits;
+                var completedTests = DbManager.GetCompletedTests();
+                if (completedTests != null && completedTests.Any())
+                {
+                    RaportyDataGrid.ItemsSource = completedTests;
+                }
+                else
+                {
+                    MessageBox.Show("Brak wykonanych badań do wyświetlenia.", "Informacja",
+                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Brak zakończonych wizyt do wyświetlenia.", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Błąd podczas ładowania danych: {ex.Message}", "Błąd",
+                               MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void ShowReport_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is Visit selectedVisit)
+            if (sender is Button button && button.DataContext is TestHistory selectedTestHistory)
             {
-                var viewReportWindow = new ShowReport(selectedVisit, this);
+                var viewReportWindow = new ShowReport(selectedTestHistory, this);
                 viewReportWindow.Show();
                 this.Hide();
             }
             else
             {
-                MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
