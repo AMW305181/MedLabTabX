@@ -164,19 +164,17 @@
                 <TextBlock Style="{StaticResource MainHeaderStyle}" Text="RECEPCJA" HorizontalAlignment="Center"/>
                 <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
 
-                <!-- Tutaj będzie wyświetlana zawartość wybranej sekcji -->
-                <!-- Tutaj będzie wyświetlana zawartość wybranej sekcji -->
                 <ContentControl x:Name="MainContent" Margin="20">
                     <Grid>
                         <TextBlock Text="Witaj w panelu recepcji laboratorium medycznego" 
-                    FontSize="18" 
-                    HorizontalAlignment="Center" 
-                    Margin="0,40,0,0"/>
+                            FontSize="18" 
+                            HorizontalAlignment="Center" 
+                            Margin="0,40,0,0"/> 
                         <TextBlock Text="Wybierz opcję z menu po lewej stronie, aby rozpocząć pracę" 
-                    FontSize="14" 
-                    Foreground="#666666" 
-                    HorizontalAlignment="Center" 
-                    Margin="0,70,0,0"/>
+                            FontSize="14" 
+                            Foreground="#666666" 
+                            HorizontalAlignment="Center" 
+                            Margin="0,70,0,0"/>
                     </Grid>
                 </ContentControl>
             </StackPanel>
