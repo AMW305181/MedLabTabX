@@ -32,6 +32,7 @@ namespace MedLabTab.Views.OtherViews
             txtSearch.TextChanged += TxtSearch_TextChanged;
         }
 
+
         private void LoadUsers()
         {
             _allUsers = DbManager.LoadUsers();
@@ -93,7 +94,7 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit(this);
+            NewVisitAdmin newVisit = new NewVisitAdmin(this);
             newVisit.Show();
             this.Hide();
         }
@@ -202,7 +203,7 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
             {
                 Profile profile = new Profile(selectedUser, this);
                 profile.Show();
-                this.Close();
+                this.Hide();
             }
             else
             {

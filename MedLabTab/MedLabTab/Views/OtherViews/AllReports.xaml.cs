@@ -26,45 +26,113 @@ namespace MedLabTab.Views.OtherViews
         public AllReports(Window parentWindow)
         {
             InitializeComponent();
-            LoadDoneTests();
+            LoadCompletedTests();
             _parentWindow = parentWindow;
         }
 
-        private void LoadDoneTests()
+        private void LoadCompletedTests()
         {
-            var doneTests = DbManager.GetActiveTests(); // do zmiany na GetDoneTests()
-            if (doneTests != null)
+            try
             {
-                RaportyDataGrid.ItemsSource = doneTests;
+                var completedTests = DbManager.GetCompletedTests();
+                if (completedTests != null && completedTests.Any())
+                {
+                    RaportyDataGrid.ItemsSource = completedTests;
+                }
+                else
+                {
+                    MessageBox.Show("Brak wykonanych badań do wyświetlenia.", "Informacja",
+                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Błąd podczas ładowania gotowych testów.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Błąd podczas ładowania danych: {ex.Message}", "Błąd",
+                               MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void ShowReport_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-
-            // odnalezienie kontekstu wiersza - czyli obiektu testu
-            Test selectedTest = button?.DataContext as Test;
-
-            if (selectedTest != null)
+            if (sender is Button button && button.DataContext is TestHistory selectedTestHistory)
             {
-                var viewReportWindow = new ShowReport(/*selectedTest,*/ this);
+                var viewReportWindow = new ShowReport(selectedTestHistory, this);
                 viewReportWindow.Show();
                 this.Hide();
             }
             else
             {
-                MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
             this.Close();
-            _parentWindow?.Show();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics();
+            statistics.Show();
+            this.Close();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }

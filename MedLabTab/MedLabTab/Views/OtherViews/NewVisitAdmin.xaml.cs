@@ -22,19 +22,17 @@ namespace MedLabTab.Views.OtherViews
     /// <summary>
     /// Interaction logic for NewVisit.xaml
     /// </summary>
-    public partial class NewVisit : Window
+    public partial class NewVisitAdmin : Window
     {
         private Window _parentWindow;
         private float visitCost;
         private int visitTime;
-        private User _currentUser;
-        public NewVisit(User currentUser, Window parentWindow)
+        public NewVisitAdmin(Window parentWindow)
         {
             InitializeComponent();
             ClearForm();
             LoadData();
             _parentWindow = parentWindow;
-            _currentUser = currentUser;
         }
 
         private void LoadData()
@@ -42,10 +40,20 @@ namespace MedLabTab.Views.OtherViews
             visitCost = 0;
             visitTime = 0;
 
-            if (_currentUser != null )
+            //załadowanie listy pacjentów
+            PatientComboBox.Items.Clear();
+            var users = DbManager.GetActivePatients();
+            foreach (var user in users)
             {
-                PatientTextBox.Text = _currentUser.Name + " " + _currentUser.Surname;
+                PatientComboBox.Items.Add(new ComboBoxItem
+                {
+                    Content = user.Name + " " + user.Surname,
+                    Tag = user.PESEL
+                });
             }
+
+            if (PatientComboBox.Items.Count > 0)
+                PatientComboBox.SelectedIndex = 0;
 
             //załadowanie listy badań
             TestsComboBox.Items.Clear();
@@ -86,7 +94,7 @@ namespace MedLabTab.Views.OtherViews
         {
             CostTextBlock.Text = $"Koszt: {visitCost} zł";
             TimeTextBlock.Text = $"Czas trwania: {visitTime} min";
-            //IsPaidCheckBox.IsChecked = false;
+            IsPaidCheckBox.IsChecked = false;
             IsActiveCheckBox.IsChecked = true;
         }
 
@@ -102,6 +110,9 @@ namespace MedLabTab.Views.OtherViews
             {
                 //do uzupełnienia po dodaniu harmonogramu
 
+                //var selectedPatient = (ComboBoxItem)PatientComboBox.SelectedItem;
+                //string patientPESEL = (string)selectedPatient.Tag;
+
                 //var selectedTimeSlot = (ComboBoxItem)DateComboBox.SelectedItem;
                 //int timeSlotId = (int)selectedTimeSlot.Tag;
 
@@ -110,7 +121,7 @@ namespace MedLabTab.Views.OtherViews
                 //    Cost = visitCost,
                 //    PaymentStatus = IsPaidCheckBox.IsChecked == true,
                 //    IsActive = IsActiveCheckBox.IsChecked == true,
-                //    PatientId = _currentUser.id,
+                //    PatientId = (DbManager.GetUser(patientPESEL)).id,
                 //    TimeSlotId = timeSlotId,
                 //};
 
@@ -128,7 +139,7 @@ namespace MedLabTab.Views.OtherViews
                 //        {
                 //            VisitId = newVisit.id,
                 //            TestId = test.id,
-                //            PatientId = _currentUser.id,
+                //            PatientId = DbManager.GetUser(patientPESEL).id,
                 //            Status = 1, // to chyba oznacza ze jest pierwszy etap jakby
                 //            AnalystId = null,
                 //        };
@@ -202,7 +213,8 @@ namespace MedLabTab.Views.OtherViews
 
         private bool ValidateInputs()
         {
-            if (!(TestsListBox.HasItems) ||
+            if (string.IsNullOrWhiteSpace(PatientComboBox.Text) ||
+                !(TestsListBox.HasItems) ||
                 string.IsNullOrWhiteSpace(DateComboBox.Text))
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -210,83 +222,6 @@ namespace MedLabTab.Views.OtherViews
             }
 
             return true;
-
-        private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (VisitCalendar.SelectedDate.HasValue)
-            {
-                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
-                // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
-            }
-        }
-        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
-        {
-            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
-            allVisits.Show();
-            this.Hide();
-        }
-
-        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
-        {
-            NewVisit newVisit = new NewVisit(this);
-            newVisit.Show();
-            this.Hide();
-        }
-
-        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
-        {
-            AllTestsAdmin allTests = new AllTestsAdmin(this);
-            allTests.Show();
-            this.Hide();
-        }
-
-        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
-        {
-            NewTest newTest = new NewTest(this);
-            newTest.Show();
-            this.Hide();
-        }
-
-        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
-        {
-            AllUsers allUsers = new AllUsers();
-            allUsers.Show();
-            this.Close();
-        }
-
-        private void BtnRegister_Click(object sender, RoutedEventArgs e)
-        {
-            Registration registration = new Registration();
-            registration.Show();
-            this.Close();
-        }
-
-        private void BtnReports_Click(object sender, RoutedEventArgs e)
-        {
-            AllReports allReports = new AllReports(this);
-            allReports.Show();
-            this.Hide();
-        }
-
-        private void BtnStats_Click(object sender, RoutedEventArgs e)
-        {
-            Statistics statistics = new Statistics();
-            statistics.Show();
-            this.Close();
-        }
-
-        private void BtnLogout_Click(object sender, RoutedEventArgs e)
-        {
-            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
-                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                var loginWindow = new Login();
-                loginWindow.Show();
-                this.Close();
-            }
-
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
