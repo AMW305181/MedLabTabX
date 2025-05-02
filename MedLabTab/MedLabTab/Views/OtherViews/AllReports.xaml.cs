@@ -72,12 +72,12 @@ namespace MedLabTab.Views.OtherViews
             allVisits.Show();
             this.Hide();
         }
-
+        //tu będzie newVisitAdmin
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit(this);
-            newVisit.Show();
-            this.Hide();
+        //    NewVisit newVisit = new NewVisit(this);
+        //    newVisit.Show();
+        //    this.Hide();
         }
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
