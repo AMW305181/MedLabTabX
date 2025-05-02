@@ -44,7 +44,7 @@ namespace MedLabTab.Views.OtherViews
 
             if (_currentUser != null )
             {
-                PatientTextBox.Text = _currentUser.Name + " " + _currentUser.Surname;
+                PatientComboBox.SelectedItem = _currentUser;
             }
 
             //załadowanie listy badań
@@ -66,20 +66,7 @@ namespace MedLabTab.Views.OtherViews
             if (TestsComboBox.Items.Count > 0)
                 TestsComboBox.SelectedIndex = 0;
 
-            //załadowanie listy dostepnych terminow
-            DateComboBox.Items.Clear();
-            var dates = DbManager.GetAllDates(); // tutaj metoda do poprawki - zalezy jak bedzie wygladal harmonogram
-            foreach (var date in dates)
-            {
-                DateComboBox.Items.Add(new ComboBoxItem
-                {
-                    Content = date.Date + " " + date.Time,
-                    Tag = date.id
-                });
-            }
-
-            if (DateComboBox.Items.Count > 0)
-                DateComboBox.SelectedIndex = 0;
+            VisitCalendar.SelectedDate = DateTime.Today;
         }
 
         private void ClearForm()
@@ -200,10 +187,36 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void PatientComboBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
+            {
+
+                
+            }
+            else
+            {
+                MessageBox.Show("Zaznacz badanie do usunięcia.", "Brak zaznaczenia", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void VisitCalendar_SelectedDatesChanged(object sender, RoutedEventArgs e)
+        {
+            if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
+            {
+
+
+            }
+            else
+            {
+                MessageBox.Show("Zaznacz badanie do usunięcia.", "Brak zaznaczenia", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+
         private bool ValidateInputs()
         {
-            if (!(TestsListBox.HasItems) ||
-                string.IsNullOrWhiteSpace(DateComboBox.Text))
+            if (!(TestsListBox.HasItems) || !VisitCalendar.SelectedDate.HasValue)
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
