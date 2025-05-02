@@ -40,43 +40,6 @@ namespace MedLabTab.Views.OtherViews
             VisitsDataGrid.ItemsSource = visits;
         }
 
-
-        public static List<Visit> GetMyVisits(int userId)
-        {
-            try
-            {
-                using (var db = new MedLabContext())
-                {
-                    return db.Visits
-                            .Where(v => v.PatientId == userId)
-                            .ToList();
-                }
-            }
-            catch
-            {
-                return new List<Visit>();
-            }
-        }
-
-        private void Edit_Click(object sender, RoutedEventArgs e)
-        {
-            //Button button = sender as Button;
-
-            //// odnalezienie kontekstu wiersza - czyli obiektu testu
-            //Visit selectedVisit = (sender as Button)?.CommandParameter as Visit;
-
-            //if (selectedVisit != null)
-            //{
-            //    var editTestWindow = new EditVisit(selectedVisit, this);
-            //    editTestWindow.Show();
-            //    this.Hide();
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Nie udało się wczytać danych wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-        }
-
         private void BtnEditVisit_Click(object sender, RoutedEventArgs e)
         {
 
@@ -134,7 +97,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests(this);
+            AllTests allTests = new AllTests(_currentUser, this);
             allTests.Show();
             this.Hide();
         }

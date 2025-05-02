@@ -194,7 +194,7 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
-        }/*
+        }
         public static bool ChangeTestStatus(Test test)
         {
             try
@@ -223,7 +223,7 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
             catch { return false; }
-        }*/
+        }
 
         public static List<CategoryDictionary> GetCategories()
         {
@@ -366,6 +366,24 @@ namespace MedLabTab.DatabaseManager
             catch
             {
                 return false;
+            }
+        }
+
+        public static List<TestHistory> GetCompletedTests()
+        {
+            using (var db = new MedLabContext())
+            {
+                return db.TestHistories
+                    .Include(th => th.Test)
+                    .Include(th => th.Visit)
+                        .ThenInclude(v => v.TimeSlot)
+                            .ThenInclude(ts => ts.Nurse)
+                    .Include(th => th.Patient)
+                    .Include(th => th.Analyst)
+                    .Where(th => th.Visit.IsActive == false)
+                    .OrderByDescending(th => th.Visit.TimeSlot.Date)
+                    .ThenByDescending(th => th.Visit.TimeSlot.Time)
+                    .ToList();
             }
         }
     }

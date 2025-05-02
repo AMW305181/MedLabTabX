@@ -201,7 +201,7 @@ namespace MedLabTab.Views.OtherViews
         }
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests(this);
+            AllTests allTests = new AllTests(_currentUser, this);
             allTests.Show();
             this.Hide();
         }

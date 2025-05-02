@@ -184,23 +184,43 @@
         </Style>
 
         <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
-            <Setter Property="Background" Value="#FF5555"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                 BorderBrush="{TemplateBinding BorderBrush}" 
-                 BorderThickness="{TemplateBinding BorderThickness}"
-                 CornerRadius="4">
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
+                            <!-- Domyślne kolory (czerwony) -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF3333"/>
+                                <Setter TargetName="border" Property="Background" Value="#FF3333"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#FF2222"/>
+                                <Setter TargetName="border" Property="Background" Value="#FF2222"/>
                             </Trigger>
+
+                            <!-- Nadpisanie dla stanu nieaktywnego (zielony) -->
+                            <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#4CAF50"/>
+                            </DataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsActive}" Value="False"/>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="border" Property="Background" Value="#3E8E41"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsActive}" Value="False"/>
+                                    <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="border" Property="Background" Value="#2E7D32"/>
+                            </MultiDataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -308,8 +328,8 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nazwa" Binding="{Binding TestName}" Width="2*" />
-                        <DataGridTextColumn Header="Opis" Binding="{Binding Description}" Width="2*" />
+                        <DataGridTextColumn Header="Nazwa" Binding="{Binding TestName}" Width="*" />
+                        <DataGridTextColumn Header="Opis" Binding="{Binding Description}" Width="Auto" />
                         <DataGridTextColumn Header="Koszt" Width="*">
                             <DataGridTextColumn.Binding>
                                 <Binding Path="Price" StringFormat="{}{0:N2} zł"/>
@@ -320,8 +340,25 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Content="Edytuj" Width="100" Margin="5,0" CommandParameter="{Binding OriginalTest}" Style="{StaticResource PrimaryButtonStyle}" Click="Edit_Click"/>
-                                        <Button Content="Dezaktywuj" Width="100" Margin="5,0" CommandParameter="{Binding OriginalTest}"  Style="{StaticResource DeleteButtonStyle}" Click="Deactivate_Click"/>
+                                        <Button Content="Edytuj" 
+                                            Width="100" 
+                                            Margin="5,0" 
+                                            CommandParameter="{Binding OriginalTest}" 
+                                            Style="{StaticResource PrimaryButtonStyle}" 
+                                            FontStyle="Normal"
+                                            Click="Edit_Click"/>
+                                        <Button Content="{Binding StatusText}"
+                                            Width="100" 
+                                            Margin="5,0" 
+                                            CommandParameter="{Binding OriginalTest}"
+                                            FontStyle="Normal"
+                                            Click="ToggleActive_Click">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource DeleteButtonStyle}">
+                                                    <Setter Property="Background" Value="{Binding StatusColor}"/>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
