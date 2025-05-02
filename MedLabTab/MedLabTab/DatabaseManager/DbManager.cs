@@ -368,6 +368,30 @@ namespace MedLabTab.DatabaseManager
                 return false;
             }
         }
+
+        public static List<Visit> GetCompletedVisits()
+        {
+            try
+            {
+                using (var db = new MedLabContext())
+                {
+                    return db.Visits
+                        .Include(v => v.Patient) 
+                        .Include(v => v.TimeSlot) 
+                        .ThenInclude(ts => ts.Nurse) 
+                        .Include(v => v.TestHistories)
+                        .ThenInclude(th => th.Test) 
+                        .Where(v => v.IsActive == false)
+                        .OrderByDescending(v => v.TimeSlot.Date)
+                        .ThenByDescending(v => v.TimeSlot.Time)
+                        .ToList();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
 

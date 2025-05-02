@@ -32,14 +32,14 @@ namespace MedLabTab.Views.OtherViews
 
         private void LoadDoneTests()
         {
-            var doneTests = DbManager.GetActiveTests(); // do zmiany na GetDoneTests()
-            if (doneTests != null)
+            var completedVisits = DbManager.GetCompletedVisits();
+            if (completedVisits != null && completedVisits.Any())
             {
-                RaportyDataGrid.ItemsSource = doneTests;
+                RaportyDataGrid.ItemsSource = completedVisits;
             }
             else
             {
-                MessageBox.Show("Błąd podczas ładowania gotowych testów.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Brak zakończonych wizyt do wyświetlenia.", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -60,10 +60,73 @@ namespace MedLabTab.Views.OtherViews
                 MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
             this.Close();
-            _parentWindow?.Show();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics();
+            statistics.Show();
+            this.Close();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }

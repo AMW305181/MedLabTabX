@@ -31,4 +31,5 @@ public partial class Test
     public virtual ICollection<TestHistory> TestHistories { get; set; } = new List<TestHistory>();
 
     public string DisplayPrice => Price.ToString("0.00") + " zł";
+
 }

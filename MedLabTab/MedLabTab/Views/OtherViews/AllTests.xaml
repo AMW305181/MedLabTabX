@@ -89,7 +89,7 @@
             <Setter Property="Margin" Value="0,10,0,20"/>
         </Style>
 
-        <!-- Zmodyfikowany styl przycisku głównego -->
+        <!-- Styl przycisku głównego -->
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Padding" Value="15,5"/>
