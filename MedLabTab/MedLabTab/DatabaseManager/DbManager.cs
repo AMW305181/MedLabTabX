@@ -9,6 +9,7 @@ using MedLabTab.DatabaseModels;
 using MedLabTab.ViewModels;
 using MedLabTab.Views.OtherViews;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MedLabTab.DatabaseManager
 {
@@ -102,6 +103,17 @@ namespace MedLabTab.DatabaseManager
             catch { return null; }
         }
 
+        public static Test GetTest(int Id)
+        {
+            try
+            {
+                var test = db.Tests.Where(t => t.id == Id).FirstOrDefault();
+                if (test != null) { return test; }
+                return null;
+            }
+            catch { return null; }
+        }
+
         public static bool EditUserCommon(string login, string password, string phoneNumber, int userId)
         {
             try
@@ -126,6 +138,28 @@ namespace MedLabTab.DatabaseManager
             {
                 var user = db.Users.Where(u => u.PESEL == PESEL).FirstOrDefault();
                 if (user != null) { return user; }
+                return null;
+            }
+            catch { return null; }
+        }
+
+        public static User GetUserById(int Id)
+        {
+            try
+            {
+                var user = db.Users.Where(u => u.id == Id).FirstOrDefault();
+                if (user != null) { return user; }
+                return null;
+            }
+            catch { return null; }
+        }
+
+        public static Schedule GetSchedule(int Id)
+        {
+            try
+            {
+                var schedule = db.Schedules.Where(s => s.id == Id).FirstOrDefault();
+                if (schedule != null) { return schedule; }
                 return null;
             }
             catch { return null; }
@@ -188,6 +222,21 @@ namespace MedLabTab.DatabaseManager
                 if (test != null)
                 {
                     test.IsActive = false;
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+
+        public static bool DeactivateVisit(Visit visit)
+        {
+            try
+            {
+                if (visit != null)
+                {
+                    visit.IsActive = false;
                     db.SaveChanges();
                     return true;
                 }
@@ -369,6 +418,71 @@ namespace MedLabTab.DatabaseManager
             }
         }
 
+        public static List<Schedule> GetAllDates()
+        {
+            try
+            {
+                List<Schedule> AvailableDates = db.Schedules.ToList();
+                return AvailableDates;
+            }
+            catch { return null; }
+        }
+
+        public static List<Visit> GetAllVisits()
+        {
+            try
+            {
+                List<Visit> AllVisits = db.Visits.ToList();
+                return AllVisits;
+            }
+            catch { return null; }
+        }
+        public static bool EditVisit(Visit oldVisit, Visit newVisit)
+        {
+            try
+            {
+                oldVisit.Cost = newVisit.Cost;
+                oldVisit.PaymentStatus = newVisit.PaymentStatus;
+                oldVisit.IsActive = newVisit.IsActive;
+                oldVisit.PatientId = newVisit.PatientId;
+                oldVisit.TimeSlotId = newVisit.TimeSlotId;
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public static bool AddTestHistory(TestHistory newTest)
+        {
+            try
+            {
+                db.TestHistories.Add(newTest);
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+        public static bool RemoveTestHistory(int visitId)
+        {
+            try
+            {
+                db.TestHistories.RemoveRange(db.TestHistories.Where(t => t.VisitId == visitId));
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public static List<TestHistory> GetTestsInVisit(int visitId)
+        {
+            try
+            {
+                List<TestHistory> TestsInVisit= db.TestHistories.Where(t => t.VisitId == visitId).ToList();
+                if (TestsInVisit != null) { return TestsInVisit; }
+                return null;
+            }
+            catch { return null; }
+
         public static List<TestHistory> GetCompletedTests()
         {
             using (var db = new MedLabContext())
@@ -385,6 +499,7 @@ namespace MedLabTab.DatabaseManager
                     .ThenByDescending(th => th.Visit.TimeSlot.Time)
                     .ToList();
             }
+
         }
     }
 }
