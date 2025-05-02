@@ -37,7 +37,10 @@ namespace MedLabTab.Views.OtherViews
                 {
                     Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date,
                     Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time,
-                    Tests = DbManager.GetTestsInVisit(v.id),
+                    Tests = string.Join(", ", DbManager.GetTestsInVisit(v.id)
+                        .Select(th => DbManager.GetTest(th.TestId))
+                        .Where(test => test != null && !string.IsNullOrEmpty(test.TestName))
+                        .Select(test => test.TestName)),
                     v.Cost,
                     Patient = DbManager.GetUserById(v.PatientId)?.Name + " " + DbManager.GetUserById(v.PatientId)?.Surname,
                     Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " +
