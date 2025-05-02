@@ -112,7 +112,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit(this);
+            NewVisit newVisit = new NewVisit(_currentUser,this);
             newVisit.Show();
             this.Hide();
         }
@@ -144,7 +144,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void NewVisit2_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit(this);
+            NewVisit newVisit = new NewVisit(_currentUser, this);
             newVisit.Show();
             this.Hide();
         }

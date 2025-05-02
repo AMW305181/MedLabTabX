@@ -401,22 +401,22 @@ namespace MedLabTab.DatabaseManager
                 .ToList();
         }
 
-        public static bool DeactivateVisit(Visit visit)
-        {
-            try
-            {
-                var visitToUpdate = db.Visits.FirstOrDefault(v => v.id == visit.id);
-                if (visitToUpdate == null) return false;
+        //public static bool DeactivateVisit(Visit visit)
+        //{
+        //    try
+        //    {
+        //        var visitToUpdate = db.Visits.FirstOrDefault(v => v.id == visit.id);
+        //        if (visitToUpdate == null) return false;
 
-                visitToUpdate.IsActive = false;
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        //        visitToUpdate.IsActive = false;
+        //        db.SaveChanges();
+        //        return true;
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public static List<Schedule> GetAllDates()
         {
@@ -477,11 +477,12 @@ namespace MedLabTab.DatabaseManager
         {
             try
             {
-                List<TestHistory> TestsInVisit= db.TestHistories.Where(t => t.VisitId == visitId).ToList();
+                List<TestHistory> TestsInVisit = db.TestHistories.Where(t => t.VisitId == visitId).ToList();
                 if (TestsInVisit != null) { return TestsInVisit; }
                 return null;
             }
             catch { return null; }
+        }
 
         public static List<TestHistory> GetCompletedTests()
         {
