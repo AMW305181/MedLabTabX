@@ -343,10 +343,10 @@
                                     <TextBlock>
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Text" Value="Nie"/>
+                                                <Setter Property="Text" Value="Tak"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                                        <Setter Property="Text" Value="Tak"/>
+                                                        <Setter Property="Text" Value="Nie"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsActive}" Value="False">
                                                         <Setter Property="Foreground" Value="#888888"/>
