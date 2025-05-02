@@ -31,7 +31,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit(this);
+            NewVisitAdmin newVisit = new NewVisitAdmin(this);
             newVisit.Show();
             this.Hide();
         }
