@@ -47,10 +47,6 @@ namespace MedLabTab.Views.OtherViews
                         DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,
                     PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
                     v.IsActive,
-                    DateTime = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date + " " +
-                          DbManager.GetSchedule(v.TimeSlotId.Value)?.Time,
-                    
-                    
                     OriginalVisit = v,
                 }).ToList();
 

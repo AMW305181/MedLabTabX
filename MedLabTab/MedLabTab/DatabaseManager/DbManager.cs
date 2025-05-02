@@ -9,6 +9,7 @@ using MedLabTab.DatabaseModels;
 using MedLabTab.ViewModels;
 using MedLabTab.Views.OtherViews;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MedLabTab.DatabaseManager
 {
@@ -400,6 +401,41 @@ namespace MedLabTab.DatabaseManager
                 return AllVisits;
             }
             catch { return null; }
+        }
+        public static bool EditVisit(Visit oldVisit, Visit newVisit)
+        {
+            try
+            {
+                oldVisit.Cost = newVisit.Cost;
+                oldVisit.PaymentStatus = newVisit.PaymentStatus;
+                oldVisit.IsActive = newVisit.IsActive;
+                oldVisit.PatientId = newVisit.PatientId;
+                oldVisit.TimeSlotId = newVisit.TimeSlotId;
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public static bool AddTestHistory(TestHistory newTest)
+        {
+            try
+            {
+                db.TestHistories.Add(newTest);
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+        public static bool RemoveTestHistory(int visitId)
+        {
+            try
+            {
+                db.TestHistories.RemoveRange(db.TestHistories.Where(t => t.VisitId == visitId));
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
         }
 
         public static List<TestHistory> GetTestsInVisit(int visitId)
