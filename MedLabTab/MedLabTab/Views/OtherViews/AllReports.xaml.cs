@@ -45,13 +45,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void ShowReport_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-
-            Test selectedTest = button?.DataContext as Test;
-
-            if (selectedTest != null)
+            if (sender is Button button && button.DataContext is Visit selectedVisit)
             {
-                var viewReportWindow = new ShowReport(/*selectedTest,*/ this);
+                var viewReportWindow = new ShowReport(selectedVisit, this);
                 viewReportWindow.Show();
                 this.Hide();
             }
