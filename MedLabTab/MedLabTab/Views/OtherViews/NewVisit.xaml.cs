@@ -210,15 +210,16 @@ namespace MedLabTab.Views.OtherViews
             }
 
             return true;
-
-        private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (VisitCalendar.SelectedDate.HasValue)
-            {
-                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
-                // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
-            }
         }
+
+        //private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (VisitCalendar.SelectedDate.HasValue)
+        //    {
+        //        DateTime selectedDate = VisitCalendar.SelectedDate.Value;
+        //        // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
+        //    }
+        //}
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
@@ -228,7 +229,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit(this);
+            NewVisit newVisit = new NewVisit(_currentUser, this);
             newVisit.Show();
             this.Hide();
         }
