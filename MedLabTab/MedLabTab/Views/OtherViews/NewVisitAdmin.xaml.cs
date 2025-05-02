@@ -177,6 +177,23 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (VisitCalendar.SelectedDate.HasValue)
+            {
+                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
+                // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
+            }
+        }
+
+        private void PatientComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TestsComboBox.SelectedIndex != 0)
+            {
+
+            }
+        }
+
         private void RemoveSelectedTest_Click(object sender, RoutedEventArgs e)
         {
             if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
@@ -197,28 +214,6 @@ namespace MedLabTab.Views.OtherViews
                 MessageBox.Show("Zaznacz badanie do usunięcia.", "Brak zaznaczenia", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-
-        private void VisitCalendar_SelectedDatesChanged(object sender, RoutedEventArgs e)
-        {
-            if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
-            {
-
-
-            }
-            else
-            {
-                MessageBox.Show("Zaznacz badanie do usunięcia.", "Brak zaznaczenia", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
-
-        private void PatientComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (TestsComboBox.SelectedIndex != 0)
-            {
-
-            }
-        }
-
 
         private bool ValidateInputs()
         {

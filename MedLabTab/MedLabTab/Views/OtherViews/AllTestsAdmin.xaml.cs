@@ -149,9 +149,9 @@ namespace MedLabTab.Views.OtherViews
         //na newVisitAdmin
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-        //    NewVisit newVisit = new NewVisit(this);
-        //    newVisit.Show();
-        //    this.Hide();
+            NewVisitAdmin newVisit = new NewVisitAdmin(this);
+            newVisit.Show();
+            this.Hide();
         }
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)

@@ -32,20 +32,20 @@ namespace MedLabTab.Views.OtherViews
         {
             InitializeComponent();
             ClearForm();
+            this.DataContext = this;
             LoadData();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
+
+            PatientTextBox.Text = currentUser != null
+    ? $"{currentUser.Name} {currentUser.Surname}"
+    : "Nie zalogowano";
         }
 
         private void LoadData()
         {
             visitCost = 0;
             visitTime = 0;
-
-            if (_currentUser != null )
-            {
-                PatientComboBox.SelectedItem = _currentUser;
-            }
 
             //załadowanie listy badań
             TestsComboBox.Items.Clear();
@@ -194,22 +194,15 @@ namespace MedLabTab.Views.OtherViews
 
                 
             }
-            else
-            {
-                MessageBox.Show("Zaznacz badanie do usunięcia.", "Brak zaznaczenia", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+
         }
 
-        private void VisitCalendar_SelectedDatesChanged(object sender, RoutedEventArgs e)
+        private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
+            if (VisitCalendar.SelectedDate.HasValue)
             {
-
-
-            }
-            else
-            {
-                MessageBox.Show("Zaznacz badanie do usunięcia.", "Brak zaznaczenia", MessageBoxButton.OK, MessageBoxImage.Information);
+                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
+                // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
             }
         }
 

@@ -157,6 +157,15 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="TextBox" x:Key="ReadOnlyTextBoxStyle">
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+        </Style>
+        
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -245,16 +254,26 @@
                     <StackPanel Grid.Column="0" Margin="10">
                         <!-- Pacjent -->
                         <Label Content="Pacjent:" FontSize="14" FontWeight="SemiBold" Margin="0,5"/>
-                        <ComboBox x:Name="PatientComboBox" Height="30" FontSize="14" 
-                          SelectionChanged="PatientComboBox_SelectionChanged"/>
+                        <TextBox x:Name="PatientTextBox" Height="30" FontSize="14" Background="Transparent"
+                             Style="{StaticResource ReadOnlyTextBoxStyle}"/>  
 
                         <!-- Badania -->
                         <Label Content="Wybierz badania:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
                         <ComboBox x:Name="TestsComboBox" Height="30" FontSize="14" 
                           SelectionChanged="TestsComboBox_SelectionChanged"/>
                         <Label Content="Wybrane badania:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
-                        <ListBox x:Name="TestsListBox" Height="120" FontSize="14" 
-                         SelectionMode="Multiple" Margin="0,0,0,10"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ListBox x:Name="TestsListBox" Height="120" FontSize="14" 
+                                SelectionMode="Multiple" Margin="0,0,0,10"/>
+
+                        </Grid>
+                        <Button Content="Usuń" Width="60" Height="30" Margin="5,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                                Click="RemoveSelectedTest_Click" Style="{StaticResource PrimaryButtonStyle}"/>
                     </StackPanel>
 
                     <!-- Prawa kolumna - kalendarz -->
