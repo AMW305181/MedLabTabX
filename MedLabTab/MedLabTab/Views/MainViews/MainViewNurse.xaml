@@ -109,10 +109,10 @@
                 <!-- Menu nawigacyjne -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <!-- Przycisk BADANIA -->
+                        <!-- Przycisk WZIYTY -->
                         <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnExams" 
-                            Content="BADANIA"
+                            Content="WIZYTY"
                             Click="BtnExams_Click"/>    
 
                         <!-- Przycisk PRÓBKI -->

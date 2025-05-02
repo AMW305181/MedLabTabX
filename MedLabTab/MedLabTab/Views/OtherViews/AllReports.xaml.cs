@@ -47,7 +47,6 @@ namespace MedLabTab.Views.OtherViews
         {
             Button button = sender as Button;
 
-            // odnalezienie kontekstu wiersza - czyli obiektu testu
             Test selectedTest = button?.DataContext as Test;
 
             if (selectedTest != null)

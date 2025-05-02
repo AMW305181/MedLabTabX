@@ -36,9 +36,10 @@
         <DataGrid x:Name="RaportyDataGrid" Grid.Row="1"
                   AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Badanie" Binding="{Binding TestName}" Width="*" />
-                <DataGridTextColumn Header="Data" Binding="{Binding Description}" Width="*" />
-                <DataGridTextColumn Header="Pacjent" Binding="{Binding Price}" Width="*" />
+                <DataGridTextColumn Header="Badanie" Binding="{Binding DisplayTests}" Width="*" />
+                <DataGridTextColumn Header="Data" Binding="{Binding DisplayDate}" Width="*" />
+                <DataGridTextColumn Header="Godzina" Binding="{Binding DisplayTime}" Width="*" />
+                <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
                 <DataGridTemplateColumn Header="Akcje" Width="160">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
