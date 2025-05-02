@@ -35,15 +35,19 @@ namespace MedLabTab.Views.OtherViews
             {
                 var visitsWithNames = visits.Select(v => new
                 {
-                    Id = v.id,
+                    Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date,
+                    Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time,
+                    Tests = DbManager.GetTestsInVisit(v.id),
                     v.Cost,
-                    v.PaymentStatus,
+                    Patient = DbManager.GetUserById(v.PatientId)?.Name + " " + DbManager.GetUserById(v.PatientId)?.Surname,
+                    Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " +
+                        DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,
+                    PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
                     v.IsActive,
                     DateTime = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date + " " +
                           DbManager.GetSchedule(v.TimeSlotId.Value)?.Time,
-                    Patient = DbManager.GetUserById(v.PatientId)?.Name + " " + DbManager.GetUserById(v.PatientId)?.Surname, 
-                    Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " + 
-                        DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,
+                    
+                    
                     OriginalVisit = v,
                 }).ToList();
 

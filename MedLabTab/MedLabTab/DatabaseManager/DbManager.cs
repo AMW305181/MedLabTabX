@@ -402,6 +402,16 @@ namespace MedLabTab.DatabaseManager
             catch { return null; }
         }
 
+        public static List<TestHistory> GetTestsInVisit(int visitId)
+        {
+            try
+            {
+                List<TestHistory> TestsInVisit= db.TestHistories.Where(t => t.VisitId == visitId).ToList();
+                if (TestsInVisit != null) { return TestsInVisit; }
+                return null;
+            }
+            catch { return null; }
+        }
     }
 }
 

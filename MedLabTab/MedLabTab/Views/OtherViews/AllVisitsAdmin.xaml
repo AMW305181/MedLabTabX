@@ -35,8 +35,9 @@
         <!-- Tabela -->
         <DataGrid x:Name="VisitsDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Wizyta" Binding="{Binding Id}" Width="0.5*" />
-                <DataGridTextColumn Header="Data i godzina" Binding="{Binding DateTime}" Width="*" />
+                <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
+                <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
+                <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*" />
                 <DataGridTextColumn Header="Koszt" Binding="{Binding Cost}" Width="*" />
                 <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
                 <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*" />
