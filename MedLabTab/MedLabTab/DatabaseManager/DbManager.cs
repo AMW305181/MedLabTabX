@@ -427,12 +427,14 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return false; }
         }
+
+        //do poprawki jak bedzie isActive w TestHistory
         public static bool RemoveTestHistory(int visitId)
         {
             try
             {
-                db.TestHistories.RemoveRange(db.TestHistories.Where(t => t.VisitId == visitId));
-                db.SaveChanges();
+                //db.TestHistories.RemoveRange(db.TestHistories.Where(t => t.VisitId == visitId));
+                //db.SaveChanges();
                 return true;
             }
             catch { return false; }
