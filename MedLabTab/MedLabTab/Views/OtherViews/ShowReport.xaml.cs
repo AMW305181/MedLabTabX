@@ -48,9 +48,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            //NewVisit newVisit = new NewVisit(this);
-            //newVisit.Show();
-            //this.Hide();
+            NewVisitAdmin newVisit = new NewVisitAdmin(this);
+            newVisit.Show();
+            this.Hide();
         }
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
@@ -93,6 +93,12 @@ namespace MedLabTab.Views.OtherViews
             Statistics statistics = new Statistics();
             statistics.Show();
             this.Close();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            _parentWindow?.Show();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
