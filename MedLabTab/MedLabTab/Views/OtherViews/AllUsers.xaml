@@ -66,9 +66,9 @@
 
         <!-- Style dla przycisków -->
         <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="36"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Padding" Value="15,5"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#FF69B4"/>
@@ -96,26 +96,77 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- Style dla przycisku Usuń -->
-        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="#FF5555"/>
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="4">
+                         BorderBrush="{TemplateBinding BorderBrush}" 
+                         BorderThickness="{TemplateBinding BorderThickness}"
+                         CornerRadius="4">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF3333"/>
+                                <Setter Property="Background" Value="#FF4AA0"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#FF2222"/>
+                                <Setter Property="Background" Value="#FF3A90"/>
                             </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Style dla przycisku Usuń -->
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Domyślne kolory (czerwony) -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF3333"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF2222"/>
+                            </Trigger>
+
+                            <!-- Nadpisanie dla stanu nieaktywnego (zielony) -->
+                            <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="#4CAF50"/>
+                            </DataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsActive}" Value="False"/>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="border" Property="Background" Value="#3E8E41"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsActive}" Value="False"/>
+                                    <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter TargetName="border" Property="Background" Value="#2E7D32"/>
+                            </MultiDataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -433,18 +484,6 @@
                         <ComboBoxItem Content="Analityk"/>
                     </ComboBox>
 
-                    <!-- Sortowanie -->
-                    <ComboBox Grid.Column="2" 
-                          x:Name="cmbSort"
-                          Style="{StaticResource ComboBoxStyle}"
-                          Width="180"
-                          Margin="0,0,10,0"
-                          SelectionChanged="CmbSort_SelectionChanged">      
-                        <ComboBoxItem Content="Sortuj wg nazwiska" IsSelected="True"/>
-                        <ComboBoxItem Content="Sortuj wg imienia"/>
-                        <ComboBoxItem Content="Sortuj wg loginu"/>
-                        <ComboBoxItem Content="Sortuj wg roli"/>
-                    </ComboBox>
                 </Grid>
 
 
@@ -452,29 +491,59 @@
                 <DataGrid Grid.Row="2" 
                           x:Name="dgUsers"
                           Style="{StaticResource DataGridStyle}"
+                          IsReadOnly="true"
                           SelectionChanged="DgUsers_SelectionChanged"
                           AutoGenerateColumns="False"
                           ScrollViewer.HorizontalScrollBarVisibility="Auto"
                           ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="Auto"/>
-                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="Auto"/>
-                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="Auto"/>
-                        <DataGridTextColumn Header="Rola" Binding="{Binding Role}" Width="Auto"/>
-                        <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}" Width="Auto"/>
-                        <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="Auto"/>
+                        <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="*"/>
+                        <DataGridTextColumn Header="Imię" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}" Width="*"/>
+                        <DataGridTextColumn Header="Rola" Binding="{Binding UserTypeNavigation.TypeName}" Width="*"/>
+                        <DataGridTextColumn Header="PESEL" Binding="{Binding PESEL}" Width="*"/>
+                        <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="*"/>
+                        <DataGridTemplateColumn Header="Aktywny" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="Nie"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="Text" Value="Tak"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Akcje" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button Content="Edytuj" 
                                                 Style="{StaticResource ButtonStyle}" 
-                                                Width="80"
+                                                Width="100"
+                                                Margin="5,0"
                                                 Click="BtnEditUser_Click"/>
-                                        <Button Content="Usuń" 
-                                                Style="{StaticResource DeleteButtonStyle}" 
-                                                Width="80"
-                                                Click="BtnDeleteUser_Click"/>
+                                        <Button Content="{Binding StatusText}"
+                                                Width="100" 
+                                                Margin="5,0" 
+                                                CommandParameter="{Binding OriginalTest}"
+                                                FontStyle="Normal"
+                                                Click="BtnDeleteUser_Click">     
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource DeleteButtonStyle}">
+                                                    <Setter Property="Background" Value="{Binding StatusColor}"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -551,23 +620,6 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <!-- Przyciski -->
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" 
-                                    Orientation="Horizontal" 
-                                    HorizontalAlignment="Right" 
-                                    Margin="0,15,0,0">
-                            <Button Content="Anuluj" 
-                                    Style="{StaticResource ButtonStyle}" 
-                                    Background="#DDDDDD"
-                                    Foreground="#555555"
-                                    Width="100"
-                                    Click="BtnCancelEdit_Click"/>
-                            <Button Content="Zapisz" 
-                                    Style="{StaticResource ButtonStyle}" 
-                                    Width="100"
-                                    Click="BtnSaveUser_Click"
-                                    Margin="10,5,0,5"/>
-                        </StackPanel>
                     </Grid>
                 </Border>
             </Grid>

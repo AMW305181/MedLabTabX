@@ -30,16 +30,24 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests(this);
+            AllTests allTests = new AllTests(currentUser,this);
             allTests.Show();
             this.Hide();
         }
 
         private void BtnVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisits allVisits = new AllVisits();
+            MyVisits allVisits = new MyVisits(currentUser, this);
             allVisits.Show();
-            this.Close();
+            this.Hide();
+        }
+
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(currentUser, this);
+            newVisit.Show();
+            this.Hide();
         }
 
         private void BtnResults_Click(object sender, RoutedEventArgs e)
@@ -66,5 +74,6 @@ namespace MedLabTab.Views.MainViews
                 this.Close();
             }
         }
+
     }
 }

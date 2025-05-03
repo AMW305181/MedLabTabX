@@ -8,6 +8,83 @@
         Background="#f8f5ff">
 
     <Window.Resources>
+
+        <!-- Style dla przycisków nawigacyjnych -->
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFE6F0"/>
+                                <Setter Property="Foreground" Value="#FF69B4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FFD6E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla przycisku wylogowania -->
+        <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
+            <Setter Property="Background" Value="#FFF0F0"/>
+            <Setter Property="Foreground" Value="#FF5555"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFE0E0"/>
+                                <Setter Property="Foreground" Value="#FF3333"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FFD0D0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla nagłówków sekcji -->
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#FF69B4"/>
+            <Setter Property="Margin" Value="10,15,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
         <!-- Style przycisków -->
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#FF69B4"/>
@@ -68,37 +145,97 @@
     </Window.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Tytuł -->
-        <TextBlock Text="Nowe badanie" Grid.Row="0" Margin="0,10,0,10"
+        <!-- Pasek nawigacyjny (lewa strona) -->
+        <Border Grid.Column="0" Background="White" BorderBrush="#EEEEEE" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo i nazwa -->
+                <StackPanel Grid.Row="0" Margin="0,20,0,20">
+                    <TextBlock Text="MedLabTab" FontSize="22" FontWeight="Bold" Foreground="#FF69B4" HorizontalAlignment="Center"/>
+                    <TextBlock Text="System Laboratoryjny" FontSize="12" Foreground="#888888" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Menu nawigacyjne -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Grid.Row="1">
+                        <!-- Sekcja WIZYTY -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+
+                        <!-- Sekcja BADANIA -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie badania" x:Name="btnAllExams" Click="BtnAllExams_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Nowe badanie" x:Name="btnNewExam" Click="BtnNewExam_Click"/>
+
+                        <!-- Sekcja KONTA -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszyscy użytkownicy" x:Name="btnAllUsers" Click="BtnAllUsers_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Zarejestruj" x:Name="btnRegister" Click="BtnRegister_Click"/>
+
+                        <!-- Sekcja RAPORTY -->
+                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Raporty badań" x:Name="btnReports" Click="BtnReports_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Statystyki" x:Name="btnStats" Click="BtnStats_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Przycisk wylogowania -->
+                <Button Grid.Row="2" 
+                    Style="{StaticResource LogoutButtonStyle}" 
+                    Content="Wyloguj się" 
+                    x:Name="btnLogout"
+                    Click="BtnLogout_Click"
+                    Margin="10,20,10,20"/>
+            </Grid>
+        </Border>
+
+        <!-- Główna treść (prawa strona) -->
+        <Grid Grid.Column="1">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#f8f5ff" Offset="0"/>
+                    <GradientStop Color="#fff0f5" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <!-- Tytuł -->
+            <TextBlock Text="Nowe badanie" Grid.Row="0" Margin="0,10,0,10"
                    HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
 
-        <!-- Formularz -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Nazwa badania"/>
-            <TextBox x:Name="TestNameTextBox" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch" MinWidth="200"/>
+            <!-- Formularz -->
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+                <TextBlock Style="{StaticResource TextBlockStyle}" Text="Nazwa badania"/>
+                <TextBox x:Name="TestNameTextBox" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Stretch" MinWidth="200"/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Opis"/>
-            <TextBox x:Name="DescriptionTextBox" Style="{StaticResource TextBoxStyle}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+                <TextBlock Style="{StaticResource TextBlockStyle}" Text="Opis"/>
+                <TextBox x:Name="DescriptionTextBox" Style="{StaticResource TextBoxStyle}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Cena (zł)"/>
-            <TextBox x:Name="PriceTextBox" Style="{StaticResource TextBoxStyle}"/>
+                <TextBlock Style="{StaticResource TextBlockStyle}" Text="Cena (zł)"/>
+                <TextBox x:Name="PriceTextBox" Style="{StaticResource TextBoxStyle}"/>
 
-            <TextBlock Style="{StaticResource TextBlockStyle}" Text="Kategoria"/>
-            <ComboBox x:Name="CategoryComboBox" Style="{StaticResource ComboBoxStyle}"/>
+                <TextBlock Style="{StaticResource TextBlockStyle}" Text="Kategoria"/>
+                <ComboBox x:Name="CategoryComboBox" Style="{StaticResource ComboBoxStyle}"/>
 
-            <CheckBox x:Name="IsActiveCheckBox" Content="Aktywne" Margin="0,0,0,15" FontSize="14" Foreground="#333"/>
-        </StackPanel>
+                <CheckBox x:Name="IsActiveCheckBox" Content="Aktywne" Margin="0,0,0,15" FontSize="14" Foreground="#333"/>
+            </StackPanel>
 
-        <!-- Przyciski -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20">
-            <Button Content="Zapisz" Style="{StaticResource ButtonStyle}" Width="120" Margin="10,0" Click="Save_Click"/>
-            <Button Content="Anuluj" Style="{StaticResource ButtonStyle}" Width="120" Margin="10,0" Click="Cancel_Click"/>
-        </StackPanel>
+            <!-- Przyciski -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20" VerticalAlignment="Bottom">
+                <Button Content="Zapisz" Style="{StaticResource ButtonStyle}" Width="120" Click="Save_Click" Height="20"/>
+                <Button Content="Anuluj" Style="{StaticResource ButtonStyle}" Width="120" Margin="12,0" Click="Cancel_Click" Height="20"/>
+            </StackPanel>
+        </Grid>
+
     </Grid>
 </Window>

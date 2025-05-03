@@ -21,28 +21,97 @@ namespace MedLabTab.Views.OtherViews
     public partial class ShowReport : Window
     {
         private Window _parentWindow;
-        //private Report _testReport;
-        public ShowReport(/*Report report,*/ Window parentWindow)
+        private readonly TestHistory _testHistory;
+        public ShowReport(TestHistory testHistory, Window parentWindow)
         {
             InitializeComponent();
             _parentWindow = parentWindow;
-            //_testReport = report;
+            _testHistory = testHistory;
             FillReportWithData();
         }
         private void FillReportWithData()
         {
-            //TestTextBlock.Text = _testReport.Test;
-            //PatientTextBlock.Text = _testReport.Patient;
-            //NurseTextBlock.Text = _testReport.Nurse;
-            //AnalystTextBlock.Text = _testReport.Analyst;
-            //DateTextBlock.Text = _testReport.Date;
+            TestTextBlock.Text = _testHistory.DisplayTest;
+            PatientTextBlock.Text = _testHistory.DisplayPatient;
+            NurseTextBlock.Text = _testHistory.DisplayNurse;
+            AnalystTextBlock.Text = _testHistory.DisplayAnalyst;
+            DateTextBlock.Text = $"{_testHistory.DisplayDate} {_testHistory.DisplayTime}";
             //ResultTextBox.Text = _testReport.Result;
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+        {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisitAdmin newVisit = new NewVisitAdmin(this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
+            this.Close();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics();
+            statistics.Show();
+            this.Close();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
             _parentWindow?.Show();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }

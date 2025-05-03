@@ -16,96 +16,112 @@ using MedLabTab.DatabaseModels;
 
 namespace MedLabTab.Views.OtherViews
 {
-    /// <summary>
-    /// Interaction logic for Tests.xaml
-    /// </summary>
     public partial class AllTests : Window
     {
         private Window _parentWindow;
-        public AllTests(Window parentWindow)
+        private User _currentUser;
+        public AllTests(User currentUser, Window parentWindow)
         {
             InitializeComponent();
             LoadTests(); // Załaduj dane po inicjalizacji okna
             _parentWindow = parentWindow;
-        }
-
-        private void LoadTests()
-        {
-            var tests = DbManager.GetAllTests(); // <-- Zmienna klasa, np. TestRepository
-            if (tests != null)
+            _currentUser = currentUser;
+            switch (_currentUser.UserType)
             {
-                BadaniaDataGrid.ItemsSource = tests;
+                case 3:
+                    AnalystMenu.Visibility = Visibility.Visible;
+                    break;
+                case 4:
+                    PatientMenu.Visibility = Visibility.Visible;
+                    ScheduleButton.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+        public void LoadTests()
+        {
+            var tests = DbManager.GetActiveTests();
+            var categoryDict = DbManager.GetCategoriesDictionary();
+
+            if (tests != null && categoryDict != null)
+            {
+                var mappedTests = tests.Select(t => new
+                {
+                    t.TestName,
+                    t.Description,
+                    t.DisplayPrice,
+                    Category = categoryDict.TryGetValue(t.Category, out var catName) ? catName : "Nieznana",
+                    OriginalTest = t
+                }).ToList();
+
+                BadaniaDataGrid.ItemsSource = mappedTests;
             }
             else
             {
-                MessageBox.Show("Błąd podczas ładowania aktywnych testów.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Błąd podczas ładowania danych.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void AddTest_Click(object sender, RoutedEventArgs e)
+
+
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            var newTestWindow = new NewTest(this);
-            newTestWindow.Show();
+            AllTests allTests = new AllTests(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+        private void BtnResults_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var profile = new Profile(_currentUser, this);
+            profile.Show();
             this.Hide();
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-
-            // odnalezienie kontekstu wiersza - czyli obiektu testu
-            Test selectedTest = button?.DataContext as Test;
-
-            if (selectedTest != null)
-            {
-                var editTestWindow = new EditTest(selectedTest, this);
-                editTestWindow.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Nie udało się wczytać danych badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void Deactivate_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            Test selectedTest = button?.DataContext as Test;
-
-            if (selectedTest != null)
-            {
-                var result = MessageBox.Show(
-                    $"Czy na pewno chcesz usunąć badanie \"{selectedTest.TestName}\"?",
-                    "Potwierdzenie usunięcia",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    bool deleted = DbManager.DeleteTest(selectedTest);
-
-                    if (deleted)
-                    {
-                        MessageBox.Show("Badanie zostało usunięte.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadTests(); // Odświeżenie tabeli
-                    }
-                    else
-                    {
-                        MessageBox.Show("Wystąpił błąd podczas usuwania badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Nie udało się pobrać wybranego badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
+            Samples samples = new Samples();
+            samples.Show();
             this.Close();
-            _parentWindow?.Show();
         }
+
+        private void BtnReport_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports newReport = new AllReports(this);
+            newReport.Show();
+            this.Hide();
+        }
+
+        private void BtnVisits_Click(object sender, RoutedEventArgs e)
+        {
+            MyVisits allVisits = new MyVisits(_currentUser, this);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(_currentUser,this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
+        }
+
+
     }
 }

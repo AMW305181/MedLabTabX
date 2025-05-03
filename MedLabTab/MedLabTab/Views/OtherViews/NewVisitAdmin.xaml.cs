@@ -22,30 +22,38 @@ namespace MedLabTab.Views.OtherViews
     /// <summary>
     /// Interaction logic for NewVisit.xaml
     /// </summary>
-    public partial class NewVisit : Window
+    public partial class NewVisitAdmin : Window
     {
         private Window _parentWindow;
         private float visitCost;
         private int visitTime;
-        private User _currentUser;
-        public NewVisit(User currentUser, Window parentWindow)
+        public NewVisitAdmin(Window parentWindow)
         {
             InitializeComponent();
             ClearForm();
-            this.DataContext = this;
             LoadData();
             _parentWindow = parentWindow;
-            _currentUser = currentUser;
-
-            PatientTextBox.Text = currentUser != null
-    ? $"{currentUser.Name} {currentUser.Surname}"
-    : "Nie zalogowano";
         }
 
         private void LoadData()
         {
             visitCost = 0;
             visitTime = 0;
+
+            //załadowanie listy pacjentów
+            PatientComboBox.Items.Clear();
+            var users = DbManager.GetActivePatients();
+            foreach (var user in users)
+            {
+                PatientComboBox.Items.Add(new ComboBoxItem
+                {
+                    Content = user.Name + " " + user.Surname,
+                    Tag = user.PESEL
+                });
+            }
+
+            if (PatientComboBox.Items.Count > 0)
+                PatientComboBox.SelectedIndex = 0;
 
             //załadowanie listy badań
             TestsComboBox.Items.Clear();
@@ -73,7 +81,7 @@ namespace MedLabTab.Views.OtherViews
         {
             CostTextBlock.Text = $"Koszt: {visitCost} zł";
             TimeTextBlock.Text = $"Czas trwania: {visitTime} min";
-            //IsPaidCheckBox.IsChecked = false;
+            IsPaidCheckBox.IsChecked = false;
             IsActiveCheckBox.IsChecked = true;
         }
 
@@ -89,6 +97,9 @@ namespace MedLabTab.Views.OtherViews
             {
                 //do uzupełnienia po dodaniu harmonogramu
 
+                //var selectedPatient = (ComboBoxItem)PatientComboBox.SelectedItem;
+                //string patientPESEL = (string)selectedPatient.Tag;
+
                 //var selectedTimeSlot = (ComboBoxItem)DateComboBox.SelectedItem;
                 //int timeSlotId = (int)selectedTimeSlot.Tag;
 
@@ -97,7 +108,7 @@ namespace MedLabTab.Views.OtherViews
                 //    Cost = visitCost,
                 //    PaymentStatus = IsPaidCheckBox.IsChecked == true,
                 //    IsActive = IsActiveCheckBox.IsChecked == true,
-                //    PatientId = _currentUser.id,
+                //    PatientId = (DbManager.GetUser(patientPESEL)).id,
                 //    TimeSlotId = timeSlotId,
                 //};
 
@@ -115,7 +126,7 @@ namespace MedLabTab.Views.OtherViews
                 //        {
                 //            VisitId = newVisit.id,
                 //            TestId = test.id,
-                //            PatientId = _currentUser.id,
+                //            PatientId = DbManager.GetUser(patientPESEL).id,
                 //            Status = 1, // to chyba oznacza ze jest pierwszy etap jakby
                 //            AnalystId = null,
                 //        };
@@ -166,6 +177,23 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (VisitCalendar.SelectedDate.HasValue)
+            {
+                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
+                // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
+            }
+        }
+
+        private void PatientComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TestsComboBox.SelectedIndex != 0)
+            {
+
+            }
+        }
+
         private void RemoveSelectedTest_Click(object sender, RoutedEventArgs e)
         {
             if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
@@ -187,26 +215,6 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void PatientComboBox_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
-            {
-
-                
-            }
-
-        }
-
-        private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (VisitCalendar.SelectedDate.HasValue)
-            {
-                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
-                // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
-            }
-        }
-
-
         private bool ValidateInputs()
         {
             if (!(TestsListBox.HasItems) || !VisitCalendar.SelectedDate.HasValue)
@@ -218,101 +226,60 @@ namespace MedLabTab.Views.OtherViews
             return true;
         }
 
-        //private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (VisitCalendar.SelectedDate.HasValue)
-        //    {
-        //        DateTime selectedDate = VisitCalendar.SelectedDate.Value;
-        //        // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
-        //    }
-        //}
-        private void BtnEditVisit_Click(object sender, RoutedEventArgs e)
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void BtnCancelVisit_Click(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is Button button)) return;
-
-            if (!(button.DataContext is Visit selectedVisit))
-            {
-                MessageBox.Show("Nie udało się pobrać wybranej wizyty.",
-                              "Błąd",
-                              MessageBoxButton.OK,
-                              MessageBoxImage.Error);
-                return;
-            }
-
-            var result = MessageBox.Show(
-                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.DisplayDate} o {selectedVisit.DisplayTime}?",
-                "Potwierdzenie anulowania",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (result != MessageBoxResult.Yes) return;
-
-            try
-            {
-                bool success = DbManager.DeactivateVisit(selectedVisit);
-
-                if (success)
-                {
-                    MessageBox.Show("Wizyta została anulowana.",
-                                  "Sukces",
-                                  MessageBoxButton.OK,
-                                  MessageBoxImage.Information);
-                    LoadData();
-                }
-                else
-                {
-                    MessageBox.Show("Nie udało się anulować wizyty.",
-                                  "Błąd",
-                                  MessageBoxButton.OK,
-                                  MessageBoxImage.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Wystąpił błąd: {ex.Message}",
-                              "Błąd",
-                              MessageBoxButton.OK,
-                              MessageBoxImage.Error);
-            }
-        }
-
-        private void BtnExams_Click(object sender, RoutedEventArgs e)
-        {
-            AllTests allTests = new AllTests(_currentUser, this);
-            allTests.Show();
-            this.Hide();
-        }
-
-        private void BtnVisits_Click(object sender, RoutedEventArgs e)
-        {
-            MyVisits allVisits = new MyVisits(_currentUser, this);
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
             allVisits.Show();
             this.Hide();
         }
 
-
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit(_currentUser, this);
-            newVisit.Show();
+            NewVisitAdmin newVisitAdmin = new NewVisitAdmin(this);
+            newVisitAdmin.Show();
             this.Hide();
         }
 
-        private void BtnResults_Click(object sender, RoutedEventArgs e)
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            allTests.Show();
+            this.Hide();
         }
 
-        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
         {
-            var profile = new Profile(_currentUser, this);
-            profile.Show();
+            NewTest newTest = new NewTest(this);
+            newTest.Show();
             this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
+            this.Close();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics();
+            statistics.Show();
+            this.Close();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
@@ -327,13 +294,6 @@ namespace MedLabTab.Views.OtherViews
                 this.Close();
             }
 
-        }
-
-        private void NewVisit2_Click(object sender, RoutedEventArgs e)
-        {
-            NewVisit newVisit = new NewVisit(_currentUser, this);
-            newVisit.Show();
-            this.Hide();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
