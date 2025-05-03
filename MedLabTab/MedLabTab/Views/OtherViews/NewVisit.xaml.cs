@@ -32,20 +32,20 @@ namespace MedLabTab.Views.OtherViews
         {
             InitializeComponent();
             ClearForm();
+            this.DataContext = this;
             LoadData();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
+
+            PatientTextBox.Text = currentUser != null
+    ? $"{currentUser.Name} {currentUser.Surname}"
+    : "Nie zalogowano";
         }
 
         private void LoadData()
         {
             visitCost = 0;
             visitTime = 0;
-
-            if (_currentUser != null )
-            {
-                PatientTextBox.Text = _currentUser.Name + " " + _currentUser.Surname;
-            }
 
             //załadowanie listy badań
             TestsComboBox.Items.Clear();
@@ -66,20 +66,7 @@ namespace MedLabTab.Views.OtherViews
             if (TestsComboBox.Items.Count > 0)
                 TestsComboBox.SelectedIndex = 0;
 
-            //załadowanie listy dostepnych terminow
-            DateComboBox.Items.Clear();
-            var dates = DbManager.GetAllDates(); // tutaj metoda do poprawki - zalezy jak bedzie wygladal harmonogram
-            foreach (var date in dates)
-            {
-                DateComboBox.Items.Add(new ComboBoxItem
-                {
-                    Content = date.Date + " " + date.Time,
-                    Tag = date.id
-                });
-            }
-
-            if (DateComboBox.Items.Count > 0)
-                DateComboBox.SelectedIndex = 0;
+            VisitCalendar.SelectedDate = DateTime.Today;
         }
 
         private void ClearForm()
@@ -200,10 +187,29 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void PatientComboBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
+            {
+
+                
+            }
+
+        }
+
+        private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (VisitCalendar.SelectedDate.HasValue)
+            {
+                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
+                // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
+            }
+        }
+
+
         private bool ValidateInputs()
         {
-            if (!(TestsListBox.HasItems) ||
-                string.IsNullOrWhiteSpace(DateComboBox.Text))
+            if (!(TestsListBox.HasItems) || !VisitCalendar.SelectedDate.HasValue)
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
@@ -220,12 +226,75 @@ namespace MedLabTab.Views.OtherViews
         //        // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
         //    }
         //}
-        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+        private void BtnEditVisit_Click(object sender, RoutedEventArgs e)
         {
-            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+
+        }
+
+        private void BtnCancelVisit_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is Button button)) return;
+
+            if (!(button.DataContext is Visit selectedVisit))
+            {
+                MessageBox.Show("Nie udało się pobrać wybranej wizyty.",
+                              "Błąd",
+                              MessageBoxButton.OK,
+                              MessageBoxImage.Error);
+                return;
+            }
+
+            var result = MessageBox.Show(
+                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.DisplayDate} o {selectedVisit.DisplayTime}?",
+                "Potwierdzenie anulowania",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes) return;
+
+            try
+            {
+                bool success = DbManager.DeactivateVisit(selectedVisit);
+
+                if (success)
+                {
+                    MessageBox.Show("Wizyta została anulowana.",
+                                  "Sukces",
+                                  MessageBoxButton.OK,
+                                  MessageBoxImage.Information);
+                    LoadData();
+                }
+                else
+                {
+                    MessageBox.Show("Nie udało się anulować wizyty.",
+                                  "Błąd",
+                                  MessageBoxButton.OK,
+                                  MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Wystąpił błąd: {ex.Message}",
+                              "Błąd",
+                              MessageBoxButton.OK,
+                              MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnVisits_Click(object sender, RoutedEventArgs e)
+        {
+            MyVisits allVisits = new MyVisits(_currentUser, this);
             allVisits.Show();
             this.Hide();
         }
+
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
@@ -234,46 +303,16 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
-        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        private void BtnResults_Click(object sender, RoutedEventArgs e)
         {
-            AllTestsAdmin allTests = new AllTestsAdmin(this);
-            allTests.Show();
+
+        }
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var profile = new Profile(_currentUser, this);
+            profile.Show();
             this.Hide();
-        }
-
-        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
-        {
-            NewTest newTest = new NewTest(this);
-            newTest.Show();
-            this.Hide();
-        }
-
-        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
-        {
-            AllUsers allUsers = new AllUsers();
-            allUsers.Show();
-            this.Close();
-        }
-
-        private void BtnRegister_Click(object sender, RoutedEventArgs e)
-        {
-            Registration registration = new Registration();
-            registration.Show();
-            this.Close();
-        }
-
-        private void BtnReports_Click(object sender, RoutedEventArgs e)
-        {
-            AllReports allReports = new AllReports(this);
-            allReports.Show();
-            this.Hide();
-        }
-
-        private void BtnStats_Click(object sender, RoutedEventArgs e)
-        {
-            Statistics statistics = new Statistics();
-            statistics.Show();
-            this.Close();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
@@ -288,6 +327,13 @@ namespace MedLabTab.Views.OtherViews
                 this.Close();
             }
 
+        }
+
+        private void NewVisit2_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(_currentUser, this);
+            newVisit.Show();
+            this.Hide();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
