@@ -41,9 +41,18 @@ namespace MedLabTab.Views.OtherViews
             InactiveLabel.Visibility = Visibility.Collapsed;
             ErrorLabel.Visibility = Visibility.Collapsed;
             string password = PasswordBox.Password;
+            string passwordHashed = null;
+            bool passwordValid = false;
+
             bool isCredNoneEmpty = LoginVM.IsCredentialsNoneEmpty(username: LoginTextBox.Text, password: password);
+            bool userExists = DbManager.IsLoginTaken(login: LoginTextBox.Text);
+            if (userExists) { 
+                passwordHashed=DbManager.GetHashedPassword(username: LoginTextBox.Text); 
+                passwordValid = PasswordHasher.Verify(password, passwordHashed);
+            }
+            
             bool isUserValid = DbManager.CheckUser(username: LoginTextBox.Text, password: password);
-            if (isCredNoneEmpty && isUserValid)
+            if (isCredNoneEmpty && passwordValid)
             {
                 SignedInUser User = new SignedInUser();
 
