@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MedLabTab.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace MedLabTab.DatabaseManager
 {
@@ -23,6 +24,12 @@ namespace MedLabTab.DatabaseManager
                 return true;
             }
             catch (Exception) { return false; }
+        }
+
+        public string GetHashedPassword (MedLabContext db, string username)
+        {
+            string password = db.Users.Where(u => u.Login == username).Select(u => u.Password).First();
+            return password;
         }
 
         public bool CheckUser(MedLabContext db, string username, string password)
