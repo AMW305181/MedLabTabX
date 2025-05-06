@@ -116,7 +116,7 @@ namespace MedLabTab.Views.OtherViews
                 //            VisitId = newVisit.id,
                 //            TestId = test.id,
                 //            PatientId = _currentUser.id,
-                //            Status = 1, // to chyba oznacza ze jest pierwszy etap jakby
+                //            Status = 1, // pacjent musi sobie oplacic w recepcji
                 //            AnalystId = null,
                 //        };
 

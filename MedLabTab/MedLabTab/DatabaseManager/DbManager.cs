@@ -172,6 +172,49 @@ namespace MedLabTab.DatabaseManager
         public static bool RemoveTestHistory(int visitId) { return testHistoryManager.RemoveTestHistory(db, visitId); }
         public static List<TestHistory> GetTestsInVisit(int visitId) { return testHistoryManager.GetTestsInVisit(db, visitId); }
         public static List<TestHistory> GetCompletedTests() { return testHistoryManager.GetCompletedTests(db);}
+
+        //to do poprawki - lista wizyt dla danej pielegniarki, aktywne, status = "Sample to be collected"
+        public static List<Visit> GetNurseVisits(int nurseId)
+        {
+            return db.Visits
+                .Include(v => v.TimeSlot)
+                    .ThenInclude(ts => ts.Nurse)
+                .Include(v => v.TestHistories)
+                    .ThenInclude(th => th.Test)
+                .Include(v => v.Patient)
+                .Where(v => v.IsActive && v.TimeSlot != null && v.TimeSlot.NurseId == nurseId)
+                .AsNoTracking()
+                .ToList();
+        }
+
+        //to do poprawki - lista wizyt dla analizy - status = "Sample collected" lub "Analysis pending"
+        public static List<TestHistory> GetAnalystTests()
+        {
+            return db.TestHistories
+                .Include(th => th.Test)
+                    .ThenInclude(t => t.CategoryNavigation)
+                .Include(th => th.Patient)
+                .Include(th => th.Visit)
+                    .ThenInclude(v => v.TimeSlot)
+                .ToList();
+        }
+
+
+        public static bool EditTestHistory(TestHistory odlTest, TestHistory newTest)
+        {
+            try
+            {
+                odlTest.id = newTest.id;
+                odlTest.VisitId = newTest.VisitId;
+                odlTest.TestId = newTest.TestId;
+                odlTest.PatientId = newTest.PatientId;
+                odlTest.Status = newTest.Status;
+                odlTest.AnalystId = newTest.AnalystId;
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
     }
 }
 
