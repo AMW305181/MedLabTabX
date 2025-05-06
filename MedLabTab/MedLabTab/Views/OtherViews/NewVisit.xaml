@@ -317,7 +317,7 @@
                            HorizontalAlignment="Center"/>
                     </StackPanel>
 
-                    <CheckBox x:Name="IsActiveCheckBox" Content="Zapłacone" FontSize="14" 
+                    <CheckBox x:Name="IsActiveCheckBox" Content="Aktywna" FontSize="14" 
                      FontWeight="SemiBold" Margin="20,10" VerticalAlignment="Center"/>
                 </StackPanel>
 

@@ -110,9 +110,9 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Samples samples = new Samples();
+            SamplesNurse samples = new SamplesNurse(this, currentUser);
             samples.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)

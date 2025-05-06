@@ -171,7 +171,7 @@ namespace MedLabTab.Views.OtherViews
                             VisitId = newVisit.id,
                             TestId = test.id,
                             PatientId = DbManager.GetUser(patientPESEL).id,
-                            Status = 1, // to chyba oznacza ze jest pierwszy etap jakby
+                            Status = IsPaidCheckBox.IsChecked == true ? 2 : 1, // jezeli jest zaplacone to do etapu 2 a jak nie to czeka na 1
                             AnalystId = null,
                         };
 
