@@ -51,7 +51,6 @@ namespace MedLabTab.Views.OtherViews
                 passwordValid = PasswordHasher.Verify(password, passwordHashed);
             }
             
-            bool isUserValid = DbManager.CheckUser(username: LoginTextBox.Text, password: password);
             if (isCredNoneEmpty && passwordValid)
             {
                 SignedInUser User = new SignedInUser();

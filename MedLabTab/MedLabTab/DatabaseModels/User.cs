@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedLabTab.DatabaseModels;
@@ -18,7 +17,7 @@ public partial class User
 
     public int UserType { get; set; }
 
-    [StringLength(20)]
+    [StringLength(255)]
     [Unicode(false)]
     public string Password { get; set; } = null!;
 
@@ -53,7 +52,4 @@ public partial class User
 
     [InverseProperty("Patient")]
     public virtual ICollection<Visit> Visits { get; set; } = new List<Visit>();
-
-    public string StatusText => IsActive ? "Dezaktywuj" : "Aktywuj";
-    public Brush StatusColor => IsActive ? Brushes.IndianRed : Brushes.LimeGreen;
 }

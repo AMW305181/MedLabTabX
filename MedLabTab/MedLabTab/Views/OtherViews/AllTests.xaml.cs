@@ -48,7 +48,7 @@ namespace MedLabTab.Views.OtherViews
                 {
                     t.TestName,
                     t.Description,
-                    t.DisplayPrice,
+                    Price = t.Price.ToString("0.00") + " zł",
                     Category = categoryDict.TryGetValue(t.Category, out var catName) ? catName : "Nieznana",
                     OriginalTest = t
                 }).ToList();

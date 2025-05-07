@@ -22,6 +22,8 @@ namespace MedLabTab.DatabaseManager
         private static VisitsManager visitsManager = new VisitsManager();
         private static CategoriesManager categoriesManager = new CategoriesManager();
         private static TestHistoryManager testHistoryManager = new TestHistoryManager();
+        private static ReportsManager reportsManager = new ReportsManager();
+       
         public static bool LogInUser(string username, ref SignedInUser user) {return usersManager.LogInUser(db, username, ref user); }
         public static bool CheckUser(string username, string password) {return usersManager.CheckUser(db,username,password); }
         public static bool IsPESELTaken(string PESEL){return usersManager.IsPESELTaken(db, PESEL);}
@@ -219,10 +221,11 @@ namespace MedLabTab.DatabaseManager
             catch { return false; }
         }
 
-        public static string GetHashedPassword(string username)
-        {
-            return usersManager.GetHashedPassword(db, username);
-        }
+        public static string GetHashedPassword(string username)  {  return usersManager.GetHashedPassword(db, username);}
+        public static bool AddReport(Report report){ return reportsManager.AddReport(db, report); }
+        public static bool EditReport(Report report, Report newReport) { return reportsManager.EditReport(db, report, newReport); }
+        public static int GetNurseIdFromTestHistory(TestHistory test) {return testHistoryManager.GetNurseIdFromTestHistory(db, test);}
+
     }
 }
 

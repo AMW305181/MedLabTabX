@@ -64,6 +64,7 @@ namespace MedLabTab.DatabaseManager
         {
             try
             {
+                user.Password=PasswordHasher.Hash(user.Password);
                 db.Users.Add(user);
                 db.SaveChanges();
                 return true;
@@ -84,10 +85,14 @@ namespace MedLabTab.DatabaseManager
             try
             {
                 var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
+               
                 if (user != null)
                 {
-                    user.Login = login;
-                    user.Password = password;
+                    if (!string.IsNullOrWhiteSpace(password))
+                    { password = PasswordHasher.Hash(password);
+                        user.Password = password;
+                    }
+                    user.Login = login;    
                     user.PhoneNumber = phoneNumber;
                     db.SaveChanges();
                     return true;

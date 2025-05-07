@@ -58,5 +58,6 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return false; }
         }
+        
     }
 }
