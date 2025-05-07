@@ -229,7 +229,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Samples samples = new Samples();
+            Samples samples = new Samples(this, _currentUser);
             samples.Show();
             this.Close();
         }

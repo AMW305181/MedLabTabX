@@ -22,16 +22,17 @@
         <DataGrid x:Name="SamplesDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Badanie" Binding="{Binding TestName}" Width="*" />
-                <DataGridTextColumn Header="Data" Binding="{Binding Date}" Width="*" />
-                <DataGridTextColumn Header="Data" Binding="{Binding Time}" Width="*" />
+                <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
+                <DataGridTextColumn Header="Czas" Binding="{Binding Time}" Width="*" />
                 <DataGridTextColumn Header="Kategoria" Binding="{Binding TestCategory}" Width="*" />
-                <DataGridTextColumn Header="Badania" Binding="{Binding Patient}" Width="*" />
-                <DataGridTemplateColumn Header="Akcje" Width="160">
+                <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                <DataGridTemplateColumn Header="Akcje" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="W trakcie analizy" Width="60" Margin="5,0" Click="BeingAnalysed_Click"/>
-                                <Button Content="Dodaj wyniki" Width="60" Margin="5,0" Click="AddResults_Click"/>
+                                <Button Content="Analiza" Width="60" Margin="5,0" Click="BeingAnalysed_Click"/>
+                                <Button Content="Wyniki" Width="60" Margin="5,0" Click="AddResults_Click"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

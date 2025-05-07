@@ -223,6 +223,16 @@ namespace MedLabTab.DatabaseManager
         {
             return usersManager.GetHashedPassword(db, username);
         }
+
+        public static List<TestHistory> GetAllTestHistories()
+        {
+            try
+            {
+                List<TestHistory> AllTests = db.TestHistories.ToList();
+                return AllTests;
+            }
+            catch { return null; }
+        }
     }
 }
 
