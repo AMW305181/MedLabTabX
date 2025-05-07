@@ -192,7 +192,7 @@ namespace MedLabTab.DatabaseManager
         }
 
         //to do poprawki - lista wizyt dla analizy - status = "Sample collected" lub "Analysis pending"
-        public static List<TestHistory> GetAnalystTests() //int analystId
+        public static List<TestHistory> GetAnalystTests(int analystId) //int analystId
         {
             return db.TestHistories
                 .Include(th => th.Test)
@@ -200,32 +200,40 @@ namespace MedLabTab.DatabaseManager
                 .Include(th => th.Patient)
                 .Include(th => th.Visit)
                     .ThenInclude(v => v.TimeSlot)
-                .Where(th=>th.Status==3 ||  th.Status==4) //.Where(th=>th.Status==3 || (th.Status==4 && th.AnalystId==analystId))
+                .Where(th=>th.Status==3 || (th.Status==4 && th.AnalystId==analystId))
                 .ToList();
         }
 
 
-        public static bool EditTestHistory(TestHistory odlTest, TestHistory newTest)
+        public static bool EditTestHistory(TestHistory oldTest, TestHistory newTest)
         {
             try
             {
-                odlTest.id = newTest.id;
-                odlTest.VisitId = newTest.VisitId;
-                odlTest.TestId = newTest.TestId;
-                odlTest.PatientId = newTest.PatientId;
-                odlTest.Status = newTest.Status;
-                odlTest.AnalystId = newTest.AnalystId;
+                oldTest.id = newTest.id;
+                oldTest.VisitId = newTest.VisitId;
+                oldTest.TestId = newTest.TestId;
+                oldTest.PatientId = newTest.PatientId;
+                oldTest.Status = newTest.Status;
+                oldTest.AnalystId = newTest.AnalystId;
                 db.SaveChanges();
                 return true;
             }
             catch { return false; }
         }
 
+        public static List<TestHistory> GetAllTestHistories()
+        {
+            try
+            {
+                List<TestHistory> AllTests = db.TestHistories.ToList();
+                return AllTests;
+            }
+            catch { return null; }
+        }
         public static string GetHashedPassword(string username)  {  return usersManager.GetHashedPassword(db, username);}
         public static bool AddReport(Report report){ return reportsManager.AddReport(db, report); }
         public static bool EditReport(Report report, Report newReport) { return reportsManager.EditReport(db, report, newReport); }
         public static int GetNurseIdFromTestHistory(TestHistory test) {return testHistoryManager.GetNurseIdFromTestHistory(db, test);}
-
     }
 }
 
