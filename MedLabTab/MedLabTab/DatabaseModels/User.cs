@@ -37,15 +37,6 @@ public partial class User
     [Unicode(false)]
     public string? PhoneNumber { get; set; }
 
-    [InverseProperty("Analyst")]
-    public virtual ICollection<Report> ReportAnalysts { get; set; } = new List<Report>();
-
-    [InverseProperty("Nurse")]
-    public virtual ICollection<Report> ReportNurses { get; set; } = new List<Report>();
-
-    [InverseProperty("Patient")]
-    public virtual ICollection<Report> ReportPatients { get; set; } = new List<Report>();
-
     [InverseProperty("Nurse")]
     public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
 

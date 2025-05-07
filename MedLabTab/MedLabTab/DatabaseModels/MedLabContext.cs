@@ -46,23 +46,11 @@ public partial class MedLabContext : DbContext
 
         modelBuilder.Entity<Report>(entity =>
         {
-            entity.HasKey(e => e.id).HasName("PK__Reports__3213E83F38C236FB");
-
-            entity.HasOne(d => d.Analyst).WithMany(p => p.ReportAnalysts)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Reports__Analyst__5070F446");
-
-            entity.HasOne(d => d.Nurse).WithMany(p => p.ReportNurses)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Reports__NurseId__4F7CD00D");
-
-            entity.HasOne(d => d.Patient).WithMany(p => p.ReportPatients)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Reports__Patient__4E88ABD4");
+            entity.HasKey(e => e.id).HasName("PK__Reports__3213E83FEA2DA7A6");
 
             entity.HasOne(d => d.Sample).WithMany(p => p.Reports)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Reports__SampleI__4D94879B");
+                .HasConstraintName("FK__Reports__SampleI__5CD6CB2B");
         });
 
         modelBuilder.Entity<Schedule>(entity =>
