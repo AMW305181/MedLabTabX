@@ -32,7 +32,7 @@ namespace MedLabTab.Views.OtherViews
         }
         public void LoadSamples()
         {
-            var tests = DbManager.GetAnalystTests();
+            var tests = DbManager.GetAnalystTests(_currentUser.id);
 
             if (tests != null)
             {
@@ -66,7 +66,7 @@ namespace MedLabTab.Views.OtherViews
                 VisitId = oldTest.VisitId,
                 TestId = oldTest.TestId,
                 PatientId = oldTest.PatientId,
-                AnalystId = oldTest.AnalystId,
+                AnalystId = _currentUser.id,
                 Status = 4 // do raportu
             };
 

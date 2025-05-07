@@ -57,13 +57,14 @@ namespace MedLabTab.Views.OtherViews
         }
         public void Ready_Click(object sender, RoutedEventArgs e)
         {
-            dynamic selectedItem = SamplesDataGrid.SelectedItem;
-            Visit visit = selectedItem.OriginalVisit;
 
-            var oldTests = DbManager.GetTestsInVisit(visit.id); // zakładamy że to lista TestHistory
+            var button = sender as Button;
+            Visit visit = button?.CommandParameter as Visit;
+
+            List<TestHistory> oldTests = DbManager.GetTestsInVisit(visit.id); // zakładamy że to lista TestHistory
             bool allUpdated = true;
 
-            foreach (var oldTest in oldTests)
+            foreach (TestHistory oldTest in oldTests)
             {
                 var newTest = new TestHistory
                 {

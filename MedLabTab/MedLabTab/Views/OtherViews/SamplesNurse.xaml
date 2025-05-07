@@ -29,7 +29,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Gotowe" Width="60" Margin="5,0" Click="Ready_Click"/>
+                                <Button Content="Gotowe" Width="60" Margin="5,0" Click="Ready_Click" CommandParameter="{Binding OriginalVisit}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
