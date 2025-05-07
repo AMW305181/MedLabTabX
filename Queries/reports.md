@@ -3,8 +3,8 @@ BEGIN
     CREATE TABLE Reports (
         id INT IDENTITY(1,1) NOT NULL,
         SampleId INT NOT NULL,
-        CreationDate DATE NOT NULL,
-        CreationTime TIME NOT NULL,
+        LastUpdateDate DATE NOT NULL,
+        LastUpdateTime TIME NOT NULL,
         Results NVARCHAR(MAX) NOT NULL,
         PRIMARY KEY(id),
         FOREIGN KEY (SampleId) REFERENCES TestHistory(id)

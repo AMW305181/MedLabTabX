@@ -13,9 +13,9 @@ public partial class Report
 
     public int SampleId { get; set; }
 
-    public DateOnly CreationDate { get; set; }
+    public DateOnly LastUpdateDate { get; set; }
 
-    public TimeOnly CreationTime { get; set; }
+    public TimeOnly LastUpdateTime { get; set; }
 
     public string Results { get; set; } = null!;
 
