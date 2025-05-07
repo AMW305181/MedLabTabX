@@ -47,8 +47,9 @@ namespace MedLabTab.Views.OtherViews
                 txtPesel.Text = _currentUser.PESEL;
                 txtPhone.Text = _currentUser.PhoneNumber;
                 txtLogin.Text = _currentUser.Login;
-                txtPassword.Password = _currentUser.Password;
-                txtRepeatPassword.Password = _currentUser.Password;
+                //zakomentowane, poniewaz hasla hashowane wygladaja inaczej
+                //txtPassword.Password = _currentUser.Password;
+                //txtRepeatPassword.Password = _currentUser.Password;
 
                 int typeId= _currentUser.UserType;
                 switch (typeId) 
@@ -116,8 +117,8 @@ namespace MedLabTab.Views.OtherViews
         private bool ValidateInputs()
         {
             if (string.IsNullOrWhiteSpace(txtPhone.Text) ||
-                string.IsNullOrWhiteSpace(txtLogin.Text) ||
-                string.IsNullOrWhiteSpace(txtPassword.Password))
+                string.IsNullOrWhiteSpace(txtLogin.Text))
+                
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
@@ -129,7 +130,7 @@ namespace MedLabTab.Views.OtherViews
                 return false;
             }
 
-            if (txtPassword.Password.Length < 6)
+            if (!string.IsNullOrWhiteSpace(txtPassword.Password) && txtPassword.Password.Length < 6)
             {
                 MessageBox.Show("Hasło musi zawierać co najmniej 6 znaków.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
