@@ -132,7 +132,7 @@ namespace MedLabTab.Views.OtherViews
                     PESEL = txtPesel.Text.Trim(),
                     PhoneNumber = txtPhone.Text.Trim(),
                     Login = txtLogin.Text.Trim(),
-                    Password = txtPassword.Text,//BCrypt.Net.BCrypt.HashPassword(txtPassword.Text),
+                    Password = txtPassword.Text,
                         UserType = userType,
                     IsActive = true
                 };

@@ -31,11 +31,11 @@ namespace MedLabTab.Views.OtherViews
         }
         private void FillReportWithData()
         {
-            TestTextBlock.Text = _testHistory.DisplayTest;
-            PatientTextBlock.Text = _testHistory.DisplayPatient;
-            NurseTextBlock.Text = _testHistory.DisplayNurse;
-            AnalystTextBlock.Text = _testHistory.DisplayAnalyst;
-            DateTextBlock.Text = $"{_testHistory.DisplayDate} {_testHistory.DisplayTime}";
+            TestTextBlock.Text = _testHistory.Test?.TestName;
+            PatientTextBlock.Text = _testHistory.Patient?.Name + " " + _testHistory.Patient?.Surname;
+            NurseTextBlock.Text = _testHistory.Visit?.TimeSlot?.Nurse?.Name + " " + _testHistory.Visit?.TimeSlot?.Nurse?.Surname;
+            AnalystTextBlock.Text = _testHistory.Analyst != null ? $"{_testHistory.Analyst.Name} {_testHistory.Analyst.Surname}" : "Brak analityka";
+            DateTextBlock.Text = $"{_testHistory.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty"} {_testHistory.Visit?.TimeSlot?.Time.ToString(@"hh\:mm") ?? "Brak godziny"}";
             //ResultTextBox.Text = _testReport.Result;
         }
 
