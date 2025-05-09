@@ -116,7 +116,7 @@ namespace MedLabTab.Views.OtherViews
                 //            VisitId = newVisit.id,
                 //            TestId = test.id,
                 //            PatientId = _currentUser.id,
-                //            Status = 1, // to chyba oznacza ze jest pierwszy etap jakby
+                //            Status = 1, // pacjent musi sobie oplacic w recepcji
                 //            AnalystId = null,
                 //        };
 
@@ -245,7 +245,7 @@ namespace MedLabTab.Views.OtherViews
             }
 
             var result = MessageBox.Show(
-                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.DisplayDate} o {selectedVisit.DisplayTime}?",
+                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.TimeSlot?.Date.ToString("dd.MM.yyyy")} o {selectedVisit.TimeSlot?.Time.ToString("hh\\:mm")}?",
                 "Potwierdzenie anulowania",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);

@@ -1,4 +1,4 @@
-﻿<Window x:Class="MedLabTab.Views.OtherViews.Samples"
+﻿<Window x:Class="MedLabTab.Views.OtherViews.SamplesAnalyst"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -27,6 +27,16 @@
                 <DataGridTextColumn Header="Kategoria" Binding="{Binding TestCategory}" Width="*" />
                 <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                <DataGridTemplateColumn Header="Akcje" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Analiza" Width="60" Margin="5,0" Click="BeingAnalysed_Click"/>
+                                <Button Content="Wyniki" Width="60" Margin="5,0" Click="AddResults_Click"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

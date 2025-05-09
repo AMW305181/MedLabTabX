@@ -24,9 +24,9 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Samples samples = new Samples();
+            SamplesAnalyst samples = new SamplesAnalyst(this, currentUser);
             samples.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)

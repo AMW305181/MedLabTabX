@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedLabTab.DatabaseModels;
@@ -29,7 +28,4 @@ public partial class Test
 
     [InverseProperty("Test")]
     public virtual ICollection<TestHistory> TestHistories { get; set; } = new List<TestHistory>();
-
-    public string DisplayPrice => Price.ToString("0.00") + " zł";
-
 }

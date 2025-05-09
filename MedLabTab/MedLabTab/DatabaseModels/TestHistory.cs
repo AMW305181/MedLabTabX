@@ -30,6 +30,9 @@ public partial class TestHistory
     [InverseProperty("TestHistoryPatients")]
     public virtual User Patient { get; set; } = null!;
 
+    [InverseProperty("Sample")]
+    public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+
     [ForeignKey("Status")]
     [InverseProperty("TestHistories")]
     public virtual StatusDictionary StatusNavigation { get; set; } = null!;
@@ -41,11 +44,4 @@ public partial class TestHistory
     [ForeignKey("VisitId")]
     [InverseProperty("TestHistories")]
     public virtual Visit Visit { get; set; } = null!;
-
-    public string DisplayPatient => Patient?.Name + " " + Patient?.Surname;
-    public string DisplayAnalyst => Analyst != null ? $"{Analyst.Name} {Analyst.Surname}" : "Brak analityka";
-    public string DisplayNurse => Visit?.TimeSlot?.Nurse?.Name + " " + Visit?.TimeSlot?.Nurse?.Surname;
-    public string DisplayTest => Test?.TestName;
-    public string DisplayDate => Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty";
-    public string DisplayTime => Visit?.TimeSlot?.Time.ToString(@"hh\:mm") ?? "Brak godziny";
 }
