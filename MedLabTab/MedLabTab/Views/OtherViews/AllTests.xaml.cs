@@ -48,7 +48,7 @@ namespace MedLabTab.Views.OtherViews
                 {
                     t.TestName,
                     t.Description,
-                    t.DisplayPrice,
+                    Price = t.Price.ToString("0.00") + " zł",
                     Category = categoryDict.TryGetValue(t.Category, out var catName) ? catName : "Nieznana",
                     OriginalTest = t
                 }).ToList();
@@ -83,7 +83,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Samples samples = new Samples();
+            Samples samples = new Samples(this, _currentUser);
             samples.Show();
             this.Close();
         }

@@ -73,9 +73,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(this);
             statistics.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
@@ -132,7 +132,7 @@ namespace MedLabTab.Views.OtherViews
                     PESEL = txtPesel.Text.Trim(),
                     PhoneNumber = txtPhone.Text.Trim(),
                     Login = txtLogin.Text.Trim(),
-                    Password = txtPassword.Text,//BCrypt.Net.BCrypt.HashPassword(txtPassword.Text),
+                    Password = txtPassword.Text,
                         UserType = userType,
                     IsActive = true
                 };

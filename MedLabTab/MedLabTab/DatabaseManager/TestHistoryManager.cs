@@ -49,11 +49,17 @@ namespace MedLabTab.DatabaseManager
                             .ThenInclude(ts => ts.Nurse)
                     .Include(th => th.Patient)
                     .Include(th => th.Analyst)
-                    .Where(th => th.Visit.IsActive == false)
+                    .Where(th =>  th.Status==5)
                     .OrderByDescending(th => th.Visit.TimeSlot.Date)
                     .ThenByDescending(th => th.Visit.TimeSlot.Time)
                     .ToList();
 
+        }
+        public int GetNurseIdFromTestHistory(MedLabContext db, TestHistory test)
+        {
+            return db.TestHistories.Where(th => th.id == test.id)
+           .Select(th => th.Visit.TimeSlot.NurseId)
+           .FirstOrDefault();
         }
     }
 }

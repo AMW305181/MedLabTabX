@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MedLabTab.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace MedLabTab.DatabaseManager
 {
@@ -23,6 +24,12 @@ namespace MedLabTab.DatabaseManager
                 return true;
             }
             catch (Exception) { return false; }
+        }
+
+        public string GetHashedPassword (MedLabContext db, string username)
+        {
+            string password = db.Users.Where(u => u.Login == username).Select(u => u.Password).First();
+            return password;
         }
 
         public bool CheckUser(MedLabContext db, string username, string password)
@@ -57,6 +64,7 @@ namespace MedLabTab.DatabaseManager
         {
             try
             {
+                user.Password=PasswordHasher.Hash(user.Password);
                 db.Users.Add(user);
                 db.SaveChanges();
                 return true;
@@ -77,10 +85,14 @@ namespace MedLabTab.DatabaseManager
             try
             {
                 var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
+               
                 if (user != null)
                 {
-                    user.Login = login;
-                    user.Password = password;
+                    if (!string.IsNullOrWhiteSpace(password))
+                    { password = PasswordHasher.Hash(password);
+                        user.Password = password;
+                    }
+                    user.Login = login;    
                     user.PhoneNumber = phoneNumber;
                     db.SaveChanges();
                     return true;

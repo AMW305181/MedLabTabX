@@ -38,7 +38,7 @@ namespace MedLabTab.Views.OtherViews
         private void LoadData()
         {
             visitCost = 0;
-            visitTime = 0;
+            visitTime = 15; // zakładamy że każda wizyta trwa 15 minut
 
             //załadowanie listy pacjentów
             PatientComboBox.Items.Clear();
@@ -127,7 +127,7 @@ namespace MedLabTab.Views.OtherViews
                 //            VisitId = newVisit.id,
                 //            TestId = test.id,
                 //            PatientId = DbManager.GetUser(patientPESEL).id,
-                //            Status = 1, // to chyba oznacza ze jest pierwszy etap jakby
+                //            Status = IsPaidCheckBox.IsChecked == true ? 2 : 1, // jezeli jest zaplacone to do etapu 2 a jak nie to czeka na 1
                 //            AnalystId = null,
                 //        };
 
@@ -169,7 +169,6 @@ namespace MedLabTab.Views.OtherViews
                 Test test = DbManager.GetTest(testId);
 
                 visitCost += test.Price;
-                visitTime += 15; // zakładamy że każde badanie trwa 15 minut
 
                 UpdateValues();
 
@@ -203,7 +202,6 @@ namespace MedLabTab.Views.OtherViews
                     var test = DbManager.GetTest(testId);
 
                     visitCost -= test.Price;
-                    visitTime -= 15;
 
                     TestsListBox.Items.Remove(selectedItem);
                     UpdateValues();
@@ -277,9 +275,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(this);
             statistics.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)

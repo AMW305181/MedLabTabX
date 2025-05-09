@@ -1,4 +1,4 @@
-﻿<Window x:Class="MedLabTab.Views.OtherViews.Samples"
+﻿<Window x:Class="MedLabTab.Views.OtherViews.SamplesNurse"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,19 +14,26 @@
         </Grid.RowDefinitions>
 
         <Button Content="back" Width="60" Height="20" Margin="5,0,0,0" HorizontalAlignment="Left" Click="Back_Click"/>
-
+        
         <!-- Tytuł -->
         <TextBlock Text="Próbki" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
 
         <!-- Tabela -->
         <DataGrid x:Name="SamplesDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Badanie" Binding="{Binding TestName}" Width="*" />
-                <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
-                <DataGridTextColumn Header="Czas" Binding="{Binding Time}" Width="*" />
-                <DataGridTextColumn Header="Kategoria" Binding="{Binding TestCategory}" Width="*" />
-                <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
+                <DataGridTextColumn Header="Data" Binding="{Binding Date}" Width="*" />
+                <DataGridTextColumn Header="Data" Binding="{Binding Time}" Width="*" />
+                <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*" />
+                <DataGridTextColumn Header="Badania" Binding="{Binding Patient}" Width="*" />
+                <DataGridTemplateColumn Header="Akcje" Width="160">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Content="Gotowe" Width="60" Margin="5,0" Click="Ready_Click" CommandParameter="{Binding OriginalVisit}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

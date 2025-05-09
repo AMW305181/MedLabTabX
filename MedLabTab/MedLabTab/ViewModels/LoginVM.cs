@@ -10,5 +10,7 @@ namespace MedLabTab.ViewModels
     {
         public bool IsCredentialsNoneEmpty(string username, string password)
             => !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password);
+
+
     }
 }

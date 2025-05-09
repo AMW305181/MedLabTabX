@@ -59,7 +59,7 @@ namespace MedLabTab.Views.OtherViews
             }
 
             var result = MessageBox.Show(
-                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.DisplayDate} o {selectedVisit.DisplayTime}?",
+                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.TimeSlot?.Date.ToString("dd.MM.yyyy")} o {selectedVisit.TimeSlot?.Time.ToString("hh\\:mm")}?",
                 "Potwierdzenie anulowania",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
