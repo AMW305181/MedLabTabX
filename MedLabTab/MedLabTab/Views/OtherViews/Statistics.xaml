@@ -17,23 +17,25 @@
         <TextBlock Text="Statystyki" Grid.Row="0" Margin="0,20,0,10"
                    HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
 
+        <Button Content="back" Width="60" Height="20" Margin="5,0,0,0" HorizontalAlignment="Left" Click="Back_Click"/>
+
         <!-- Wyśrodkowane dane -->
         <Grid Grid.Row="1">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-                <TextBlock Text="Przychód miesięczny:" FontWeight="Bold" FontSize="16" TextAlignment="Center"/>
-                <TextBlock Text="12 500 zł" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
+                <TextBlock Text="Całościowy przychód:" FontWeight="Bold" FontSize="16" TextAlignment="Center"/>
+                <TextBlock Name="Income" Text="12 500 zł" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
 
                 <TextBlock Text="Najpopularniejsze badanie:" FontWeight="Bold" FontSize="16" TextAlignment="Center"/>
-                <TextBlock Text="Morfologia" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
+                <TextBlock Name="Test" Text="Morfologia" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
 
                 <TextBlock Text="Najlepsza pielęgniarka:" FontWeight="Bold" FontSize="16" TextAlignment="Center"/>
-                <TextBlock Text="Anna Kowalska" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
+                <TextBlock Name="Nurse" Text="Anna Kowalska" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
 
                 <TextBlock Text="Najlepszy analityk:" FontWeight="Bold" FontSize="16" TextAlignment="Center"/>
-                <TextBlock Text="Jan Nowak" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
+                <TextBlock Name="Analyst" Text="Jan Nowak" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
 
                 <TextBlock Text="Najlepszy pacjent:" FontWeight="Bold" FontSize="16" TextAlignment="Center"/>
-                <TextBlock Text="Piotr Zieliński" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
+                <TextBlock Name="Patient" Text="Piotr Zieliński" Margin="0,0,0,15" FontSize="14" TextAlignment="Center"/>
             </StackPanel>
         </Grid>
     </Grid>

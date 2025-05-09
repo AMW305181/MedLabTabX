@@ -84,6 +84,8 @@ namespace MedLabTab.Views.OtherViews
                 }
             }
 
+            DbManager.DeactivateVisit(visit); //probki pobrane - wizyta sie odbyla
+
             if (allUpdated)
             {
                 MessageBox.Show("Statusy badań zostały zaktualizowane.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
