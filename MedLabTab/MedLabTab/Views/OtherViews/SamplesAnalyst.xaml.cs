@@ -109,17 +109,28 @@ namespace MedLabTab.Views.OtherViews
                 dynamic selectedItem = SamplesDataGrid.SelectedItem;
                 TestHistory test = selectedItem.OriginalTest;
 
-                //var report = new Report
-                //{
-                //    TestName = DbManager.GetTest(test.TestId).TestName,
-                //    PatientName = DbManager.GetUserById(test.PatientId).Name + " " + DbManager.GetUserById(test.PatientId).Surname,
-                //    AnalystName = DbManager.GetUserById(_currentUser.id).Name + " " + DbManager.GetUserById(_currentUser.id).Surname,
-                //    Date = DateTime.Now.ToString("yyyy-MM-dd"),
-                //    Time = DateTime.Now.ToString("HH:mm"),
-                //    Results = resultText
-                //};
-                bool added = true;
-                //bool added = DbManager.AddReport(report);
+                var now = DateTime.Now;
+
+                var newReport = new Report
+                {
+                    SampleId = test.id,
+                    LastUpdateDate = DateOnly.FromDateTime(now),
+                    LastUpdateTime = TimeOnly.FromDateTime(now),
+                    Results = resultText,
+                };
+
+                bool added = false;
+
+                var oldReport = DbManager.GetReport(newReport.id);
+
+                if (oldReport == null)
+                {
+                    added = DbManager.AddReport(newReport);
+                }
+                else
+                {
+                    added = DbManager.EditReport(oldReport, newReport);
+                }
 
                 bool updated = true;
 

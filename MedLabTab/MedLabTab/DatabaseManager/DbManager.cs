@@ -230,6 +230,17 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return null; }
         }
+
+        public static Report GetReport(int Id)
+        {
+            try
+            {
+                var reports = db.Reports.Where(t => t.id == Id).FirstOrDefault();
+                if (reports != null) { return reports; }
+                return null;
+            }
+            catch { return null; }
+        }
         public static string GetHashedPassword(string username)  {  return usersManager.GetHashedPassword(db, username);}
         public static bool AddReport(Report report){ return reportsManager.AddReport(db, report); }
         public static bool EditReport(Report report, Report newReport) { return reportsManager.EditReport(db, report, newReport); }

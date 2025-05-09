@@ -90,9 +90,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(this);
             statistics.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
