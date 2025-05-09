@@ -121,7 +121,7 @@ namespace MedLabTab.Views.OtherViews
 
                 bool added = false;
 
-                var oldReport = DbManager.GetReport(newReport.id);
+                var oldReport = DbManager.GetReport(test.id); //do sprawdzenia
 
                 if (oldReport == null)
                 {

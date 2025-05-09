@@ -182,12 +182,10 @@ namespace MedLabTab.DatabaseManager
             return db.Visits
                 .Include(v => v.TimeSlot)
                     .ThenInclude(ts => ts.Nurse)
-                .Include(v => v.TestHistories
-                    .Where(th => th.Status == 2))
-                    .ThenInclude(th => th.Test)  
+                .Include(v => v.TestHistories)
+                    .ThenInclude(th => th.Test)
                 .Include(v => v.Patient)
-                .Where(v => v.IsActive == true && v.TimeSlot != null && v.TimeSlot.NurseId == nurseId)
-                .AsNoTracking()
+                .Where(v => v.IsActive == true && v.TestHistories.Any(th => th.Status == 2) && v.TimeSlot != null && v.TimeSlot.NurseId == nurseId)
                 .ToList();
         }
 
@@ -235,7 +233,7 @@ namespace MedLabTab.DatabaseManager
         {
             try
             {
-                var reports = db.Reports.Where(t => t.id == Id).FirstOrDefault();
+                var reports = db.Reports.Where(t => t.SampleId == Id).FirstOrDefault();
                 if (reports != null) { return reports; }
                 return null;
             }
