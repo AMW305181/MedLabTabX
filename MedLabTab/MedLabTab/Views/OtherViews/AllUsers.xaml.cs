@@ -136,9 +136,9 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(this);
             statistics.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)

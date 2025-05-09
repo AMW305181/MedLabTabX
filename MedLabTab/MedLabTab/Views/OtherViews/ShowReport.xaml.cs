@@ -1,4 +1,5 @@
-﻿using MedLabTab.DatabaseModels;
+﻿using MedLabTab.DatabaseManager;
+using MedLabTab.DatabaseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace MedLabTab.Views.OtherViews
             NurseTextBlock.Text = _testHistory.Visit?.TimeSlot?.Nurse?.Name + " " + _testHistory.Visit?.TimeSlot?.Nurse?.Surname;
             AnalystTextBlock.Text = _testHistory.Analyst != null ? $"{_testHistory.Analyst.Name} {_testHistory.Analyst.Surname}" : "Brak analityka";
             DateTextBlock.Text = $"{_testHistory.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty"} {_testHistory.Visit?.TimeSlot?.Time.ToString(@"hh\:mm") ?? "Brak godziny"}";
-            //ResultTextBox.Text = _testReport.Result;
+            ResultTextBox.Text = DbManager.GetReport(_testHistory.id).Results;
         }
 
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
@@ -90,9 +91,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(this);
             statistics.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
