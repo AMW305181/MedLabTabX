@@ -168,6 +168,8 @@ namespace MedLabTab.DatabaseManager
         //}
 
         public static List<Schedule> GetAllDates() { return schedulesManager.GetAllDates(db); }
+
+        public static List<Schedule> GetAvailableSlotsForDate(DateOnly date) { return schedulesManager.GetAvailableSlotsForDate(db, date); }
         public static List<Visit> GetAllVisits(){return visitsManager.GetAllVisits(db); }
         public static bool EditVisit(Visit oldVisit, Visit newVisit) { return visitsManager.EditVisit(db, oldVisit, newVisit); }
         public static bool AddTestHistory(TestHistory newTest) { return testHistoryManager.AddTestHistory(db, newTest); }

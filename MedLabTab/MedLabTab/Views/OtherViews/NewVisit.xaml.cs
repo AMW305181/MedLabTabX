@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -27,6 +28,8 @@ namespace MedLabTab.Views.OtherViews
         private Window _parentWindow;
         private float visitCost;
         private int visitTime;
+        private int? _selectedSlotId;
+        private List<Schedule> _AvaibleSlots;
         private User _currentUser;
         public NewVisit(User currentUser, Window parentWindow)
         {
@@ -87,58 +90,38 @@ namespace MedLabTab.Views.OtherViews
         {
             if (ValidateInputs())
             {
-                //do uzupełnienia po dodaniu harmonogramu
+                try
+                {
+                    using (var db = new MedLabContext())
+                    {
+                        VisitsManager visitsManager = new VisitsManager();
 
-                //var selectedTimeSlot = (ComboBoxItem)DateComboBox.SelectedItem;
-                //int timeSlotId = (int)selectedTimeSlot.Tag;
+                        float testCost = visitCost;
+                        bool testPaymentStatus = false; 
+                        bool testIsActive = IsActiveCheckBox.IsChecked ?? false;
+                        int testPatientId = _currentUser.id; ; //repair that so it works
+                        int? testTimeSlotId = _selectedSlotId; // Assuming time slot with ID 5 exists
 
-                //var newVisit = new Visit
-                //{
-                //    Cost = visitCost,
-                //    PaymentStatus = IsPaidCheckBox.IsChecked == true,
-                //    IsActive = IsActiveCheckBox.IsChecked == true,
-                //    PatientId = _currentUser.id,
-                //    TimeSlotId = timeSlotId,
-                //};
+                        bool result = visitsManager.AddVisit(db, testCost, testPaymentStatus,
+                                                           testIsActive, testPatientId, testTimeSlotId);
 
-                //bool addedVisit = DbManager.AddVisit(newVisit);
-                //bool addedAllTests = true;
-
-
-                //foreach (ListBoxItem item in TestsListBox.Items)
-                //{
-                //    if (item.Tag is int testId)
-                //    {
-                //        var test = DbManager.GetTest(testId);
-
-                //        var newTestHistory = new TestHistory
-                //        {
-                //            VisitId = newVisit.id,
-                //            TestId = test.id,
-                //            PatientId = _currentUser.id,
-                //            Status = 1, // pacjent musi sobie oplacic w recepcji
-                //            AnalystId = null,
-                //        };
-
-                //        bool added = DbManager.AddTestHistory(newTestHistory);
-
-                //        if (!added)
-                //        {
-                //            addedAllTests = false;
-                //        }
-                //    }
-                //}
-
-                //if (addedVisit && addedAllTests)
-                //{
-                //    MessageBox.Show("Wizyta została dodana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                //    this.Close();
-                //    _parentWindow?.Show();
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Wystąpił błąd podczas dodawania wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //}
+                        if (result)
+                        {
+                            MessageBox.Show("Visit registered successfully!", "Success",
+                                           MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to register visit.", "Error",
+                                           MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error",
+                                   MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -158,7 +141,8 @@ namespace MedLabTab.Views.OtherViews
                 Test test = DbManager.GetTest(testId);
 
                 visitCost += test.Price;
-                visitTime += 15; // zakładamy że każde badanie trwa 15 minut
+                //visitTime += 15; // zakładamy że każde badanie trwa 15 minut
+                visitTime = 15; // łączny czas wizyty to 15 minut (założeneie)
 
                 UpdateValues();
 
@@ -175,7 +159,9 @@ namespace MedLabTab.Views.OtherViews
                     var test = DbManager.GetTest(testId);
 
                     visitCost -= test.Price;
-                    visitTime -= 15;
+                    if (TestsListBox.Items.Count == 1){ //łączny czas wizyty to 15 minut (założeneie)
+                        visitTime = 0;
+                    }
 
                     TestsListBox.Items.Remove(selectedItem);
                     UpdateValues();
@@ -192,40 +178,72 @@ namespace MedLabTab.Views.OtherViews
             if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
             {
 
-                
             }
 
         }
 
         private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Czyścimy combobox z poprzednich wartości
+            TimeComboBox.Items.Clear();
+            _selectedSlotId = null;
+
             if (VisitCalendar.SelectedDate.HasValue)
             {
-                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
-                // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
+                DateOnly selectedDate = DateOnly.FromDateTime(VisitCalendar.SelectedDate.Value);
+                _AvaibleSlots = DbManager.GetAvailableSlotsForDate(selectedDate);
+
+                // Sprawdzamy czy są dostępne sloty
+                if (_AvaibleSlots != null && _AvaibleSlots.Count > 0)
+                {
+                    // Wypełniamy combobox dostępnymi slotami
+                    foreach (var slot in _AvaibleSlots)
+                    {
+                        string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
+                        string timeInfo = slot.Time.ToString("HH:mm");
+
+                        ListBoxItem item = new ListBoxItem
+                        {
+                            Content = $"{timeInfo} - {nurseInfo}",
+                            Tag = slot.id
+                        };
+
+                        TimeComboBox.Items.Add(item);
+                    }
+                }
+                else
+                {
+                    // Jeśli nie ma dostępnych slotów, informujemy o tym użytkownika
+                    MessageBox.Show("Brak dostępnych terminów na wybrany dzień.",
+                        "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
 
 
         private bool ValidateInputs()
         {
-            if (!(TestsListBox.HasItems) || !VisitCalendar.SelectedDate.HasValue)
+            if (!TestsListBox.HasItems)
             {
-                MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Musisz wybrać co najmniej jedno badanie.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (!VisitCalendar.SelectedDate.HasValue)
+            {
+                MessageBox.Show("Musisz wybrać datę wizyty.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (!_selectedSlotId.HasValue)
+            {
+                MessageBox.Show("Musisz wybrać godzinę wizyty.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
             return true;
         }
 
-        //private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (VisitCalendar.SelectedDate.HasValue)
-        //    {
-        //        DateTime selectedDate = VisitCalendar.SelectedDate.Value;
-        //        // TimeComboBox.ItemsSource = GetAvailableTimes(selectedDate);
-        //    }
-        //}
         private void BtnEditVisit_Click(object sender, RoutedEventArgs e)
         {
 
@@ -340,6 +358,25 @@ namespace MedLabTab.Views.OtherViews
         {
             this.Close();
             _parentWindow?.Show();
+        }
+
+        private void TimeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Pobieramy wybrany item z comboboxa
+            ListBoxItem selectedItem = TimeComboBox.SelectedItem as ListBoxItem;
+
+            // Jeśli coś zostało wybrane, pobieramy id slotu
+            if (selectedItem != null)
+            {
+                // Zapisujemy id wybranego slotu do zmiennej _selectedSlotId
+                _selectedSlotId = (int)selectedItem.Tag;
+
+            }
+            else
+            {
+                // Jeśli nic nie wybrano, resetujemy _selectedSlotId
+                _selectedSlotId = null;
+            }
         }
     }
 }

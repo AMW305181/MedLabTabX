@@ -188,21 +188,14 @@
                                   BorderThickness="0"
                                   Background="Transparent">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Data" 
-                       Binding="{Binding DisplayDate}" 
-                       Width="*"/>
-                                <DataGridTextColumn Header="Godzina" 
-                       Binding="{Binding DisplayTime}" 
-                       Width="*"/>
-                                <DataGridTextColumn Header="Pielęgniarka" 
-                       Binding="{Binding DisplayNurse}" 
-                       Width="*"/>
-                                <DataGridTextColumn Header="Badania" 
-                       Binding="{Binding DisplayTests}" 
-                       Width="2*"/>
-                                <DataGridTextColumn Header="Koszt" 
-                       Binding="{Binding DisplayCost}" 
-                       Width="*"/>
+                                <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
+                                <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
+                                <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*" />
+                                <DataGridTextColumn Header="Koszt" Binding="{Binding Cost}" Width="*" />
+                                <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
+                                <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*" />
+                                <DataGridTextColumn Header="Status płatności" Binding="{Binding PaymentStatus}" Width="*" />
+                                <!--<DataGridTextColumn Header="Badanie aktywne" Binding="{Binding IsActive}" Width="*" />-->
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>

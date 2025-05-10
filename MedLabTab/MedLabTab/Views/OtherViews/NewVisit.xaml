@@ -299,7 +299,8 @@
 
                         <!-- Dostępne godziny -->
                         <Label Content="Dostępne godziny:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
-                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"/>
+                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"
+                                  SelectionChanged="TimeComboBox_SelectionChanged"/>
                     </StackPanel>
                 </Grid>
 

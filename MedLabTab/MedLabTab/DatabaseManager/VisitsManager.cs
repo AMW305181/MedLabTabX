@@ -58,6 +58,28 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return false; }
         }
-        
+
+        //NEW STUFF - Kamiś
+        public bool AddVisit(MedLabContext db, float cost, bool paymentStatus, bool isActive,
+                     int patientId, int? timeSlotId)
+        {
+            try
+            {
+                Visit newVisit = new Visit
+                {
+                    Cost = cost,
+                    PaymentStatus = paymentStatus,
+                    IsActive = isActive,
+                    PatientId = patientId,
+                    TimeSlotId = timeSlotId
+                };
+
+                db.Visits.Add(newVisit);
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
     }
 }
