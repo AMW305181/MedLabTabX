@@ -82,11 +82,11 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
         <!-- Style dla głównego nagłówka -->
-        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+        <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="Margin" Value="0,30,0,20"/>
+            <Setter Property="Margin" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
         <!-- Style dla przycisku głównego -->
@@ -257,7 +257,7 @@
 
             <!-- Nagłówek -->
             <StackPanel Grid.Row="0">
-                <TextBlock Text="Raporty" Style="{StaticResource HeaderStyle}"/>
+                <TextBlock Text="RAPORTY" Style="{StaticResource MainHeaderStyle}"/>
                 <TextBlock Text="Lista zakończonych badań" 
                    Foreground="#666666" 
                    FontSize="14"

@@ -27,6 +27,13 @@ namespace MedLabTab.Views.MainViews
             this.Hide();
         }
 
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(this);
+            samples.Show();
+            this.Hide();
+        }
+
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
             AllTestsAdmin allTests = new AllTestsAdmin(this);
@@ -64,7 +71,7 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(this);
             statistics.Show();
             this.Close();
         }

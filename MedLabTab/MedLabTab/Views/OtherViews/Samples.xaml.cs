@@ -22,12 +22,10 @@ namespace MedLabTab.Views.OtherViews
     public partial class Samples : Window
     {
         private Window _parentWindow;
-        private User _currentUser;
-        public Samples(Window parentWindow, User currentUser)
+        public Samples(Window parentWindow)
         {
             InitializeComponent();
             _parentWindow = parentWindow;
-            _currentUser = currentUser;
             LoadSamples();
         }
         public void LoadSamples()
@@ -55,10 +53,73 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            allVisits.Show();
+            this.Hide();
+        }
+        //na newVisitAdmin
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisitAdmin newVisit = new NewVisitAdmin(this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers();
+            allUsers.Show();
             this.Close();
-            _parentWindow?.Show();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration();
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics(this);
+            statistics.Show();
+            this.Hide();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }

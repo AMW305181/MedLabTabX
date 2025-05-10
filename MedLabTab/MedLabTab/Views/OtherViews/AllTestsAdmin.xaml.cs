@@ -134,12 +134,6 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-            _parentWindow?.Show();
-        }
-
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
@@ -191,7 +185,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(this);
             statistics.Show();
             this.Close();
         }
