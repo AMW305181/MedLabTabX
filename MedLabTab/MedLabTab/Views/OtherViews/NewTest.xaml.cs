@@ -73,9 +73,7 @@ namespace MedLabTab.Views.OtherViews
                 if (added)
                 {
                     if (_parentWindow is AllTestsAdmin allTestsAdmin)
-                    {
-                        allTestsAdmin.LoadTests(); // Dynamiczne odświeżenie danych
-                    }
+                        allTestsAdmin.LoadTests();
                     MessageBox.Show("Badanie zostało dodane pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
                     _parentWindow?.Show();
