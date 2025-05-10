@@ -104,7 +104,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics(this);
+            Statistics statistics = new Statistics();
             statistics.Show();
             this.Hide();
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MedLabTab.DatabaseManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,11 +23,10 @@ namespace MedLabTab.Views.OtherViews
     public partial class Statistics : Window
     {
         Window _parentWindow;
-        public Statistics(Window parentWindow)
+        public Statistics()
         {
             InitializeComponent();
             FillData();
-            _parentWindow = parentWindow;
         }
 
         private void FillData()
@@ -139,7 +139,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics(this);
+            Statistics statistics = new Statistics();
             statistics.Show();
             this.Hide();
         }

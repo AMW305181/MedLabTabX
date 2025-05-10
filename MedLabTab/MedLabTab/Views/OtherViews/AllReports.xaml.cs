@@ -34,9 +34,19 @@ namespace MedLabTab.Views.OtherViews
         {
             try
             {
-                var completedTests = DbManager.GetCompletedTests();
-                if (completedTests != null && completedTests.Any())
+                var tests = DbManager.GetCompletedTests();
+
+                if (tests != null && tests.Any())
                 {
+                    var completedTests = tests.Select(t => new
+                    {
+                        Patient = DbManager.GetUserById(t.PatientId)?.Name + " " + DbManager.GetUserById(t.PatientId)?.Surname,
+                        Date = t.Visit?.TimeSlot?.Date,
+                        Time = t.Visit?.TimeSlot?.Time,
+                        Test = t.Test?.TestName,
+                        OriginalTest = t,
+                    }).ToList();
+
                     RaportyDataGrid.ItemsSource = completedTests;
                 }
                 else
@@ -54,16 +64,22 @@ namespace MedLabTab.Views.OtherViews
 
         private void ShowReport_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is TestHistory selectedTestHistory)
+            if (sender is Button button)
             {
-                var viewReportWindow = new ShowReport(selectedTestHistory, this);
-                viewReportWindow.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                dynamic item = button.DataContext;
+
+                TestHistory selectedTest = item?.OriginalTest as TestHistory;
+
+                if (selectedTest != null)
+                {
+                    var viewReportWindow = new ShowReport(selectedTest, this);
+                    viewReportWindow.Show();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
@@ -117,9 +133,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics(this);
+            Statistics statistics = new Statistics();
             statistics.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)

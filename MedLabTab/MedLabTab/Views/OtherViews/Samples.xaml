@@ -258,7 +258,7 @@
                         <DataGridTextColumn Header="Badanie" Binding="{Binding TestName}" Width="*" />
                         <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
                         <DataGridTextColumn Header="Czas" Binding="{Binding Time}" Width="*" />
-                        <DataGridTextColumn Header="Kategoria" Binding="{Binding TestCategory}" Width="*" />
+                        <DataGridTextColumn Header="Kategoria" Binding="{Binding Category}" Width="*" />
                         <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
                         <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
                     </DataGrid.Columns>

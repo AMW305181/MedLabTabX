@@ -270,10 +270,10 @@
             <DataGrid x:Name="RaportyDataGrid" Grid.Row="1" Style="{StaticResource DataGridStyle}"
           AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Pacjent" Binding="{Binding DisplayPatient}" Width="*" />
-                    <DataGridTextColumn Header="Data" Binding="{Binding DisplayDate}" Width="*" />
-                    <DataGridTextColumn Header="Godzina" Binding="{Binding DisplayTime}" Width="*" />
-                    <DataGridTextColumn Header="Badanie" Binding="{Binding DisplayTest}" Width="Auto" />
+                    <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
+                    <DataGridTextColumn Header="Data" Binding="{Binding Date}" Width="*" />
+                    <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
+                    <DataGridTextColumn Header="Badanie" Binding="{Binding Test}" Width="*" />
                     <DataGridTemplateColumn Header="Akcje" Width="160">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
