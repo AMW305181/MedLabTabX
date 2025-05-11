@@ -196,9 +196,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
+            Statistics statistics = new Statistics(this);
             statistics.Show();
-            this.Close();
+            this.Hide();
         }
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
@@ -230,7 +230,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Samples samples = new Samples();
+            Samples samples = new Samples(this, _currentUser);
             samples.Show();
             this.Close();
         }

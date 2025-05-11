@@ -1,5 +1,6 @@
 ﻿using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -32,7 +34,7 @@ namespace MedLabTab.Views.OtherViews
         }
         public void LoadSamples()
         {
-            var tests = DbManager.GetAnalystTests();
+            var tests = DbManager.GetAnalystTests(_currentUser.id);
 
             if (tests != null)
             {
@@ -43,6 +45,7 @@ namespace MedLabTab.Views.OtherViews
                     Time = t.Visit?.TimeSlot?.Time,
                     Patient = $"{t.Patient.Name} {t.Patient.Surname}",
                     TestCategory = t.Test?.CategoryNavigation?.CategoryName,
+                    Status = t.Status == 3? "Do analizy" : "Do uzupełnienia wyniki",
                     OriginalTest = t
                 }).ToList();
 
@@ -58,36 +61,102 @@ namespace MedLabTab.Views.OtherViews
             dynamic selectedItem = SamplesDataGrid.SelectedItem;
             TestHistory oldTest = selectedItem.OriginalTest;
 
-            bool updated = true;
-
-            var newTest = new TestHistory
+            if (oldTest.Status == 3)
             {
-                id = oldTest.id, // klucz główny musi być ten sam, żeby zaktualizować
-                VisitId = oldTest.VisitId,
-                TestId = oldTest.TestId,
-                PatientId = oldTest.PatientId,
-                AnalystId = oldTest.AnalystId,
-                Status = 4 // do raportu
-            };
+                bool updated = true;
 
-            updated = DbManager.EditTestHistory(oldTest, newTest);
-            
+                var newTest = new TestHistory
+                {
+                    id = oldTest.id, // klucz główny musi być ten sam, żeby zaktualizować
+                    VisitId = oldTest.VisitId,
+                    TestId = oldTest.TestId,
+                    PatientId = oldTest.PatientId,
+                    AnalystId = _currentUser.id,
+                    Status = 4 // do raportu
+                };
 
-            if (updated)
-            {
-                MessageBox.Show("Status badania został zaktualizowany.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                updated = DbManager.EditTestHistory(oldTest, newTest);
+
+
+                if (updated)
+                {
+                    MessageBox.Show("Status badania został zaktualizowany.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Nie udało się zaktualizować badania.", "Uwaga", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                LoadSamples(); // odśwież widok
             }
             else
             {
-                MessageBox.Show("Nie udało się zaktualizować badania.", "Uwaga", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Próbka została już poddana analizie.", "Uwaga", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-
-            LoadSamples(); // odśwież widok
         }
 
-        public void AddResults_Click (object sender, RoutedEventArgs e)
+        private void AddResults_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new ResultInputDialog
+            {
+                Owner = this // ważne dla prawidłowego ustawienia modala
+            };
 
+            if (dialog.ShowDialog() == true)
+            {
+                string resultText = dialog.ResultText;
+
+                dynamic selectedItem = SamplesDataGrid.SelectedItem;
+                TestHistory test = selectedItem.OriginalTest;
+
+                var now = DateTime.Now;
+
+                var newReport = new Report
+                {
+                    SampleId = test.id,
+                    LastUpdateDate = DateOnly.FromDateTime(now),
+                    LastUpdateTime = TimeOnly.FromDateTime(now),
+                    Results = resultText,
+                };
+
+                bool added = false;
+
+                var oldReport = DbManager.GetReport(test.id); //do sprawdzenia
+
+                if (oldReport == null)
+                {
+                    added = DbManager.AddReport(newReport);
+                }
+                else
+                {
+                    added = DbManager.EditReport(oldReport, newReport);
+                }
+
+                bool updated = true;
+
+                var newTest = new TestHistory
+                {
+                    id = test.id,
+                    VisitId = test.VisitId,
+                    TestId = test.TestId,
+                    PatientId = test.PatientId,
+                    AnalystId = _currentUser.id,
+                    Status = 5 // gotowy
+                };
+
+                updated = DbManager.EditTestHistory(test, newTest);
+
+                if (added && updated)
+                {
+                    MessageBox.Show("Wyniki zostały zapisane.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Nie udało się zapisać wyników.", "Uwaga", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+
+            LoadSamples();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
