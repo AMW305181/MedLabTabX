@@ -83,14 +83,14 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Samples samples = new Samples(this);
+            Samples samples = new Samples(_currentUser);
             samples.Show();
             this.Close();
         }
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            AllReports newReport = new AllReports(this);
+            AllReports newReport = new AllReports(_currentUser, this);
             newReport.Show();
             this.Hide();
         }

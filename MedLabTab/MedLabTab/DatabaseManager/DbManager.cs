@@ -223,7 +223,14 @@ namespace MedLabTab.DatabaseManager
         {
             try
             {
-                List<TestHistory> AllTests = db.TestHistories.ToList();
+                List<TestHistory> AllTests = db.TestHistories
+                    .Include(t => t.Test)
+                        .ThenInclude(te => te.CategoryNavigation)
+                    .Include(t => t.Patient)
+                    .Include(t => t.Visit)
+                        .ThenInclude(v => v.TimeSlot)
+                    .Include(t => t.StatusNavigation)
+                    .ToList();
                 return AllTests;
             }
             catch { return null; }

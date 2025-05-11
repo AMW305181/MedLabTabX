@@ -23,11 +23,13 @@ namespace MedLabTab.Views.OtherViews
     public partial class AllReports : Window
     {
         private Window _parentWindow;
-        public AllReports(Window parentWindow)
+        private User _currentUser;
+        public AllReports(User currentUser, Window parentWindow)
         {
             InitializeComponent();
             LoadCompletedTests();
             _parentWindow = parentWindow;
+            _currentUser = currentUser;
         }
 
         private void LoadCompletedTests()
@@ -72,7 +74,7 @@ namespace MedLabTab.Views.OtherViews
 
                 if (selectedTest != null)
                 {
-                    var viewReportWindow = new ShowReport(selectedTest, this);
+                    var viewReportWindow = new ShowReport(selectedTest, _currentUser, this);
                     viewReportWindow.Show();
                     this.Hide();
                 }
@@ -82,59 +84,33 @@ namespace MedLabTab.Views.OtherViews
                 }
             }
         }
-        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
-        {
-            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
-            allVisits.Show();
-            this.Hide();
-        }
-        //tu będzie newVisitAdmin
-        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
-        {
-            NewVisitAdmin newVisit = new NewVisitAdmin(this);
-            newVisit.Show();
-            this.Hide();
-        }
 
-        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            AllTests allTests = new AllTests(_currentUser, this);
             allTests.Show();
             this.Hide();
         }
 
-        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            NewTest newTest = new NewTest(this);
-            newTest.Show();
+            SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
+            samples.Show();
             this.Hide();
         }
 
-        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            AllUsers allUsers = new AllUsers();
-            allUsers.Show();
-            this.Close();
-        }
-
-        private void BtnRegister_Click(object sender, RoutedEventArgs e)
-        {
-            Registration registration = new Registration();
-            registration.Show();
-            this.Close();
-        }
-
-        private void BtnReports_Click(object sender, RoutedEventArgs e)
-        {
-            AllReports allReports = new AllReports(this);
-            allReports.Show();
+            AllReports newReport = new AllReports(_currentUser, this);
+            newReport.Show();
             this.Hide();
         }
 
-        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics();
-            statistics.Show();
+            Profile profile = new Profile(_currentUser, this);
+            profile.Show();
             this.Hide();
         }
 

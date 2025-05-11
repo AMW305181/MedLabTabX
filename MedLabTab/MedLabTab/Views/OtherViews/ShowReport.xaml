@@ -43,6 +43,7 @@
             </Setter>
         </Style>
 
+
         <!-- Style dla przycisku wylogowania -->
         <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
             <Setter Property="Background" Value="#FFF0F0"/>
@@ -176,6 +177,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>

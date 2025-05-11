@@ -194,6 +194,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
@@ -258,7 +259,7 @@
                         <DataGridTextColumn Header="Badanie" Binding="{Binding TestName}" Width="*" />
                         <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
                         <DataGridTextColumn Header="Czas" Binding="{Binding Time}" Width="*" />
-                        <DataGridTextColumn Header="Kategoria" Binding="{Binding Category}" Width="*" />
+                        <DataGridTextColumn Header="Kategoria" Binding="{Binding TestCategory}" Width="*" />
                         <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
                         <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*" />
                     </DataGrid.Columns>
