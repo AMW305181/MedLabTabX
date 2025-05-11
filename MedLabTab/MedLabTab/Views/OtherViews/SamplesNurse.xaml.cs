@@ -21,12 +21,10 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class SamplesNurse : Window
     {
-        private Window _parentWindow;
         private User _currentUser;
-        public SamplesNurse(Window parentWindow, User currentUser)
+        public SamplesNurse(User currentUser)
         {
             InitializeComponent();
-            _parentWindow = parentWindow;
             _currentUser = currentUser;
             LoadSamples();
         }
@@ -98,12 +96,37 @@ namespace MedLabTab.Views.OtherViews
             LoadSamples(); // odśwież widok
         }
 
-
-
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            _parentWindow?.Show();
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            SamplesNurse samples = new SamplesNurse(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            Profile profile = new Profile(_currentUser, this);
+            profile.Show();
+            this.Hide();
+        }
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 

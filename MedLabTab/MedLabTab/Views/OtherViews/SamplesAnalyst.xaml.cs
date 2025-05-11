@@ -23,12 +23,10 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class SamplesAnalyst : Window
     {
-        private Window _parentWindow;
         private User _currentUser;
-        public SamplesAnalyst(Window parentWindow, User currentUser)
+        public SamplesAnalyst(User currentUser)
         {
             InitializeComponent();
-            _parentWindow = parentWindow;
             _currentUser = currentUser;
             LoadSamples();
         }
@@ -159,10 +157,45 @@ namespace MedLabTab.Views.OtherViews
             LoadSamples();
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            _parentWindow?.Show();
+            AllTests allTests = new AllTests(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+        private void BtnReport_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports newReport = new AllReports(_currentUser, this);
+            newReport.Show();
+            this.Hide();
+        }
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            Profile profile = new Profile(_currentUser, this);
+            profile.Show();
+            this.Hide();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 

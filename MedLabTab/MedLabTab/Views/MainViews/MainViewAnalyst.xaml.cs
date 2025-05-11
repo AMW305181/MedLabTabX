@@ -24,14 +24,14 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            SamplesAnalyst samples = new SamplesAnalyst(this, currentUser);
+            SamplesAnalyst samples = new SamplesAnalyst(currentUser);
             samples.Show();
             this.Hide();
         }
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            AllReports newReport = new AllReports(this);
+            AllReports newReport = new AllReports(currentUser, this);
             newReport.Show();
             this.Hide();
         }

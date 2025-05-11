@@ -157,6 +157,15 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -186,6 +195,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
@@ -232,7 +242,17 @@
                 </Grid.RowDefinitions>
 
                 <!-- Tytuł -->
-                <TextBlock Text="Nowa wizyta" Grid.Row="0" Style="{StaticResource HeaderStyle}"/>
+                <!-- Nagłówek -->
+                <StackPanel Grid.Row="0">
+                    <TextBlock Style="{StaticResource MainHeaderStyle}" Text="NOWA WIZYTA" HorizontalAlignment="Center"/>
+                    <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
+                    <TextBlock Text="Formularz nowej wizyty w laboratorium" 
+                      Foreground="#666666" 
+                      FontSize="14"
+                      HorizontalAlignment="Center"
+                      Margin="0,-15,0,15"/>
+                    <Separator Style="{StaticResource SeparatorStyle}"/>
+                </StackPanel>
 
                 <!-- Formularz -->
                 <Grid Grid.Row="1" Margin="0,20">

@@ -9,11 +9,11 @@
         Background="#f8f5ff">
     <Window.Resources>
         <!-- Style dla nagłówka -->
-        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+        <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Margin" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
 
@@ -396,6 +396,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
@@ -443,7 +444,7 @@
 
                 <!-- Nagłówek -->
                 <StackPanel Grid.Row="0">
-                    <TextBlock Text="Zarządzanie użytkownikami" Style="{StaticResource HeaderStyle}"/>
+                    <TextBlock Text="ZARZĄDZANIE UŻYTKOWNIKAMI" Style="{StaticResource MainHeaderStyle}"/>
                     <TextBlock Text="Zarządzaj użytkownikami i ich danymi" 
                                Foreground="#666666" 
                                FontSize="14"
