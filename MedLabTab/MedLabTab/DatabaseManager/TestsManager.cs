@@ -2,40 +2,59 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace MedLabTab.DatabaseManager
 {
     internal class TestsManager
     {
+        TransactionOptions options = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TransactionManager.DefaultTimeout
+        };
         public List<Test> GetActiveTests(MedLabContext db)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                List<Test> ActiveTests = db.Tests.Where(t => t.IsActive == true).ToList();
-                return ActiveTests;
+                try
+                {
+                    List<Test> ActiveTests = db.Tests.Where(t => t.IsActive == true).ToList();
+                    scope.Complete();
+                    return ActiveTests;
+                }
+                catch { return null; }
             }
-            catch { return null; }
         }
         public List<Test> GetAllTests(MedLabContext db)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                List<Test> AllTests = db.Tests.ToList();
-                return AllTests;
+                try
+                {
+                    List<Test> AllTests = db.Tests.ToList();
+                    scope.Complete();
+                    return AllTests;
+                }
+                catch { return null; }
             }
-            catch { return null; }
         }
         public Test GetTest(MedLabContext db,int Id)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                var test = db.Tests.Where(t => t.id == Id).FirstOrDefault();
-                if (test != null) { return test; }
-                return null;
+                try
+                {
+                    var test = db.Tests.Where(t => t.id == Id).FirstOrDefault();
+                    scope.Complete();
+                    if (test != null) { return test; }
+                    return null;
+                }
+                catch { return null; }
             }
-            catch { return null; }
         }
         public bool AddTest(MedLabContext db,Test test)
         {
@@ -49,31 +68,48 @@ namespace MedLabTab.DatabaseManager
         }
         public  bool EditTest(MedLabContext db, Test test, Test newData)
         {
-            try
+            TransactionOptions specialOptions = new TransactionOptions
             {
-                test.TestName = newData.TestName;
-                test.Description = newData.Description;
-                test.Price = newData.Price;
-                test.Category = newData.Category;
-                test.IsActive = newData.IsActive;
-                db.SaveChanges();
-                return true;
+                IsolationLevel = IsolationLevel.RepeatableRead,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
+            {
+                try
+                {
+                    test.TestName = newData.TestName;
+                    test.Description = newData.Description;
+                    test.Price = newData.Price;
+                    test.Category = newData.Category;
+                    test.IsActive = newData.IsActive;
+                    db.SaveChanges();
+                    scope.Complete();
+                    return true;
+                }
+                catch { return false; }
             }
-            catch { return false; }
         }
         public bool ChangeTestStatus(MedLabContext db,Test test)
         {
-            try
+            TransactionOptions specialOptions = new TransactionOptions
             {
-                if (test != null)
+                IsolationLevel = IsolationLevel.RepeatableRead,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
+            {
+                try
                 {
-                    test.IsActive = !test.IsActive;
-                    db.SaveChanges();
-                    return true;
+                    if (test != null)
+                    {
+                        test.IsActive = !test.IsActive;
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
+                catch { return false; }
             }
-            catch { return false; }
         }
     }
 }
