@@ -250,6 +250,8 @@ namespace MedLabTab.DatabaseManager
         public static bool AddReport(Report report){ return reportsManager.AddReport(db, report); }
         public static bool EditReport(Report report, Report newReport) { return reportsManager.EditReport(db, report, newReport); }
         public static int GetNurseIdFromTestHistory(TestHistory test) {return testHistoryManager.GetNurseIdFromTestHistory(db, test);}
+
+       
     }
 }
 
