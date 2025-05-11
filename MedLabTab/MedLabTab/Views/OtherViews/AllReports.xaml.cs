@@ -30,6 +30,16 @@ namespace MedLabTab.Views.OtherViews
             LoadCompletedTests();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
+
+            switch (_currentUser.UserType)
+            {
+                case 1:
+                    ReceptionMenu.Visibility = Visibility.Visible;
+                    break;
+                case 3:
+                    AnalystMenu.Visibility = Visibility.Visible;
+                    break;
+            }
         }
 
         private void LoadCompletedTests()
@@ -85,6 +95,68 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+        {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(_currentUser, this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(_currentUser, this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers(_currentUser);
+            allUsers.Show();
+            this.Close();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration(_currentUser);
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(_currentUser, this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics(_currentUser);
+            statistics.Show();
+            this.Hide();
+        }
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
@@ -93,19 +165,13 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
-        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        private void BtnSamplesAnalyst_Click(object sender, RoutedEventArgs e)
         {
             SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
             samples.Show();
             this.Hide();
         }
 
-        private void BtnReport_Click(object sender, RoutedEventArgs e)
-        {
-            AllReports newReport = new AllReports(_currentUser, this);
-            newReport.Show();
-            this.Hide();
-        }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {

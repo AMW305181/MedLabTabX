@@ -19,7 +19,7 @@
         <!-- Style dla przycisków nawigacyjnych -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Foreground" Value="#FF69B4"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="Padding" Value="15,8"/>
@@ -37,6 +37,41 @@
                             <ContentPresenter Margin="{TemplateBinding Padding}" 
                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFE6F0"/>
+                                <Setter Property="Foreground" Value="#FF69B4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FFD6E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NavButtonStyle2" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                      BorderBrush="{TemplateBinding BorderBrush}" 
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="5">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                  VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -246,26 +281,32 @@
                 <!-- Menu nawigacyjne -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Grid.Row="1">
-                        <!-- Sekcja WIZYTY -->
-                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
+                        <!-- Recepcja -->
+                        <StackPanel x:Name="ReceptionMenu" Visibility="Collapsed">
+                            <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY" FontWeight="Bold" Margin="10,15,0,5"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Wszystkie wizyty" Click="BtnAllVisits_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Nowa wizyta" Click="BtnNewVisit_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
-                        <!-- Sekcja BADANIA -->
-                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie badania" x:Name="btnAllExams" Click="BtnAllExams_Click"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Nowe badanie" x:Name="btnNewExam" Click="BtnNewExam_Click"/>
+                            <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA" FontWeight="Bold" Margin="10,15,0,5"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Wszystkie badania" Click="BtnAllExams_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Nowe badanie" Click="BtnNewExam_Click"/>
 
-                        <!-- Sekcja KONTA -->
-                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszyscy użytkownicy" x:Name="btnAllUsers" Click="BtnAllUsers_Click"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Zarejestruj" x:Name="btnRegister" Click="BtnRegister_Click"/>
+                            <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA" FontWeight="Bold" Margin="10,15,0,5"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Wszyscy użytkownicy" Click="BtnAllUsers_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Zarejestruj" Click="BtnRegister_Click"/>
 
-                        <!-- Sekcja RAPORTY -->
-                        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Raporty badań" x:Name="btnReports" Click="BtnReports_Click"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Statystyki" x:Name="btnStats" Click="BtnStats_Click"/>
+                            <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Raporty badań" x:Name="btnReports" Click="BtnReports_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle2}" Content="Statystyki" x:Name="btnStats" Click="BtnStats_Click"/>
+                        </StackPanel>
+
+                        <!-- Pielęgniarka -->
+                        <StackPanel x:Name="NurseMenu" Visibility="Collapsed">
+                            <Button Style="{StaticResource NavButtonStyle}" Content="WIZYTY" Click="BtnExams_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="PRÓBKI" Click="BtnSamplesNurse_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
 
@@ -341,7 +382,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Akcje" Width="*">
+                        <DataGridTemplateColumn x:Name="Actions" Header="Akcje" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

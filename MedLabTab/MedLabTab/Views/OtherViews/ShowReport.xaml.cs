@@ -31,6 +31,16 @@ namespace MedLabTab.Views.OtherViews
             _currentUser = currentUser;
             _testHistory = testHistory;
             FillReportWithData();
+
+            switch (_currentUser.UserType)
+            {
+                case 1:
+                    ReceptionMenu.Visibility = Visibility.Visible;
+                    break;
+                case 3:
+                    AnalystMenu.Visibility = Visibility.Visible;
+                    break;
+            }
         }
         private void FillReportWithData()
         {
@@ -102,6 +112,28 @@ namespace MedLabTab.Views.OtherViews
         {
             Statistics statistics = new Statistics(_currentUser);
             statistics.Show();
+            this.Hide();
+        }
+
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnSamplesAnalyst_Click(object sender, RoutedEventArgs e)
+        {
+            SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            Profile profile = new Profile(_currentUser, this);
+            profile.Show();
             this.Hide();
         }
 

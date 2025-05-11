@@ -26,6 +26,16 @@ namespace MedLabTab.Views.OtherViews
             InitializeComponent();
             LoadVisits(); // Załaduj dane po inicjalizacji okna
             _currentUser = currentUser;
+            switch (_currentUser.UserType)
+            {
+                case 1:
+                    ReceptionMenu.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    NurseMenu.Visibility = Visibility.Visible;
+                    Actions.Visibility = Visibility.Collapsed;
+                    break;
+            }
         }
         public void LoadVisits()
         {
@@ -172,6 +182,28 @@ namespace MedLabTab.Views.OtherViews
             statistics.Show();
             this.Hide();
         }
+
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnSamplesNurse_Click(object sender, RoutedEventArgs e)
+        {
+            SamplesNurse samples = new SamplesNurse(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var profile = new Profile(_currentUser, this);
+            profile.Show();
+            this.Hide();
+        }
+
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
