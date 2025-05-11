@@ -23,11 +23,13 @@ namespace MedLabTab.Views.OtherViews
     public partial class AllUsers : Window
     {
         private User _selectedUser;
+        private User _currentUser;
         private List<User> _allUsers;
         private List<User> _filteredUsers;
-        public AllUsers()
+        public AllUsers(User currentUser)
         {
             InitializeComponent();
+            _currentUser = currentUser;
             LoadUsers();
             txtSearch.TextChanged += TxtSearch_TextChanged;
         }
@@ -87,56 +89,63 @@ namespace MedLabTab.Views.OtherViews
 
 private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
             allVisits.Show();
             this.Hide();  
         }
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisitAdmin newVisit = new NewVisitAdmin(this);
+            NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(_currentUser);
+            samples.Show();
             this.Hide();
         }
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            AllTestsAdmin allTests = new AllTestsAdmin(_currentUser, this);
             allTests.Show();
             this.Hide();
         }
 
         private void BtnNewExam_Click(object sender, RoutedEventArgs e)
         {
-            NewTest newTest = new NewTest(this);
+            NewTest newTest = new NewTest(_currentUser, this);
             newTest.Show();
             this.Hide();
         }
 
         private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
         {
-            AllUsers allUsers = new AllUsers();
+            AllUsers allUsers = new AllUsers(_currentUser);
             allUsers.Show();
             this.Close();
         }
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-            Registration registration = new Registration();
+            Registration registration = new Registration(_currentUser);
             registration.Show();
             this.Close();
         }
 
         private void BtnReports_Click(object sender, RoutedEventArgs e)
         {
-            AllReports allReports = new AllReports(this);
+            AllReports allReports = new AllReports(_currentUser, this);
             allReports.Show();
             this.Hide();
         }
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics(this);
+            Statistics statistics = new Statistics(_currentUser);
             statistics.Show();
             this.Hide();
         }

@@ -7,15 +7,18 @@ using BCrypt.Net;
 using System.Text.RegularExpressions;
 using MedLabTab.Views.MainViews;
 using MedLabTab.DatabaseManager;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
     public partial class Registration : Window
     {
-        public Registration()
+        private User _currentUser;
+        public Registration(User currentUser)
         {
             InitializeComponent();
             InitializeUserRoles();
+            _currentUser = currentUser;
             ClearForm();
 
             txtPesel.PreviewTextInput += NumberValidationTextBox;
@@ -24,56 +27,63 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
             allVisits.Show();
             this.Hide();
         }
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisitAdmin newVisit = new NewVisitAdmin(this);
+            NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(_currentUser);
+            samples.Show();
             this.Hide();
         }
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            AllTestsAdmin allTests = new AllTestsAdmin(_currentUser, this);
             allTests.Show();
             this.Close();
         }
 
         private void BtnNewExam_Click(object sender, RoutedEventArgs e)
         {
-            NewTest newTest = new NewTest(this);
+            NewTest newTest = new NewTest(_currentUser, this);
             newTest.Show();
             this.Close();
         }
 
         private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
         {
-            AllUsers allUsers = new AllUsers();
+            AllUsers allUsers = new AllUsers(_currentUser);
             allUsers.Show();
             this.Close();
         }
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-            Registration registration = new Registration();
+            Registration registration = new Registration(_currentUser);
             registration.Show();
             this.Close();
         }
 
         private void BtnReports_Click(object sender, RoutedEventArgs e)
         {
-            AllReports allReports = new AllReports(this);
+            AllReports allReports = new AllReports(_currentUser, this);
             allReports.Show();
             this.Hide();
         }
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics(this);
+            Statistics statistics = new Statistics(_currentUser);
             statistics.Show();
             this.Hide();
         }
@@ -150,10 +160,24 @@ namespace MedLabTab.Views.OtherViews
                         }
 
                        bool userAdded= DbManager.AddUser(newUser);
-                if (userAdded) { MessageBox.Show("Rejestracja zakończona pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information); }
+                if (userAdded) { MessageBox.Show("Rejestracja zakończona pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
                 else { MessageBox.Show("Wystąpił błąd.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning); }
 
-                MainViewReception newMain = new MainViewReception();
+                var signedInUser = new SignedInUser
+                {
+                    id = _currentUser.id,
+                    Login = _currentUser.Login,
+                    UserType = _currentUser.UserType,
+                    Password = _currentUser.Password,
+                    IsActive = _currentUser.IsActive,
+                    Name = _currentUser.Name,
+                    Surname = _currentUser.Surname,
+                    PESEL = _currentUser.PESEL,
+                    PhoneNumber = _currentUser.PhoneNumber,
+                };
+                MainViewReception newMain = new MainViewReception(signedInUser);
                 newMain.Show();
                 this.Close();
 
@@ -198,7 +222,20 @@ namespace MedLabTab.Views.OtherViews
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Czy na pewno chcesz wyjść bez zapisanych zmian.?", "Wyjście bez zapisu", MessageBoxButton.OK, MessageBoxImage.Warning);
-            MainViewReception reception = new MainViewReception();
+
+            var signedInUser = new SignedInUser
+            {
+                id = _currentUser.id,
+                Login = _currentUser.Login,
+                UserType = _currentUser.UserType,
+                Password = _currentUser.Password,
+                IsActive = _currentUser.IsActive,
+                Name = _currentUser.Name,
+                Surname = _currentUser.Surname,
+                PESEL = _currentUser.PESEL,
+                PhoneNumber = _currentUser.PhoneNumber,
+            };
+            MainViewReception reception = new MainViewReception(signedInUser);
             reception.Show();
             this.Close();
         }
