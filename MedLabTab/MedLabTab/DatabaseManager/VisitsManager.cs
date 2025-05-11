@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using MedLabTab.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,11 @@ namespace MedLabTab.DatabaseManager
 {
     internal class VisitsManager
     {
+        TransactionOptions options = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TransactionManager.DefaultTimeout
+        };
         public bool DeactivateVisit(MedLabContext db,Visit visit)
         {
             try
