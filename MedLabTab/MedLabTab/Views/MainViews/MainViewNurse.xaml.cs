@@ -103,14 +103,14 @@ namespace MedLabTab.Views.MainViews
         //jak coś się spierniczy, to tutaj ----->
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(currentUser);
             allVisits.Show();
             this.Hide();
         }
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            SamplesNurse samples = new SamplesNurse(this, currentUser);
+            SamplesNurse samples = new SamplesNurse(currentUser);
             samples.Show();
             this.Hide();
         }

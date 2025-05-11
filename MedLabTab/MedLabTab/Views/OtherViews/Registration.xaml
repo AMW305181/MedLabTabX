@@ -83,6 +83,13 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
+        <!-- Style dla Separator -->
+        <Style x:Key="SeparatorStyle" TargetType="Separator">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
+        </Style>
+
         <!-- Style dla głównego nagłówka -->
         <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
@@ -144,6 +151,7 @@
             <Setter Property="Margin" Value="0,0,0,15"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
+        
     </Window.Resources>
 
     <Grid>
@@ -174,6 +182,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
@@ -211,9 +220,20 @@
                 </LinearGradientBrush>
             </Grid.Background>
 
+            <!-- Nagłówek -->
+            <StackPanel Grid.Row="0">
+                <TextBlock Style="{StaticResource MainHeaderStyle}" Text="FORMULARZ REJESTRACJI" HorizontalAlignment="Center"/>
+                <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
+                <TextBlock Text="Formularz rejestracji nowego użytkownika w laboratorium" 
+                              Foreground="#666666" 
+                              FontSize="14"
+                              HorizontalAlignment="Center"
+                              Margin="0,-15,0,15"/>
+                <Separator Style="{StaticResource SeparatorStyle}"/>
+            </StackPanel>
+
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,20,0,0">
-                    <TextBlock Style="{StaticResource MainHeaderStyle}" Text="Formularz rejestracji" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
 
                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Imię"/>
                     <TextBox Style="{StaticResource TextBoxStyle}" Name="txtName" Margin="0,0,0,15" Text=""/>

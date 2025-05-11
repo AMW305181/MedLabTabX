@@ -45,6 +45,14 @@
             </Setter>
         </Style>
 
+        <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
         <!-- Style dla przycisku wylogowania -->
         <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
             <Setter Property="Background" Value="#FFF0F0"/>
@@ -84,6 +92,14 @@
             <Setter Property="Margin" Value="10,15,0,5"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
+
+        <!-- Style dla Separator -->
+        <Style x:Key="SeparatorStyle" TargetType="Separator">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
+        </Style>
+
 
         <!-- Style przycisków -->
         <Style x:Key="ButtonStyle" TargetType="Button">
@@ -172,6 +188,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
@@ -210,8 +227,16 @@
             </Grid.Background>
 
             <!-- Tytuł -->
-            <TextBlock Text="Nowe badanie" Grid.Row="0" Margin="0,10,0,10"
-                   HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+            <StackPanel Grid.Row="0">
+                <TextBlock Style="{StaticResource MainHeaderStyle}" Text="NOWE BADANIE" HorizontalAlignment="Center"/>
+                <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
+                <TextBlock Text= "Formularz dodania nowego badania w laboratorium" 
+                      Foreground="#666666" 
+                      FontSize="14"
+                      HorizontalAlignment="Center"
+                      Margin="0,-15,0,15"/>     
+                <Separator Style="{StaticResource SeparatorStyle}"/>
+            </StackPanel>
 
             <!-- Formularz -->
             <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">

@@ -12,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MedLabTab.DatabaseManager;
+using MedLabTab.DatabaseModels;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -20,12 +22,12 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class Statistics : Window
     {
-        private Window _parentWindow;
-        public Statistics(Window parentWindow)
+        private User _currentUser;
+        public Statistics(User currentUser)
         {
             InitializeComponent();
+            _currentUser = currentUser;
             FillData();
-            _parentWindow = parentWindow;
         }
 
         private void FillData()
@@ -87,10 +89,79 @@ namespace MedLabTab.Views.OtherViews
             Patient.Text = patientInfo != null ? $"{patientInfo.Name} {patientInfo.Surname}" : "Brak danych";
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser,this);
+            newVisit.Show();
+            this.Hide();
+        }
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(_currentUser, this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers(_currentUser);
+            allUsers.Show();
             this.Close();
-            _parentWindow?.Show();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration(_currentUser);
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(_currentUser, this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics(_currentUser);
+            statistics.Show();
+            this.Hide();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }
