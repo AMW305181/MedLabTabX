@@ -50,20 +50,35 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return null; }
         }
-        public List<TestHistory> GetCompletedTests(MedLabContext db)
+        public List<TestHistory> GetCompletedTests(MedLabContext db, int? patientId = null)
         {
-                return db.TestHistories
+           try
+            {
+                var query = db.TestHistories
                     .Include(th => th.Test)
                     .Include(th => th.Visit)
                         .ThenInclude(v => v.TimeSlot)
                             .ThenInclude(ts => ts.Nurse)
                     .Include(th => th.Patient)
                     .Include(th => th.Analyst)
-                    .Where(th =>  th.Status==5)
+                    .Include(th => th.StatusNavigation)
+                    .Include(th => th.Test.CategoryNavigation)
+                    .Where(th => th.Status == 5);
+
+                if (patientId.HasValue)
+                {
+                    query = query.Where(th => th.PatientId == patientId.Value);
+                }
+
+                return query
                     .OrderByDescending(th => th.Visit.TimeSlot.Date)
                     .ThenByDescending(th => th.Visit.TimeSlot.Time)
                     .ToList();
-
+            }
+            catch
+            {
+                return null;
+            }
         }
         public int GetNurseIdFromTestHistory(MedLabContext db, TestHistory test)
         {

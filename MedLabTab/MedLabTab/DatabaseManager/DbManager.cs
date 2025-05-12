@@ -168,6 +168,8 @@ namespace MedLabTab.DatabaseManager
         //}
 
         public static List<Schedule> GetAllDates() { return schedulesManager.GetAllDates(db); }
+
+        public static List<Schedule> GetAvailableSlotsForDate(DateOnly date) { return schedulesManager.GetAvailableSlotsForDate(db, date); }
         public static List<Visit> GetAllVisits(){return visitsManager.GetAllVisits(db); }
         public static bool EditVisit(Visit oldVisit, Visit newVisit) { return visitsManager.EditVisit(db, oldVisit, newVisit); }
         public static bool AddTestHistory(TestHistory newTest) { return testHistoryManager.AddTestHistory(db, newTest); }
@@ -246,10 +248,40 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return null; }
         }
+
+
+        public static List<TestHistory> GetPatientResults(int patientId)
+        {
+            try
+            {
+                using (var context = new MedLabContext())
+                {
+                    return context.TestHistories
+                        .Include(th => th.Test)
+                        .Include(th => th.Visit)
+                            .ThenInclude(v => v.TimeSlot)
+                        .Include(th => th.Patient)
+                        .Include(th => th.StatusNavigation) // Dodane załadowanie słownika statusów
+                        .Include(th => th.Analyst) // Dodane załadowanie analityka
+                        .Include(th => th.Reports) // Dodane załadowanie raportów
+                        .Where(th => th.PatientId == patientId)
+                        .OrderByDescending(th => th.Visit.TimeSlot.Date)
+                        .ThenByDescending(th => th.Visit.TimeSlot.Time)
+                        .ToList();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static string GetHashedPassword(string username)  {  return usersManager.GetHashedPassword(db, username);}
         public static bool AddReport(Report report){ return reportsManager.AddReport(db, report); }
         public static bool EditReport(Report report, Report newReport) { return reportsManager.EditReport(db, report, newReport); }
         public static int GetNurseIdFromTestHistory(TestHistory test) {return testHistoryManager.GetNurseIdFromTestHistory(db, test);}
+
+       
     }
 }
 

@@ -180,7 +180,7 @@
                                    Margin="0,0,0,15"/>
 
                         <DataGrid Grid.Row="1" 
-                                  x:Name="TestsDataGrid"
+                                  x:Name="VisitsDataGrid"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
                                   SelectionMode="Single"
@@ -188,18 +188,14 @@
                                   BorderThickness="0"
                                   Background="Transparent">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nazwa badania" 
-                                                   Binding="{Binding TestName}" 
-                                                   Width="*"/>
-                                <DataGridTextColumn Header="Kategoria" 
-                                                   Binding="{Binding CategoryNavigation.CategoryName}" 
-                                                   Width="*"/>
-                                <DataGridTextColumn Header="Opis" 
-                                                   Binding="{Binding Description}" 
-                                                   Width="2*"/>
-                                <DataGridTextColumn Header="Cena" 
-                                                   Binding="{Binding Price, StringFormat='{}{0:C}'}" 
-                                                   Width="*"/>
+                                <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
+                                <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
+                                <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*" />
+                                <DataGridTextColumn Header="Koszt" Binding="{Binding Cost}" Width="*" />
+                                <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
+                                <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*" />
+                                <DataGridTextColumn Header="Status płatności" Binding="{Binding PaymentStatus}" Width="*" />
+                                <!--<DataGridTextColumn Header="Badanie aktywne" Binding="{Binding IsActive}" Width="*" />-->
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>

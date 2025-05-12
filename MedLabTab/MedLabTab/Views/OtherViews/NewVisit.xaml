@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Nowa wizyta" Height="450" Width="800">
+        Title="Nowa wizyta" Height="788" Width="1072">
     <Window.Resources>
         <!-- Style dla przycisków nawigacyjnych -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
@@ -72,6 +72,35 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF69B4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF5BA4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF4A94"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <!-- Style dla nagłówków sekcji -->
         <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
@@ -95,31 +124,30 @@
             <Setter Property="Height" Value="1"/>
             <Setter Property="Margin" Value="0,10,0,20"/>
         </Style>
-        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Padding" Value="15,5"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
+        
+        <Style x:Key="DeleteStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF3333"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#FF3333"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                             BorderBrush="{TemplateBinding BorderBrush}" 
-                             BorderThickness="{TemplateBinding BorderThickness}"
-                             CornerRadius="4">
+                         BorderBrush="{TemplateBinding BorderBrush}" 
+                         BorderThickness="{TemplateBinding BorderThickness}"
+                         CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF4AA0"/>
+                                <Setter Property="Background" Value="#FF2222"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#FF3A90"/>
+                                <Setter Property="Background" Value="#FF2222"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -273,7 +301,7 @@
 
                         </Grid>
                         <Button Content="Usuń" Width="60" Height="30" Margin="5,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Center"
-                                Click="RemoveSelectedTest_Click" Style="{StaticResource PrimaryButtonStyle}"/>
+                                Click="RemoveSelectedTest_Click" Style="{StaticResource DeleteStyle}"/>
                     </StackPanel>
 
                     <!-- Prawa kolumna - kalendarz -->
@@ -299,7 +327,8 @@
 
                         <!-- Dostępne godziny -->
                         <Label Content="Dostępne godziny:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
-                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"/>
+                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"
+                                  SelectionChanged="TimeComboBox_SelectionChanged"/>
                     </StackPanel>
                 </Grid>
 
@@ -323,10 +352,11 @@
 
                 <!-- Przyciski -->
                 <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
-                    <Button Content="Anuluj" Width="150" Height="35" Margin="10,0" 
-                    Click="Cancel_Click" Style="{StaticResource PrimaryButtonStyle}"/>
                     <Button Content="Zarejestruj" Width="150" Height="35" Margin="10,0" 
-                    Click="Register_Click" Style="{StaticResource PrimaryButtonStyle}"/>
+                    Click="Register_Click" Style="{StaticResource ButtonStyle}"/>
+                    <Button Content="Anuluj" Width="150" Height="35" Margin="10,0" 
+                    Click="Cancel_Click" Style="{StaticResource DeleteStyle}"/>
+
                 </StackPanel>
             </Grid>
         </Grid>

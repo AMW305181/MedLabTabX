@@ -51,7 +51,7 @@ namespace MedLabTab.Views.OtherViews
                         .Select(th => DbManager.GetTest(th.TestId))
                         .Where(test => test != null && !string.IsNullOrEmpty(test.TestName))
                         .Select(test => test.TestName)),
-                    v.Cost,
+                    Cost = v.Cost,
                     Patient = DbManager.GetUserById(v.PatientId)?.Name + " " + DbManager.GetUserById(v.PatientId)?.Surname,
                     Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " +
                         DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,

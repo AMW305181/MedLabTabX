@@ -1,4 +1,4 @@
-﻿<Window x:Class="MedLabTab.Views.OtherViews.ShowReport"
+﻿<Window x:Class="MedLabTab.Views.OtherViews.ShowReportAnalyst"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -132,7 +132,7 @@
             <Setter Property="Height" Value="1"/>
             <Setter Property="Margin" Value="0,10,0,20"/>
         </Style>
-       
+
         <!-- Styl przycisku głównego -->
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
             <Setter Property="Height" Value="30"/>
@@ -171,8 +171,8 @@
             <Setter Property="Padding" Value="0"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20"/>
         </Style>
 
         <Style x:Key="FormValueStyle" TargetType="TextBlock">
@@ -182,6 +182,35 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF69B4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF5BA4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF4A94"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
     <Grid>
@@ -235,15 +264,6 @@
                             <Button Style="{StaticResource NavButtonStyle}" Content="RAPORT" Click="BtnReports_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
                         </StackPanel>
-
-                        <!-- Pacjent -->
-                        <StackPanel x:Name="PatientMenu" Visibility="Collapsed">
-                            <Button Style="{StaticResource NavButtonStyle}" Content="BADANIA" Click="BtnExams_Click"/>
-                            <Button Style="{StaticResource NavButtonStyle}" Content="TWOJE WIZYTY" Click="BtnVisits_Click"/>
-                            <Button Style="{StaticResource NavButtonStyle}" Content="NOWA WIZYTA" Click="BtnNewVisit_Click"/>
-                            <Button Style="{StaticResource NavButtonStyle}" Content="WYNIKI" Click="BtnReports_Click"/>
-                            <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
-                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
 
@@ -286,12 +306,12 @@
             </StackPanel>
 
             <!-- Środkowy panel (formularz) -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,10">
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,10">
 
                 <!-- Pacjent -->
                 <Label Content="Pacjent:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
-                <TextBlock x:Name="PatientTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
-            
+                <TextBlock x:Name="PatientTextBlock"  Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
+
                 <!-- Badanie -->
                 <Label Content="Badanie:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
                 <TextBlock x:Name="TestTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}" />
@@ -300,25 +320,33 @@
                 <Label Content="Pielęgniarka:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
                 <TextBlock x:Name="NurseTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
 
-            <!-- Analityk -->
+                <!-- Analityk -->
                 <Label Content="Analityk:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
                 <TextBlock x:Name="AnalystTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
 
-            <!-- Data -->
+                <!-- Data -->
                 <Label Content="Data:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
                 <TextBlock x:Name="DateTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
 
-            <!-- Wyniki -->
+                <!-- Wyniki -->
                 <Label Content="Wyniki:" Margin="0,5,0,2" Style="{StaticResource FormLabelStyle}"/>
-
-                <TextBlock x:Name="ResultTextBox" Width="200" Height="80" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}" />
-                <Button Style="{StaticResource PrimaryButtonStyle}" 
-                        Content="Cofnij"
-                        Click="BackButton_Click"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Bottom"
-                        Width="150"/>
+                <TextBox x:Name="ResultTextBox" Width="200" Height="80" Margin="0,0,0,2" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,10">
+                    <Button Style="{StaticResource ButtonStyle}" 
+                        Content="Zatwierdź" 
+                        Width="116" 
+                        Margin="10,0" 
+                        Height="30"
+                        Click="btnAccept_Click"/>
+                    <Button Style="{StaticResource ButtonStyle}" 
+                        Content="Anuluj" 
+                        Width="116" 
+                        Margin="10,0" 
+                        Height="30"
+                        Click="btnCancel_Click"/>
+                </StackPanel>
             </StackPanel>
-    </Grid>
+            
         </Grid>
+    </Grid>
 </Window>

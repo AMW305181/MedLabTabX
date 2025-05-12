@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Nowa wizyta" Height="450" Width="800">
+        Title="Nowa wizyta" Height="793" Width="1018">
     <Window.Resources>
         <!-- Style dla przycisków nawigacyjnych -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
@@ -165,7 +165,37 @@
             <Setter Property="Margin" Value="20"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
-        
+
+        <Style x:Key="DeleteStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF3333"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF3333"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                  BorderBrush="{TemplateBinding BorderBrush}" 
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -310,7 +340,8 @@
 
                         <!-- Dostępne godziny -->
                         <Label Content="Dostępne godziny:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
-                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"/>
+                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"
+                                  SelectionChanged="TimeComboBox_SelectionChanged"/>
                     </StackPanel>
                 </Grid>
 
@@ -341,10 +372,11 @@
 
                 <!-- Przyciski -->
                 <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
-                    <Button Content="Anuluj" Width="150" Height="35" Margin="10,0" 
-                    Click="Cancel_Click" Style="{StaticResource PrimaryButtonStyle}"/>
+                    
                     <Button Content="Zarejestruj" Width="150" Height="35" Margin="10,0" 
                     Click="Register_Click" Style="{StaticResource PrimaryButtonStyle}"/>
+                    <Button Content="Anuluj" Width="150" Height="35" Margin="10,0" 
+Click="Cancel_Click" Style="{StaticResource DeleteStyle}"/>
                 </StackPanel>
             </Grid>
         </Grid>
