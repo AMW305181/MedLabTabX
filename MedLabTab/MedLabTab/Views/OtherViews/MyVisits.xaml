@@ -307,11 +307,11 @@
                     </DataGrid.Resources>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Data wizyty" Binding="{Binding DisplayDate}" Width="*"/>
-                        <DataGridTextColumn Header="Godzina" Binding="{Binding DisplayTime}" Width="*"/>
-                        <DataGridTextColumn Header="Badania" Binding="{Binding DisplayTests}" Width="Auto"/>
-                        <DataGridTextColumn Header="Koszt" Binding="{Binding DisplayCost}" Width="*"/>
-                        <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding DisplayNurse}" Width="*"/>
+                        <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*"/>
+                        <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*"/>
+                        <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="Auto"/>
+                        <DataGridTextColumn Header="Koszt" Binding="{Binding Cost}" Width="*"/>
+                        <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*"/>
 
                         <DataGridTemplateColumn Header="Status zapłaty" Width="*">
                             <DataGridTemplateColumn.CellTemplate>

@@ -147,7 +147,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
             allVisits.Show();
             this.Hide();
         }
@@ -159,44 +159,51 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            AllTestsAdmin allTests = new AllTestsAdmin(_currentUser, this);
             allTests.Show();
             this.Hide();
         }
 
         private void BtnNewExam_Click(object sender, RoutedEventArgs e)
         {
-            NewTest newTest = new NewTest(this);
+            NewTest newTest = new NewTest(_currentUser, this);
             newTest.Show();
             this.Hide();
         }
 
         private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
         {
-            AllUsers allUsers = new AllUsers();
+            AllUsers allUsers = new AllUsers(_currentUser);
             allUsers.Show();
             this.Close();
         }
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-            Registration registration = new Registration();
+            Registration registration = new Registration(_currentUser);
             registration.Show();
             this.Close();
         }
 
         private void BtnReports_Click(object sender, RoutedEventArgs e)
         {
-            AllReports allReports = new AllReports(this);
+            AllReports allReports = new AllReports(_currentUser, this);
             allReports.Show();
             this.Hide();
         }
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics(this);
+            Statistics statistics = new Statistics(_currentUser);
             statistics.Show();
             this.Hide();
         }
@@ -207,18 +214,18 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
+        private void BtnSamplesNurse_Click(object sender, RoutedEventArgs e)
+        {
+            SamplesNurse samples = new SamplesNurse(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
         private void BtnVisits_Click(object sender, RoutedEventArgs e)
         {
             MyVisits allVisits = new MyVisits(_currentUser, this);
             allVisits.Show();
             this.Hide();
-        }
-
-
-
-        private void BtnResults_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
@@ -228,17 +235,17 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
-        private void BtnSamples_Click(object sender, RoutedEventArgs e)
-        {
-            Samples samples = new Samples(this, _currentUser);
-            samples.Show();
-            this.Close();
-        }
-
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            AllReports newReport = new AllReports(this);
+            AllReports newReport = new AllReports(_currentUser, this);
             newReport.Show();
+            this.Hide();
+        }
+
+        private void BtnSamplesAnalyst_Click(object sender, RoutedEventArgs e)
+        {
+            SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
+            samples.Show();
             this.Hide();
         }
 

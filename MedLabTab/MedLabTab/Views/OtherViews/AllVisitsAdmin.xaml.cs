@@ -20,12 +20,22 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class AllVisitsAdmin : Window
     {
-        private Window _parentWindow;
-        public AllVisitsAdmin(Window parentWindow)
+        private User _currentUser;
+        public AllVisitsAdmin(User currentUser)
         {
             InitializeComponent();
             LoadVisits(); // Załaduj dane po inicjalizacji okna
-            _parentWindow = parentWindow;
+            _currentUser = currentUser;
+            switch (_currentUser.UserType)
+            {
+                case 1:
+                    ReceptionMenu.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    NurseMenu.Visibility = Visibility.Visible;
+                    Actions.Visibility = Visibility.Collapsed;
+                    break;
+            }
         }
         public void LoadVisits()
         {
@@ -41,7 +51,7 @@ namespace MedLabTab.Views.OtherViews
                         .Select(th => DbManager.GetTest(th.TestId))
                         .Where(test => test != null && !string.IsNullOrEmpty(test.TestName))
                         .Select(test => test.TestName)),
-                    v.Cost,
+                    Cost = v.Cost,
                     Patient = DbManager.GetUserById(v.PatientId)?.Name + " " + DbManager.GetUserById(v.PatientId)?.Surname,
                     Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " +
                         DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,
@@ -110,10 +120,102 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
+        private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
+            allVisits.Show();
+            this.Hide();
+        }
+        //na newVisitAdmin
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(_currentUser, this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers(_currentUser);
+            allUsers.Show();
             this.Close();
-            _parentWindow?.Show();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration(_currentUser);
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(_currentUser, this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics(_currentUser);
+            statistics.Show();
+            this.Hide();
+        }
+
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnSamplesNurse_Click(object sender, RoutedEventArgs e)
+        {
+            SamplesNurse samples = new SamplesNurse(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var profile = new Profile(_currentUser, this);
+            profile.Show();
+            this.Hide();
+        }
+
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }

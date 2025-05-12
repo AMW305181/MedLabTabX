@@ -115,7 +115,10 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnResults_Click(object sender, RoutedEventArgs e)
         {
-            // Implementation pending
+
+            AllReports allReports = new AllReports(currentUser, this);
+            allReports.Show();
+            this.Hide();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)

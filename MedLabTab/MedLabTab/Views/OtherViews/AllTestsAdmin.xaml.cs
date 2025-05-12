@@ -19,13 +19,17 @@ namespace MedLabTab.Views.OtherViews
     public partial class AllTestsAdmin : Window
     {
         private Window _parentWindow;
-        public AllTestsAdmin(Window parentWindow)
+        private User _currentUser;
+        private List<dynamic> _allTests;
+        private List<dynamic> _filteredTests;
+        public AllTestsAdmin(User currentUser, Window parentWindow)
         {
             InitializeComponent();
             LoadTests();
+            txtSearch.TextChanged += txtSearch_TextChanged;
             _parentWindow = parentWindow;
+            _currentUser = currentUser;
         }
-
         public void LoadTests()
         {
             var tests = DbManager.GetAllTests();
@@ -33,11 +37,11 @@ namespace MedLabTab.Views.OtherViews
 
             if (tests != null && categoryDict != null)
             {
-                var mappedTests = tests.Select(t => new
+                _allTests = tests.Select(t => new
                 {
                     t.TestName,
                     t.Description,
-                    t.Price,
+                    Price = t.Price.ToString("0.00"),
                     Category = categoryDict.TryGetValue(t.Category, out var catName) ? catName : "Nieznana",
                     IsActive = t.IsActive,
                     OriginalTest = t,
@@ -45,9 +49,10 @@ namespace MedLabTab.Views.OtherViews
                     StatusColor = t.IsActive ?
                 new SolidColorBrush(Color.FromRgb(205, 92, 92)) :
                 new SolidColorBrush(Color.FromRgb(76, 175, 80))
-                }).ToList();
+                }).ToList<dynamic>();
 
-                BadaniaDataGrid.ItemsSource = mappedTests;
+                _filteredTests = new List<dynamic>(_allTests);
+                BadaniaDataGrid.ItemsSource = _allTests;
             }
             else
             {
@@ -55,6 +60,34 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_allTests == null || _filteredTests == null) return;
+
+            var searchText = txtSearch.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                BadaniaDataGrid.ItemsSource = _filteredTests;
+                return;
+            }
+
+            BadaniaDataGrid.ItemsSource = _filteredTests.Where(t =>
+            {
+                // Get property values safely with null checks
+                string testName = t.TestName?.ToString().ToLower() ?? string.Empty;
+                string description = t.Description?.ToString().ToLower() ?? string.Empty;
+                string category = t.Category?.ToString().ToLower() ?? string.Empty;
+                string price = t.Price?.ToString().ToLower() ?? string.Empty;
+                string isActive = t.IsActive?.ToString().ToLower() ?? string.Empty;
+
+                // Check if any of the properties contain the filter text
+                return testName.Contains(searchText) ||
+                       description.Contains(searchText) ||
+                       category.Contains(searchText) ||
+                       isActive.Contains(searchText) || price.Contains(searchText);
+            }).ToList();
+        }
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
@@ -134,64 +167,65 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-            _parentWindow?.Show();
-        }
-
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisitsAdmin allVisits = new AllVisitsAdmin(this);
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
             allVisits.Show();
             this.Hide();
         }
         //na newVisitAdmin
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisitAdmin newVisit = new NewVisitAdmin(this);
+            NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(_currentUser);
+            samples.Show();
             this.Hide();
         }
 
         private void BtnAllExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTestsAdmin allTests = new AllTestsAdmin(this);
+            AllTestsAdmin allTests = new AllTestsAdmin(_currentUser, this);
             allTests.Show();
             this.Hide();
         }
 
         private void BtnNewExam_Click(object sender, RoutedEventArgs e)
         {
-            NewTest newTest = new NewTest(this);
+            NewTest newTest = new NewTest(_currentUser, this);
             newTest.Show();
             this.Hide();
         }
 
         private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
         {
-            AllUsers allUsers = new AllUsers();
+            AllUsers allUsers = new AllUsers(_currentUser);
             allUsers.Show();
             this.Close();
         }
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-            Registration registration = new Registration();
+            Registration registration = new Registration(_currentUser);
             registration.Show();
             this.Close();
         }
 
         private void BtnReports_Click(object sender, RoutedEventArgs e)
         {
-            AllReports allReports = new AllReports(this);
+            AllReports allReports = new AllReports(_currentUser, this);
             allReports.Show();
             this.Hide();
         }
 
         private void BtnStats_Click(object sender, RoutedEventArgs e)
         {
-            Statistics statistics = new Statistics(this);
+            Statistics statistics = new Statistics(_currentUser);
             statistics.Show();
             this.Hide();
         }

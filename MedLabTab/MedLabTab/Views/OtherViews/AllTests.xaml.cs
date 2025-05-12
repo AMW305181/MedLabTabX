@@ -20,12 +20,17 @@ namespace MedLabTab.Views.OtherViews
     {
         private Window _parentWindow;
         private User _currentUser;
+        private List<dynamic> _allTests;
+        private List<dynamic> _filteredTests;
         public AllTests(User currentUser, Window parentWindow)
         {
             InitializeComponent();
-            LoadTests(); // Załaduj dane po inicjalizacji okna
+            
             _parentWindow = parentWindow;
             _currentUser = currentUser;
+            LoadTests(); // Załaduj dane po inicjalizacji okna
+            txtSearch.TextChanged += txtSearch_TextChanged;
+
             switch (_currentUser.UserType)
             {
                 case 3:
@@ -44,16 +49,17 @@ namespace MedLabTab.Views.OtherViews
 
             if (tests != null && categoryDict != null)
             {
-                var mappedTests = tests.Select(t => new
+                _allTests = tests.Select(t => new
                 {
                     t.TestName,
                     t.Description,
-                    Price = t.Price.ToString("0.00") + " zł",
+                    Price = t.Price.ToString("0.00"),
                     Category = categoryDict.TryGetValue(t.Category, out var catName) ? catName : "Nieznana",
                     OriginalTest = t
-                }).ToList();
+                }).ToList<dynamic>();
 
-                BadaniaDataGrid.ItemsSource = mappedTests;
+                _filteredTests = new List<dynamic>(_allTests);
+                BadaniaDataGrid.ItemsSource = _allTests;
             }
             else
             {
@@ -61,7 +67,31 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_allTests == null || _filteredTests == null) return;
 
+            var searchText = txtSearch.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                BadaniaDataGrid.ItemsSource = _filteredTests;
+                return;
+            }
+
+            BadaniaDataGrid.ItemsSource = _filteredTests.Where(t =>
+            {
+                // Get property values safely with null checks
+                string testName = t.TestName?.ToString().ToLower() ?? string.Empty;
+                string description = t.Description?.ToString().ToLower() ?? string.Empty;
+                string category = t.Category?.ToString().ToLower() ?? string.Empty;
+
+                // Check if any of the properties contain the filter text
+                return testName.Contains(searchText) ||
+                       description.Contains(searchText) ||
+                       category.Contains(searchText);
+            }).ToList();
+        }
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
@@ -71,7 +101,9 @@ namespace MedLabTab.Views.OtherViews
         }
         private void BtnResults_Click(object sender, RoutedEventArgs e)
         {
-
+            AllReports reports = new AllReports(_currentUser, this);
+            reports.Show();
+            this.Hide();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
@@ -83,14 +115,14 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Samples samples = new Samples(this, _currentUser);
+            SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
             samples.Show();
             this.Close();
         }
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            AllReports newReport = new AllReports(this);
+            AllReports newReport = new AllReports(_currentUser, this);
             newReport.Show();
             this.Hide();
         }
