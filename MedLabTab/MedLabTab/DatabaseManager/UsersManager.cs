@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Transactions;
 using MedLabTab.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 using System.Windows;
@@ -13,55 +13,85 @@ namespace MedLabTab.DatabaseManager
 {
     internal class UsersManager
     {
+        TransactionOptions options = new TransactionOptions {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TransactionManager.DefaultTimeout
+        };
         public bool LogInUser(MedLabContext db,string username, ref SignedInUser user)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                if (db.Users.Where(u => u.Login == username).FirstOrDefault() == null)
-                    return false;
+                try
+                {
+                    if (db.Users.Where(u => u.Login == username).FirstOrDefault() == null)
+                        return false;
 
-                user = new SignedInUser(db.Users.Where(u => u.Login == username).FirstOrDefault());
-                return true;
+                    user = new SignedInUser(db.Users.Where(u => u.Login == username).FirstOrDefault());
+                    scope.Complete();
+                    return true;
+                }
+                catch (Exception) { return false; }
             }
-            catch (Exception) { return false; }
         }
 
         public string GetHashedPassword (MedLabContext db, string username)
         {
-            string password = db.Users.Where(u => u.Login == username).Select(u => u.Password).First();
-            return password;
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                string password = db.Users.Where(u => u.Login == username).Select(u => u.Password).First();
+                scope.Complete();
+                return password;
+            }
         }
 
         public bool CheckUser(MedLabContext db, string username, string password)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                var user = db.Users.Where(u => u.Login == username && u.Password == password).FirstOrDefault();
-                if (user != null)
-                    return true;
-                else
-                    return false;
+                try
+                {
+                    var user = db.Users.Where(u => u.Login == username && u.Password == password).FirstOrDefault();
+                    scope.Complete();
+                    if (user != null)
+                        return true;
+                    else
+                        return false;
+                }
+                catch (Exception) { return false; }
             }
-            catch (Exception) { return false; }
         }
         public bool IsPESELTaken(MedLabContext db, string PESEL)
         {
-            var user = db.Users.Where(u => u.PESEL == PESEL).FirstOrDefault();
-            if (user == null) { return false; }
-            else { return true; }
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                var user = db.Users.Where(u => u.PESEL == PESEL).FirstOrDefault();
+                scope.Complete();
+                if (user == null) { return false; }
+                else { return true; }
+            }
         }
         public bool IsLoginTaken(MedLabContext db, string login)
         {
-            var user = db.Users.Where(u => u.Login == login).FirstOrDefault();
-            if (user == null) { return false; }
-            else { return true; }
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                var user = db.Users.Where(u => u.Login == login).FirstOrDefault();
+                scope.Complete();
+                if (user == null) { return false; }
+                else { return true; }
+            }
         }
         public bool IsLoginTakenByAnotherUser(MedLabContext db, string login, int userId)
         {
-            return db.Users.Any(u => u.Login == login && u.id != userId);
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                bool exists= db.Users.Any(u => u.Login == login && u.id != userId);
+                scope.Complete();
+                return exists;
+            }
         }
         public bool AddUser(MedLabContext db, User user)
         {
+
             try
             {
                 user.Password=PasswordHasher.Hash(user.Password);
@@ -73,67 +103,92 @@ namespace MedLabTab.DatabaseManager
         }
         public List<User> GetActivePatients(MedLabContext db)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                List<User> ActiveUsers = db.Users.Where(t => t.IsActive == true && t.UserType == 4).ToList();
-                return ActiveUsers;
-            }
-            catch { return null; }
-        }
-        public bool EditUserCommon(MedLabContext db,string login, string password, string phoneNumber, int userId)
-        {
-            try
-            {
-                var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
-               
-                if (user != null)
+                try
                 {
-                    if (!string.IsNullOrWhiteSpace(password))
-                    { password = PasswordHasher.Hash(password);
-                        user.Password = password;
-                    }
-                    user.Login = login;    
-                    user.PhoneNumber = phoneNumber;
-                    db.SaveChanges();
-                    return true;
+                    List<User> ActiveUsers = db.Users.Where(t => t.IsActive == true && t.UserType == 4).ToList();
+                    scope.Complete();
+                    return ActiveUsers;
                 }
-                return false;
+                catch { return null; }
             }
-            catch { return false; }
+        }
+        public bool EditUserCommon(MedLabContext db, string login, string password, string phoneNumber, int userId)
+        {
+            TransactionOptions specialOptions = new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.Serializable,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
+            {
+                try
+                {
+                    var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
+
+                    if (user != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(password))
+                        {
+                            password = PasswordHasher.Hash(password);
+                            user.Password = password;
+                        }
+                        user.Login = login;
+                        user.PhoneNumber = phoneNumber;
+                        db.SaveChanges();
+                        scope.Complete();
+                        return true;
+                    }
+                    scope.Complete();
+                    return false;
+                }
+                catch { return false; }
+            }
         }
         public User GetUser(MedLabContext db, string PESEL)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                var user = db.Users.Where(u => u.PESEL == PESEL).FirstOrDefault();
-                if (user != null) { return user; }
-                return null;
+                try
+                {
+                    var user = db.Users.Where(u => u.PESEL == PESEL).FirstOrDefault();
+                    scope.Complete();
+                    if (user != null) { return user; }
+                    return null;
+                }
+                catch { return null; }
             }
-            catch { return null; }
         }
         public User GetUserById(MedLabContext db, int Id)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                var user = db.Users.Where(u => u.id == Id).FirstOrDefault();
-                if (user != null) { return user; }
-                return null;
+                try
+                {
+                    var user = db.Users.Where(u => u.id == Id).FirstOrDefault();
+                    if (user != null) { return user; }
+                    return null;
+                }
+                catch { return null; }
             }
-            catch { return null; }
         }
         public List<User> LoadUsers(MedLabContext db)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                return db.Users
-                                 .Include(u => u.UserTypeNavigation)
-                                 .ToList();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Błąd podczas ładowania użytkowników: {ex.Message}",
-                               "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                try
+                {
+                    return db.Users
+                                     .Include(u => u.UserTypeNavigation)
+                                     .ToList();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Błąd podczas ładowania użytkowników: {ex.Message}",
+                                   "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
+                }
             }
         }
 
