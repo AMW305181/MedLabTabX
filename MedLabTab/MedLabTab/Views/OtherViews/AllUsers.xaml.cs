@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -35,17 +36,39 @@ namespace MedLabTab.Views.OtherViews
         }
 
 
-        private void LoadUsers()
+        public void LoadUsers()
         {
-            _allUsers = DbManager.LoadUsers();
-            if (_allUsers != null)
+            try
             {
-                _filteredUsers = new List<User>(_allUsers);
-                dgUsers.ItemsSource = _filteredUsers;
+                using (var db = new MedLabContext())
+                {
+                    var users = db.Users
+                         .Include(u => u.UserTypeNavigation)
+                         .ToList();
+                    var userList = users.Select(u => new
+                    {
+                        u.id,
+                        u.Login,
+                        u.Name,
+                        u.Surname,
+                        u.PESEL,
+                        u.PhoneNumber,
+                        UserType = u.UserTypeNavigation != null ? u.UserTypeNavigation.TypeName : "Nieznany",
+                        IsActive = u.IsActive,
+                        OriginalUser = u,
+                        StatusText = u.IsActive ? "Dezaktywuj" : "Aktywuj",
+                        StatusColor = u.IsActive ?
+                            new SolidColorBrush(Color.FromRgb(205, 92, 92)) : 
+                            new SolidColorBrush(Color.FromRgb(76, 175, 80))    
+                    }).ToList();
+
+                    dgUsers.ItemsSource = userList;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Błąd podczas ładowania użytkowników.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Błąd podczas ładowania użytkowników: {ex.Message}",
+                              "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -221,61 +244,71 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         }
         private void BtnDeleteUser_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-            User selectedUser = button?.DataContext as User;
-
-            if (selectedUser != null)
+            if (sender is Button button && button.DataContext != null)
             {
-                if (selectedUser.IsActive == false)
+                try
                 {
-                    var result2 = MessageBox.Show(
-                        $"Czy na pewno chcesz przywrócić użytkownika \"{selectedUser.Name} {selectedUser.Surname}\"?",
-                        "Potwierdzenie przywrócenia",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Warning);
+                    dynamic userData = button.DataContext;
+                    User selectedUser = userData.OriginalUser as User;
 
-                    if (result2 == MessageBoxResult.Yes)
+                    if (selectedUser != null)
                     {
-                        bool deleted = DbManager.ChangeUserStatus(selectedUser.id);
-
-                        if (deleted)
+                        if (selectedUser.IsActive == false)
                         {
-                            MessageBox.Show("Użytkownik został przywrócony.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                            LoadUsers();
+                            var result2 = MessageBox.Show(
+                                $"Czy na pewno chcesz przywrócić użytkownika \"{selectedUser.Name} {selectedUser.Surname}\"?",
+                                "Potwierdzenie przywrócenia",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Warning);
+
+                            if (result2 == MessageBoxResult.Yes)
+                            {
+                                bool deleted = DbManager.ChangeUserStatus(selectedUser.id);
+
+                                if (deleted)
+                                {
+                                    MessageBox.Show("Użytkownik został przywrócony.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    LoadUsers();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Wystąpił błąd podczas przywracania użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("Wystąpił błąd podczas przywracania użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                            var result = MessageBox.Show(
+                                $"Czy na pewno chcesz usunąć użytkownika \"{selectedUser.Name} {selectedUser.Surname}\"?",
+                                "Potwierdzenie usunięcia",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Warning);
+
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                bool deleted = DbManager.ChangeUserStatus(selectedUser.id);
+
+                                if (deleted)
+                                {
+                                    MessageBox.Show("Użytkownik został usunięty.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    LoadUsers();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Wystąpił błąd podczas usuwania użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }
                         }
                     }
-                }
-                else
-                {
-                    var result = MessageBox.Show(
-                        $"Czy na pewno chcesz usunąć użytkownika \"{selectedUser.Name} {selectedUser.Surname}\"?",
-                        "Potwierdzenie usunięcia",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Warning);
-
-                    if (result == MessageBoxResult.Yes)
+                    else
                     {
-                        bool deleted = DbManager.ChangeUserStatus(selectedUser.id);
-
-                        if (deleted)
-                        {
-                            MessageBox.Show("Użytkownik został usunięty.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                            LoadUsers();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Wystąpił błąd podczas usuwania użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                        MessageBox.Show("Nie udało się pobrać wybranego użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Nie udało się pobrać wybranego użytkownika.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Wystąpił błąd: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

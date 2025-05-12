@@ -228,13 +228,6 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
-
-
-        private void BtnResults_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
             var profile = new Profile(_currentUser, this);

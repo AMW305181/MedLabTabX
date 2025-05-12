@@ -534,7 +534,7 @@
                                         <Button Content="{Binding StatusText}"
                                                 Width="100" 
                                                 Margin="5,0" 
-                                                CommandParameter="{Binding OriginalTest}"
+                                                CommandParameter="{Binding OriginalUser}"
                                                 FontStyle="Normal"
                                                 Click="BtnDeleteUser_Click">     
                                             <Button.Style>

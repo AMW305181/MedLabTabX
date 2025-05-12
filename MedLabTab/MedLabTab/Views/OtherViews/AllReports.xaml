@@ -269,9 +269,24 @@
                             <Button Style="{StaticResource NavButtonStyle}" Content="RAPORT" Click="BtnReports_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
                         </StackPanel>
+
+                        <!-- Pacjent -->
+                        <StackPanel x:Name="PatientMenu" Visibility="Collapsed">
+                            <Button Style="{StaticResource NavButtonStyle}" Content="BADANIA" Click="BtnExams_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="TWOJE WIZYTY" Click="BtnVisits_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="NOWA WIZYTA" Click="BtnNewVisit_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="WYNIKI" Click="BtnReports_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
-
+                <!-- Przycisk wylogowania -->
+                <Button Grid.Row="2" 
+                         Style="{StaticResource LogoutButtonStyle}" 
+                         Content="Wyloguj się" 
+                         x:Name="btnLogout"
+                         Click="BtnLogout_Click"
+                         Margin="10,20,10,20"/>
             </Grid>
         </Border>
 
