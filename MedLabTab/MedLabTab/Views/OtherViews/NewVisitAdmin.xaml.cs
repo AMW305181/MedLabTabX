@@ -113,7 +113,7 @@ namespace MedLabTab.Views.OtherViews
                                 float testCost = visitCost;
                                 bool testPaymentStatus = IsPaidCheckBox.IsChecked ?? false;
                                 bool testIsActive = IsActiveCheckBox.IsChecked ?? false;
-                                int testPatientId = _seletedUser.id;
+                                int testPatientId = _selectedUser.id;
                                 int? testTimeSlotId = _selectedSlotId;
 
                                 Visit newVisit = visitsManager.CreateVisit(db, testCost, testPaymentStatus,
