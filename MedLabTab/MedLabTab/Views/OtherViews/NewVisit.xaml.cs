@@ -94,26 +94,60 @@ namespace MedLabTab.Views.OtherViews
                 {
                     using (var db = new MedLabContext())
                     {
-                        VisitsManager visitsManager = new VisitsManager();
+                        using (var transaction = db.Database.BeginTransaction())
+                        {
+                            try
+                            {
+                                VisitsManager visitsManager = new VisitsManager();
+                                float testCost = visitCost;
+                                bool testPaymentStatus = false;
+                                bool testIsActive = IsActiveCheckBox.IsChecked ?? false;
+                                int testPatientId = _currentUser.id;
+                                int? testTimeSlotId = _selectedSlotId;
 
-                        float testCost = visitCost;
-                        bool testPaymentStatus = false; 
-                        bool testIsActive = IsActiveCheckBox.IsChecked ?? false;
-                        int testPatientId = _currentUser.id; ; //repair that so it works
-                        int? testTimeSlotId = _selectedSlotId; // Assuming time slot with ID 5 exists
-
-                        bool result = visitsManager.AddVisit(db, testCost, testPaymentStatus,
+                                Visit newVisit = visitsManager.CreateVisit(db, testCost, testPaymentStatus,
                                                            testIsActive, testPatientId, testTimeSlotId);
 
-                        if (result)
-                        {
-                            MessageBox.Show("Visit registered successfully!", "Success",
-                                           MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Failed to register visit.", "Error",
-                                           MessageBoxButton.OK, MessageBoxImage.Error);
+                                if (newVisit != null && newVisit.id > 0)
+                                {
+                                    int visitId = newVisit.id;
+
+                                    // Add TestHistory records for each selected test
+                                    foreach (ListBoxItem item in TestsListBox.Items)
+                                    {
+                                        int testId = (int)item.Tag;
+
+                                        TestHistory testHistory = new TestHistory
+                                        {
+                                            VisitId = visitId,
+                                            TestId = testId,
+                                            PatientId = testPatientId,
+                                            Status = 1, // Default status
+                                            AnalystId = null // Default null
+                                        };
+
+                                        db.TestHistories.Add(testHistory);
+                                    }
+
+                                    db.SaveChanges();
+
+                                    transaction.Commit();
+
+                                    MessageBox.Show("Visit and tests registered successfully!", "Success",
+                                                   MessageBoxButton.OK, MessageBoxImage.Information);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Failed to register visit.", "Error",
+                                                   MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // Rollback transaction if anything fails
+                                transaction.Rollback();
+                                throw; // Re-throw for outer exception handling
+                            }
                         }
                     }
                 }
@@ -173,14 +207,14 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void PatientComboBox_SelectionChanged(object sender, RoutedEventArgs e)
+        /*private void PatientComboBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
             if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
             {
 
             }
 
-        }
+        }*/
 
         private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -60,7 +60,7 @@ namespace MedLabTab.DatabaseManager
         }
 
         //NEW STUFF - Kamiś
-        public bool AddVisit(MedLabContext db, float cost, bool paymentStatus, bool isActive,
+        public bool AddVisit(MedLabContext db, float cost, bool paymentStatus, bool isActive, //currently not in use
                      int patientId, int? timeSlotId)
         {
             try
@@ -79,6 +79,23 @@ namespace MedLabTab.DatabaseManager
                 return true;
             }
             catch { return false; }
+        }
+
+        public Visit CreateVisit(MedLabContext db, float cost, bool paymentStatus, //the important one
+                        bool isActive, int patientId, int? timeSlotId)
+        {
+            Visit newVisit = new Visit
+            {
+                Cost = cost,
+                PaymentStatus = paymentStatus,
+                IsActive = isActive,
+                PatientId = patientId,
+                TimeSlotId = timeSlotId
+            };
+            db.Visits.Add(newVisit);
+            db.SaveChanges();
+
+            return newVisit;
         }
 
     }
