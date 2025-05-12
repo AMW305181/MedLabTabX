@@ -1,21 +1,12 @@
-﻿<Window x:Class="MedLabTab.Views.OtherViews.AllVisitsAdmin"
+﻿<Window x:Class="MedLabTab.Views.OtherViews.ShowReportAnalyst"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Wizyty" Height="450" Width="800">
+        Title="Raport" Height="450" Width="800">
+
     <Window.Resources>
-
-        <!-- Style dla nagłówka -->
-        <Style x:Key="HeaderStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="Margin" Value="0,0,0,20"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-
         <!-- Style dla przycisków nawigacyjnych -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -31,12 +22,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                             BorderBrush="{TemplateBinding BorderBrush}" 
-                             BorderThickness="{TemplateBinding BorderThickness}"
-                             CornerRadius="5">
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
                             <ContentPresenter Margin="{TemplateBinding Padding}" 
-                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                         VerticalAlignment="Center"/>
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                      VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -66,12 +57,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                      BorderBrush="{TemplateBinding BorderBrush}" 
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      CornerRadius="5">
+                BorderBrush="{TemplateBinding BorderBrush}" 
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="5">
                             <ContentPresenter Margin="{TemplateBinding Padding}" 
-                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                  VerticalAlignment="Center"/>
+                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -87,6 +78,7 @@
             </Setter>
         </Style>
 
+
         <!-- Style dla przycisku wylogowania -->
         <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
             <Setter Property="Background" Value="#FFF0F0"/>
@@ -97,12 +89,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                             BorderBrush="{TemplateBinding BorderBrush}" 
-                             BorderThickness="{TemplateBinding BorderThickness}"
-                             CornerRadius="5">
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
                             <ContentPresenter Margin="{TemplateBinding Padding}" 
-                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                         VerticalAlignment="Center"/>
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                      VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -126,79 +118,22 @@
             <Setter Property="Margin" Value="10,15,0,5"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
-
         <!-- Style dla głównego nagłówka -->
-        <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="Margin" Value="20"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,30,0,20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
-
-        <!-- Style dla DataGrid -->
-        <Style x:Key="DataGridStyle" TargetType="DataGrid">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#EEEEEE"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="RowBackground" Value="White"/>
-            <Setter Property="AlternatingRowBackground" Value="#FFF8FB"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#EEEEEE"/>
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="CanUserDeleteRows" Value="False"/>
-            <Setter Property="AutoGenerateColumns" Value="False"/>
-            <Setter Property="SelectionMode" Value="Single"/>
-            <Setter Property="SelectionUnit" Value="FullRow"/>
-            <Setter Property="HeadersVisibility" Value="Column"/>
-            <Setter Property="RowHeaderWidth" Value="0"/>
-        </Style>
-
-        <!-- Style dla DataGridColumnHeader -->
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#FFF0F5"/>
-            <Setter Property="Foreground" Value="#555555"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="BorderBrush" Value="#EEEEEE"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        </Style>
-
-        <!-- Style dla DataGridRow -->
-        <Style TargetType="DataGridRow">
-            <Setter Property="Height" Value="36"/>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#FFF0F8"/>
-                    <Setter Property="BorderBrush" Value="#FF69B4"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FFEFF5"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Style dla DataGridCell -->
-        <Style TargetType="DataGridCell">
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Foreground" Value="#333333"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Style dla Separator -->
+        <!-- Style dla przycisku głównego -->
         <Style x:Key="SeparatorStyle" TargetType="Separator">
             <Setter Property="Background" Value="#EEEEEE"/>
             <Setter Property="Height" Value="1"/>
             <Setter Property="Margin" Value="0,10,0,20"/>
         </Style>
 
-        <!-- Style dla przycisku głównego -->
+        <!-- Styl przycisku głównego -->
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Padding" Value="15,5"/>
@@ -213,9 +148,9 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                             BorderBrush="{TemplateBinding BorderBrush}" 
-                             BorderThickness="{TemplateBinding BorderThickness}"
-                             CornerRadius="4">
+             BorderBrush="{TemplateBinding BorderBrush}" 
+             BorderThickness="{TemplateBinding BorderThickness}"
+             CornerRadius="4">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -231,23 +166,46 @@
             </Setter>
         </Style>
 
-        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
-            <Setter Property="Background" Value="#FF5555"/>
+        <Style x:Key="FormLabelStyle" TargetType="Label">
+            <Setter Property="Margin" Value="10,5,5,2"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+        <Style x:Key="FormValueStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,0,10,5"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF69B4"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                     BorderBrush="{TemplateBinding BorderBrush}" 
-                     BorderThickness="{TemplateBinding BorderThickness}"
-                     CornerRadius="4">
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF3333"/>
+                                <Setter Property="Background" Value="#FF5BA4"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#FF2222"/>
+                                <Setter Property="Background" Value="#FF4A94"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -255,13 +213,11 @@
             </Setter>
         </Style>
     </Window.Resources>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
 
         <!-- Pasek nawigacyjny (lewa strona) -->
         <Border Grid.Column="0" Background="White" BorderBrush="#EEEEEE" BorderThickness="0,0,1,0">
@@ -280,7 +236,7 @@
 
                 <!-- Menu nawigacyjne -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel Grid.Row="1">
+                    <StackPanel>
                         <!-- Recepcja -->
                         <StackPanel x:Name="ReceptionMenu" Visibility="Collapsed">
                             <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY" FontWeight="Bold" Margin="10,15,0,5"/>
@@ -301,10 +257,11 @@
                             <Button Style="{StaticResource NavButtonStyle2}" Content="Statystyki" x:Name="btnStats" Click="BtnStats_Click"/>
                         </StackPanel>
 
-                        <!-- Pielęgniarka -->
-                        <StackPanel x:Name="NurseMenu" Visibility="Collapsed">
-                            <Button Style="{StaticResource NavButtonStyle}" Content="WIZYTY" Click="BtnExams_Click"/>
-                            <Button Style="{StaticResource NavButtonStyle}" Content="PRÓBKI" Click="BtnSamplesNurse_Click"/>
+                        <!-- Analityk -->
+                        <StackPanel x:Name="AnalystMenu" Visibility="Collapsed">
+                            <Button Style="{StaticResource NavButtonStyle}" Content="BADANIA" Click="BtnExams_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="PRÓBKI" Click="BtnSamplesAnalyst_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="RAPORT" Click="BtnReports_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
                         </StackPanel>
                     </StackPanel>
@@ -312,11 +269,11 @@
 
                 <!-- Przycisk wylogowania -->
                 <Button Grid.Row="2" 
-                        Style="{StaticResource LogoutButtonStyle}" 
-                        Content="Wyloguj się" 
-                        x:Name="btnLogout"
-                        Click="BtnLogout_Click"
-                        Margin="10,20,10,20"/>
+                 Style="{StaticResource LogoutButtonStyle}" 
+                 Content="Wyloguj się" 
+                 x:Name="btnLogout"
+                 Click="BtnLogout_Click"
+                 Margin="10,20,10,20"/>
             </Grid>
         </Border>
 
@@ -329,72 +286,67 @@
                 </LinearGradientBrush>
             </Grid.Background>
 
-            <!-- Zawartość strony WizytyAdmin -->
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <!-- Nagłówek -->
-                    <RowDefinition Height="*"/>
-                    <!-- Tabela -->
-                </Grid.RowDefinitions>
-
+            <!-- Dodaj definicje wierszy -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <!-- Nagłówek -->
-                <StackPanel Grid.Row="0">
-                    <TextBlock Style="{StaticResource MainHeaderStyle}" Text="WSZYSTKIE WIZYTY" HorizontalAlignment="Center"/>
-                    <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
-                    <TextBlock Text="Lista wszystkich wizyt w laboratorium" 
-                      Foreground="#666666" 
-                      FontSize="14"
-                      HorizontalAlignment="Center"
-                      Margin="0,-15,0,15"/>
-                    <Separator Style="{StaticResource SeparatorStyle}"/>
-                </StackPanel>
-
+                <RowDefinition Height="*"/>
                 <!-- Tabela -->
-        <DataGrid x:Name="VisitsDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10" Style="{StaticResource DataGridStyle}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
-                <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
-                <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="Auto" />
-                        <DataGridTextColumn Header="Koszt" Width="*">
-                            <DataGridTextColumn.Binding>
-                                <Binding Path="Cost" StringFormat="{}{0:N2} zł"/>
-                            </DataGridTextColumn.Binding>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
-                <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*" />
-                <DataGridTextColumn Header="Status płatności" Binding="{Binding PaymentStatus}" Width="*" />
-                        <DataGridTemplateColumn Header="Badanie aktywne" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Text" Value="Nie"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                                        <Setter Property="Text" Value="Tak"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn x:Name="Actions" Header="Akcje" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Content="Edytuj" Width="60" Margin="5,0" Style="{StaticResource PrimaryButtonStyle}" CommandParameter="{Binding OriginalVisit}" Click="Edit_Click"/>
-                                        <Button Content="Usuń" Width="60" Margin="5,0" Style="{StaticResource DeleteButtonStyle}" CommandParameter="{Binding OriginalVisit}" Click="Deactivate_Click"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+            </Grid.RowDefinitions>
+
+            <!-- Nagłówek -->
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="RAPORT" Style="{StaticResource HeaderStyle}"/>
+                <TextBlock Text="Raport z badania" 
+                Foreground="#666666" 
+                FontSize="14"
+                HorizontalAlignment="Center"
+                Margin="0,-15,0,15"/>
+                <Separator Style="{StaticResource SeparatorStyle}"/>
+            </StackPanel>
+
+            <!-- Środkowy panel (formularz) -->
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,10">
+
+                <!-- Pacjent -->
+                <Label Content="Pacjent:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
+                <TextBlock x:Name="PatientTextBlock"  Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
+
+                <!-- Badanie -->
+                <Label Content="Badanie:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
+                <TextBlock x:Name="TestTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}" />
+
+                <!-- Pielęgniarka -->
+                <Label Content="Pielęgniarka:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
+                <TextBlock x:Name="NurseTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
+
+                <!-- Analityk -->
+                <Label Content="Analityk:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
+                <TextBlock x:Name="AnalystTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
+
+                <!-- Data -->
+                <Label Content="Data:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}"/>
+                <TextBlock x:Name="DateTextBlock" Width="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}"/>
+
+                <!-- Wyniki -->
+                <Label Content="Wyniki:" Margin="0,5,0,2" Style="{StaticResource FormLabelStyle}"/>
+                <TextBox x:Name="ResultTextBox" Width="200" Height="80" Margin="0,0,0,2" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,10">
+                    <Button Style="{StaticResource ButtonStyle}" 
+                        Content="Zatwierdź" 
+                        Width="116" 
+                        Margin="10,0" 
+                        Height="30"
+                        Click="btnAccept_Click"/>
+                    <Button Style="{StaticResource ButtonStyle}" 
+                        Content="Anuluj" 
+                        Width="116" 
+                        Margin="10,0" 
+                        Height="30"
+                        Click="btnCancel_Click"/>
+                </StackPanel>
+            </StackPanel>
+            
+        </Grid>
     </Grid>
-   </Grid>
-  </Grid>
 </Window>

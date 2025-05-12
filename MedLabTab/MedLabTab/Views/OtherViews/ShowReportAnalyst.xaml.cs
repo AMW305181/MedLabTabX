@@ -3,7 +3,6 @@ using MedLabTab.DatabaseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,18 +17,20 @@ using System.Windows.Shapes;
 namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
-    /// Logika interakcji dla klasy AllReports.xaml
+    /// Interaction logic for Report.xaml
     /// </summary>
-    public partial class AllReports : Window
+    public partial class ShowReportAnalyst : Window
     {
         private Window _parentWindow;
         private User _currentUser;
-        public AllReports(User currentUser, Window parentWindow)
+        private readonly TestHistory _testHistory;
+        public ShowReportAnalyst(TestHistory testHistory, User currentUser, Window parentWindow)
         {
             InitializeComponent();
-            LoadCompletedTests();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
+            _testHistory = testHistory;
+            FillReportWithData();
 
             switch (_currentUser.UserType)
             {
@@ -41,69 +42,65 @@ namespace MedLabTab.Views.OtherViews
                     break;
             }
         }
-
-        private void LoadCompletedTests()
+        private void FillReportWithData()
         {
-            try
-            {
-                var tests = DbManager.GetCompletedTests();
-
-                if (tests != null && tests.Any())
-                {
-                    var completedTests = tests.Select(t => new
-                    {
-                        Patient = DbManager.GetUserById(t.PatientId)?.Name + " " + DbManager.GetUserById(t.PatientId)?.Surname,
-                        Date = t.Visit?.TimeSlot?.Date,
-                        Time = t.Visit?.TimeSlot?.Time,
-                        Test = t.Test?.TestName,
-                        OriginalTest = t,
-                    }).ToList();
-
-                    RaportyDataGrid.ItemsSource = completedTests;
-                }
-                else
-                {
-                    MessageBox.Show("Brak wykonanych badań do wyświetlenia.", "Informacja",
-                                  MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Błąd podczas ładowania danych: {ex.Message}", "Błąd",
-                               MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            TestTextBlock.Text = _testHistory.Test?.TestName;
+            PatientTextBlock.Text = _testHistory.Patient?.Name + " " + _testHistory.Patient?.Surname;
+            NurseTextBlock.Text = _testHistory.Visit?.TimeSlot?.Nurse?.Name + " " + _testHistory.Visit?.TimeSlot?.Nurse?.Surname;
+            AnalystTextBlock.Text = _testHistory.Analyst != null ? $"{_testHistory.Analyst.Name} {_testHistory.Analyst.Surname}" : "Brak analityka";
+            DateTextBlock.Text = $"{_testHistory.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty"} {_testHistory.Visit?.TimeSlot?.Time.ToString(@"hh\:mm") ?? "Brak godziny"}";
+            ResultTextBox.Text = DbManager.GetReport(_testHistory.id).Results;
         }
 
-        private void ShowReport_Click(object sender, RoutedEventArgs e)
+        private void btnAccept_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button)
+            if (ValidateInputs())
             {
-                dynamic item = button.DataContext;
+                string newResults = ResultTextBox.Text.Trim();
+                var oldReport = DbManager.GetReport(_testHistory.id);
+                var now = DateTime.Now;
 
-                TestHistory selectedTest = item?.OriginalTest as TestHistory;
-
-                if (selectedTest != null)
+                var newReport = new Report
                 {
-                    if (_currentUser.UserType == 3) //jezeli to analityk
-                    {
-                        var viewReportWindow = new ShowReportAnalyst(selectedTest, _currentUser, this);
-                        viewReportWindow.Show();
-                        this.Hide();
-                    }
-                    else
-                    {
-                        var viewReportWindow = new ShowReport(selectedTest, _currentUser, this);
-                        viewReportWindow.Show();
-                        this.Hide();
-                    }
+                    id = oldReport.id,
+                    SampleId = oldReport.SampleId,
+                    LastUpdateDate = DateOnly.FromDateTime(now),
+                    LastUpdateTime = TimeOnly.FromDateTime(now),
+                    Results = newResults,
+                };
+
+                bool updated = DbManager.EditReport(oldReport, newReport);
+
+                if (updated)
+                {
+                    MessageBox.Show("Raport został zaktualizowany!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _parentWindow.Show();
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Nie udało się wczytać danych raportu.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Wystąpił błąd podczas aktualizacji.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
 
+        private bool ValidateInputs()
+        {
+            if (string.IsNullOrWhiteSpace(ResultTextBox.Text))
+
+            {
+                MessageBox.Show("Pole z wynikami musi być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            _parentWindow.Show();
+            this.Close();
+        }
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
@@ -113,7 +110,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
         {
-            NewVisit newVisit = new NewVisit(_currentUser, this);
+            NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
             newVisit.Show();
             this.Hide();
         }

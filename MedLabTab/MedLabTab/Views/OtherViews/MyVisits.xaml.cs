@@ -37,7 +37,26 @@ namespace MedLabTab.Views.OtherViews
         {
             var visits = DbManager.GetMyVisits(_currentUser.id);
 
-            VisitsDataGrid.ItemsSource = visits;
+            if (visits != null)
+            {
+                var visitsWithNames = visits.Select(v => new
+                {
+                    Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date,
+                    Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time,
+                    Tests = string.Join(", ", DbManager.GetTestsInVisit(v.id)
+                        .Select(th => DbManager.GetTest(th.TestId))
+                        .Where(test => test != null && !string.IsNullOrEmpty(test.TestName))
+                        .Select(test => test.TestName)),
+                    Cost = v.Cost + " zł",
+                    Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " +
+                        DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,
+                    PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
+                    v.IsActive,
+                    OriginalVisit = v,
+                }).ToList();
+
+                VisitsDataGrid.ItemsSource = visitsWithNames;
+            }
         }
 
         private void BtnEditVisit_Click(object sender, RoutedEventArgs e)
