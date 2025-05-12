@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using MedLabTab.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,11 @@ namespace MedLabTab.DatabaseManager
 {
     internal class ReportsManager
     {
+        TransactionOptions options = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TransactionManager.DefaultTimeout
+        };
         public bool AddReport(MedLabContext db, Report report ) 
         {
             try {
