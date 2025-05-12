@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Nowa wizyta" Height="450" Width="800">
+        Title="Nowa wizyta" Height="793" Width="1018">
     <Window.Resources>
         <!-- Style dla przycisków nawigacyjnych -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
@@ -340,7 +340,8 @@
 
                         <!-- Dostępne godziny -->
                         <Label Content="Dostępne godziny:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
-                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"/>
+                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"
+                                  SelectionChanged="TimeComboBox_SelectionChanged"/>
                     </StackPanel>
                 </Grid>
 
