@@ -49,7 +49,7 @@ namespace MedLabTab.Views.OtherViews
             NurseTextBlock.Text = _testHistory.Visit?.TimeSlot?.Nurse?.Name + " " + _testHistory.Visit?.TimeSlot?.Nurse?.Surname;
             AnalystTextBlock.Text = _testHistory.Analyst != null ? $"{_testHistory.Analyst.Name} {_testHistory.Analyst.Surname}" : "Brak analityka";
             DateTextBlock.Text = $"{_testHistory.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty"} {_testHistory.Visit?.TimeSlot?.Time.ToString(@"hh\:mm") ?? "Brak godziny"}";
-          //  ResultTextBox.Text = DbManager.GetReport(_testHistory.id).Results;
+            ResultTextBox.Text = DbManager.GetReport(_testHistory.id).Results;
         }
 
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)

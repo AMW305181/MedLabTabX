@@ -22,6 +22,7 @@ namespace MedLabTab.DatabaseManager
                 try
                 {
                     var schedule = db.Schedules.Where(s => s.id == Id).FirstOrDefault();
+                    scope.Complete();
                     if (schedule != null) { return schedule; }
                     return null;
                 }
@@ -35,6 +36,7 @@ namespace MedLabTab.DatabaseManager
                 try
                 {
                     List<Schedule> AvailableDates = db.Schedules.ToList();
+                    scope.Complete();
                     return AvailableDates;
                 }
                 catch { return null; }

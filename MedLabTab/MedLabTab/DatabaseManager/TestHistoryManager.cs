@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using MedLabTab.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,15 +11,24 @@ namespace MedLabTab.DatabaseManager
 {
     internal class TestHistoryManager
     {
+        TransactionOptions options = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TransactionManager.DefaultTimeout
+        };
         public bool AddTestHistory(MedLabContext db, TestHistory newTest)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                db.TestHistories.Add(newTest);
-                db.SaveChanges();
-                return true;
+                try
+                {
+                    db.TestHistories.Add(newTest);
+                    db.SaveChanges();
+                    scope.Complete();
+                    return true;
+                }
+                catch { return false; }
             }
-            catch { return false; }
         }
         public bool RemoveTestHistory(MedLabContext db,int visitId)
         {

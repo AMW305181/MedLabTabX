@@ -58,13 +58,23 @@ namespace MedLabTab.DatabaseManager
         }
         public bool AddTest(MedLabContext db,Test test)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                db.Tests.Add(test);
-                db.SaveChanges();
-                return true;
+                try
+                {
+                    bool testExists = db.Tests.Any(t => t.TestName==test.TestName);
+                    if (!testExists)
+                    {
+                        db.Tests.Add(test);
+                        db.SaveChanges();
+                        scope.Complete();
+                        return true;
+                    }
+                    scope.Complete();
+                    return false;
+                }
+                catch { return false; }
             }
-            catch { return false; }
         }
         public  bool EditTest(MedLabContext db, Test test, Test newData)
         {
@@ -104,8 +114,10 @@ namespace MedLabTab.DatabaseManager
                     {
                         test.IsActive = !test.IsActive;
                         db.SaveChanges();
+                        scope.Complete();
                         return true;
                     }
+                    scope.Complete();
                     return false;
                 }
                 catch { return false; }
