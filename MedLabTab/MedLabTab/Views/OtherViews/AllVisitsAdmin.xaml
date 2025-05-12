@@ -303,7 +303,7 @@
 
                         <!-- Pielęgniarka -->
                         <StackPanel x:Name="NurseMenu" Visibility="Collapsed">
-                            <Button Style="{StaticResource NavButtonStyle}" Content="WIZYTY" Click="BtnExams_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="WIZYTY" Click="BtnAllVisits_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="PRÓBKI" Click="BtnSamplesNurse_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
                         </StackPanel>

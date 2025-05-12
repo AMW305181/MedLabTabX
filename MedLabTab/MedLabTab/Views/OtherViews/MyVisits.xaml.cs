@@ -119,7 +119,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnResults_Click(object sender, RoutedEventArgs e)
         {
-
+            AllReports reports = new AllReports(_currentUser, this);
+            reports.Show();
+            this.Hide();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)

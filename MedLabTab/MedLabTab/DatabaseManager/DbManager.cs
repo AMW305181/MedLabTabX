@@ -246,6 +246,34 @@ namespace MedLabTab.DatabaseManager
             }
             catch { return null; }
         }
+
+
+        public static List<TestHistory> GetPatientResults(int patientId)
+        {
+            try
+            {
+                using (var context = new MedLabContext())
+                {
+                    return context.TestHistories
+                        .Include(th => th.Test)
+                        .Include(th => th.Visit)
+                            .ThenInclude(v => v.TimeSlot)
+                        .Include(th => th.Patient)
+                        .Include(th => th.StatusNavigation) // Dodane załadowanie słownika statusów
+                        .Include(th => th.Analyst) // Dodane załadowanie analityka
+                        .Include(th => th.Reports) // Dodane załadowanie raportów
+                        .Where(th => th.PatientId == patientId)
+                        .OrderByDescending(th => th.Visit.TimeSlot.Date)
+                        .ThenByDescending(th => th.Visit.TimeSlot.Time)
+                        .ToList();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static string GetHashedPassword(string username)  {  return usersManager.GetHashedPassword(db, username);}
         public static bool AddReport(Report report){ return reportsManager.AddReport(db, report); }
         public static bool EditReport(Report report, Report newReport) { return reportsManager.EditReport(db, report, newReport); }
