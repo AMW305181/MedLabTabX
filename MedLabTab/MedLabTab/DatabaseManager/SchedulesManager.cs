@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using MedLabTab.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,24 +11,37 @@ namespace MedLabTab.DatabaseManager
 {
     internal class SchedulesManager
     {
+        TransactionOptions options = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TransactionManager.DefaultTimeout
+        };
         public Schedule GetSchedule(MedLabContext db,int Id)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                var schedule = db.Schedules.Where(s => s.id == Id).FirstOrDefault();
-                if (schedule != null) { return schedule; }
-                return null;
+                try
+                {
+                    var schedule = db.Schedules.Where(s => s.id == Id).FirstOrDefault();
+                    scope.Complete();
+                    if (schedule != null) { return schedule; }
+                    return null;
+                }
+                catch { return null; }
             }
-            catch { return null; }
         }
         public List<Schedule> GetAllDates(MedLabContext db)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                List<Schedule> AvailableDates = db.Schedules.ToList();
-                return AvailableDates;
+                try
+                {
+                    List<Schedule> AvailableDates = db.Schedules.ToList();
+                    scope.Complete();
+                    return AvailableDates;
+                }
+                catch { return null; }
             }
-            catch { return null; }
         }
 
         public List<Schedule> GetAvailableSlotsForDate(MedLabContext db, DateOnly date)

@@ -3,31 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using MedLabTab.DatabaseModels;
 
 namespace MedLabTab.DatabaseManager
 {
     internal class CategoriesManager
     {
+        TransactionOptions options = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted,
+            Timeout = TransactionManager.DefaultTimeout
+        };
         public List<CategoryDictionary> GetCategories(MedLabContext db)
         {
-            try { return db.CategoryDictionaries.ToList(); }
-            catch { return null; }
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                try {
+                    var categories = db.CategoryDictionaries.ToList();
+                    scope.Complete();
+                    return categories;
+                }
+                catch { return null; }
+            }
         }
         public Dictionary<int, string> GetCategoriesDictionary(MedLabContext db)
         {
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                Dictionary<int, string> categories = new Dictionary<int, string>();
-                List<CategoryDictionary> categoryDictionaries = db.CategoryDictionaries.ToList();
-                foreach (var category in categoryDictionaries)
+                try
                 {
-                    categories.Add(category.id, category.CategoryName);
-                }
-                return categories;
+                    Dictionary<int, string> categories = new Dictionary<int, string>();
+                    List<CategoryDictionary> categoryDictionaries = db.CategoryDictionaries.ToList();
+                    scope.Complete();
+                    foreach (var category in categoryDictionaries)
+                    {
+                        categories.Add(category.id, category.CategoryName);
+                    }
+                    return categories;
 
+                }
+
+                catch { return null; }
             }
-            catch { return null; }
         }
     }
 
