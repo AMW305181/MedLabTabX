@@ -355,7 +355,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
                 <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
-                <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*" />
+                <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="Auto" />
                         <DataGridTextColumn Header="Koszt" Width="*">
                             <DataGridTextColumn.Binding>
                                 <Binding Path="Cost" StringFormat="{}{0:N2} zł"/>

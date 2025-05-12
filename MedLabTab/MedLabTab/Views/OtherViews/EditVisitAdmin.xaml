@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
         <!-- Tytuł -->
-        <TextBlock Text="Edycja wizyty" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold" Width="158"/>
+        <TextBlock Text="Edycja wizyty" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold" Width="169"/>
 
         <!-- Środkowy panel (formularz) -->
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="280" Width="200">
