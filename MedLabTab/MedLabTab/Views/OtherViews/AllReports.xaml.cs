@@ -31,6 +31,8 @@ namespace MedLabTab.Views.OtherViews
             _parentWindow = parentWindow;
             _currentUser = currentUser;
 
+            LoadCompletedTests(_currentUser.UserType == 4 ? _currentUser.id : (int?)null);
+
             switch (_currentUser.UserType)
             {
                 case 1:
@@ -39,10 +41,13 @@ namespace MedLabTab.Views.OtherViews
                 case 3:
                     AnalystMenu.Visibility = Visibility.Visible;
                     break;
+                case 4:
+                    PatientMenu.Visibility = Visibility.Visible;
+                    break;
             }
         }
 
-        private void LoadCompletedTests()
+        private void LoadCompletedTests(int? patientId = null)
         {
             try
             {
@@ -178,6 +183,14 @@ namespace MedLabTab.Views.OtherViews
         {
             SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
             samples.Show();
+            this.Hide();
+        }
+
+
+        private void BtnVisits_Click(object sender, RoutedEventArgs e)
+        {
+            MyVisits allVisits = new MyVisits(_currentUser, this);
+            allVisits.Show();
             this.Hide();
         }
 

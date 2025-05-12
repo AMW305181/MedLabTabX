@@ -171,8 +171,8 @@
             <Setter Property="Padding" Value="0"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="18"/>
         </Style>
 
         <Style x:Key="FormValueStyle" TargetType="TextBlock">
@@ -233,6 +233,15 @@
                             <Button Style="{StaticResource NavButtonStyle}" Content="BADANIA" Click="BtnExams_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="PRÓBKI" Click="BtnSamplesAnalyst_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="RAPORT" Click="BtnReports_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
+                        </StackPanel>
+
+                        <!-- Pacjent -->
+                        <StackPanel x:Name="PatientMenu" Visibility="Collapsed">
+                            <Button Style="{StaticResource NavButtonStyle}" Content="BADANIA" Click="BtnExams_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="TWOJE WIZYTY" Click="BtnVisits_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="NOWA WIZYTA" Click="BtnNewVisit_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="WYNIKI" Click="BtnReports_Click"/>
                             <Button Style="{StaticResource NavButtonStyle}" Content="PROFIL" Click="BtnProfile_Click"/>
                         </StackPanel>
                     </StackPanel>
@@ -301,7 +310,14 @@
 
             <!-- Wyniki -->
                 <Label Content="Wyniki:" Margin="0,5,0,2" Style="{StaticResource FormLabelStyle}"/>
-                <TextBox x:Name="ResultTextBox" Width="200" Height="80" Margin="0,0,0,2" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+                <TextBlock x:Name="ResultTextBox" Width="200" Height="80" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}" />
+                <Button Style="{StaticResource PrimaryButtonStyle}" 
+                        Content="Cofnij"
+                        Click="BackButton_Click"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Width="150"/>
             </StackPanel>
     </Grid>
         </Grid>

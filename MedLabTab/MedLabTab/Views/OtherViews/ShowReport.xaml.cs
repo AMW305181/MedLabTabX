@@ -40,7 +40,12 @@ namespace MedLabTab.Views.OtherViews
                 case 3:
                     AnalystMenu.Visibility = Visibility.Visible;
                     break;
+                case 4:
+                    PatientMenu.Visibility = Visibility.Visible;
+                    LoadPatientResults(_currentUser.id);
+                    break;
             }
+
         }
         private void FillReportWithData()
         {
@@ -50,6 +55,43 @@ namespace MedLabTab.Views.OtherViews
             AnalystTextBlock.Text = _testHistory.Analyst != null ? $"{_testHistory.Analyst.Name} {_testHistory.Analyst.Surname}" : "Brak analityka";
             DateTextBlock.Text = $"{_testHistory.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty"} {_testHistory.Visit?.TimeSlot?.Time.ToString(@"hh\:mm") ?? "Brak godziny"}";
             ResultTextBox.Text = DbManager.GetReport(_testHistory.id).Results;
+
+        }
+
+        private void LoadPatientResults(int patientId)
+        {
+            try
+            {
+                var results = DbManager.GetPatientResults(patientId);
+
+                if (results != null && results.Any())
+                {
+                    var patientResults = results.Select(r => new
+                    {
+                        TestName = r.Test?.TestName,
+                        Date = r.Visit?.TimeSlot?.Date,
+                        Time = r.Visit?.TimeSlot?.Time,
+                        Category = r.Test?.CategoryNavigation?.CategoryName,
+                        Result = r.Reports.FirstOrDefault()?.Results,
+                        Status = r.StatusNavigation?.StatusName,
+                        Analyst = r.Analyst != null ? $"{r.Analyst.Name} {r.Analyst.Surname}" : "Nie przypisano",
+                        OriginalTest = r
+                    }).ToList();
+
+                    //ResultsDataGrid.ItemsSource = patientResults;
+                }
+                else
+                {
+                    MessageBox.Show("Brak wyników dla wybranego pacjenta.", "Informacja",
+                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas ładowania wyników: {ex.Message}", "Błąd",
+                               MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
 
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
@@ -126,6 +168,13 @@ namespace MedLabTab.Views.OtherViews
         {
             SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
             samples.Show();
+            this.Hide();
+        }
+
+        private void BtnVisits_Click(object sender, RoutedEventArgs e)
+        {
+            MyVisits allVisits = new MyVisits(_currentUser, this);
+            allVisits.Show();
             this.Hide();
         }
 
