@@ -27,11 +27,11 @@ namespace MedLabTab.Views.OtherViews
         public AllReports(User currentUser, Window parentWindow)
         {
             InitializeComponent();
-            LoadCompletedTests();
+            
             _parentWindow = parentWindow;
             _currentUser = currentUser;
-
-            LoadCompletedTests(_currentUser.UserType == 4 ? _currentUser.id : (int?)null);
+            LoadCompletedTests();
+            //LoadCompletedTests(_currentUser.UserType == 4 ? _currentUser.id : (int?)null);
 
             switch (_currentUser.UserType)
             {
@@ -47,11 +47,16 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void LoadCompletedTests(int? patientId = null)
+        private void LoadCompletedTests()
         {
             try
             {
                 var tests = DbManager.GetCompletedTests();
+
+                if (_currentUser.UserType == 4)
+                {
+                    tests = tests.Where(t => t.PatientId == _currentUser.id).ToList();
+                }
 
                 if (tests != null && tests.Any())
                 {
