@@ -257,7 +257,7 @@ namespace MedLabTab.Views.OtherViews
 
         private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Czyścimy combobox z poprzednich wartości
+            // Czyścimy combobox z poprzednich wartościi
             TimeComboBox.Items.Clear();
             _selectedSlotId = null;
             if (VisitCalendar.SelectedDate.HasValue)
