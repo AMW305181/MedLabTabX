@@ -211,46 +211,20 @@
                 <TextBlock Style="{StaticResource MainHeaderStyle}" Text="PIELĘGNIARKA" HorizontalAlignment="Center"/>
                 <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
 
-                <!-- Dynamiczna zawartość -->
-                <Grid x:Name="ContentArea" Margin="20">
-                    <!-- Domyślna zawartość - lista badań -->
+                <!-- Tutaj będzie wyświetlana zawartość wybranej sekcji -->
+                <ContentControl x:Name="MainContent" Margin="20">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Text="NADCHODZĄCE BADANIA" 
-                                   FontSize="18" 
-                                   FontWeight="Bold" 
-                                   Margin="0,0,0,15"/>
-
-                        <DataGrid Grid.Row="1" 
-                                  x:Name="TestsDataGrid"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserAddRows="False" 
-                                  Margin="10"
-                                  Style="{StaticResource DataGridStyle}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nazwa badania" 
-                                                   Binding="{Binding TestName}" 
-                                                   Width="*"/>
-                                <DataGridTextColumn Header="Kategoria" 
-                                                   Binding="{Binding CategoryNavigation.CategoryName}" 
-                                                   Width="*"/>
-                                <DataGridTextColumn Header="Opis" 
-                                                   Binding="{Binding Description}" 
-                                                   Width="2*"/>
-                                <DataGridTextColumn Header="Koszt" Width="*">
-                                    <DataGridTextColumn.Binding>
-                                        <Binding Path="Cost" StringFormat="{}{0:N2} zł"/>
-                                    </DataGridTextColumn.Binding>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <TextBlock Text="Witaj w panelu pielęgniarki laboratorium medycznego" 
+                           FontSize="18" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,40,0,0"/>
+                        <TextBlock Text="Wybierz opcję z menu po lewej stronie, aby rozpocząć pracę" 
+                           FontSize="14" 
+                           Foreground="#666666" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,70,0,0"/>
                     </Grid>
-                </Grid>
+                </ContentControl>
             </StackPanel>
         </Grid>
     </Grid>

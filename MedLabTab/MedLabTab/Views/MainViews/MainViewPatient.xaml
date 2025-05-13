@@ -165,41 +165,20 @@
                 <TextBlock Style="{StaticResource MainHeaderStyle}" Text="PACJENT" HorizontalAlignment="Center"/>
                 <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
 
-                <!-- Dynamiczna zawartość -->
-                <Grid x:Name="ContentArea" Margin="20">
-                    <!-- Domyślna zawartość - lista badań -->
+                <!-- Tutaj będzie wyświetlana zawartość wybranej sekcji -->
+                <ContentControl x:Name="MainContent" Margin="20">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Text="NADCHODZĄCE WIZYTY" 
-                                   FontSize="18" 
-                                   FontWeight="Bold" 
-                                   Margin="0,0,0,15"/>
-
-                        <DataGrid Grid.Row="1" 
-                                  x:Name="VisitsDataGrid"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  SelectionMode="Single"
-                                  HeadersVisibility="Column"
-                                  BorderThickness="0"
-                                  Background="Transparent">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
-                                <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
-                                <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*" />
-                                <DataGridTextColumn Header="Koszt" Binding="{Binding Cost}" Width="*" />
-                                <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
-                                <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*" />
-                                <DataGridTextColumn Header="Status płatności" Binding="{Binding PaymentStatus}" Width="*" />
-                                <!--<DataGridTextColumn Header="Badanie aktywne" Binding="{Binding IsActive}" Width="*" />-->
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <TextBlock Text="Witaj w panelu pacjenta laboratorium medycznego" 
+                           FontSize="18" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,40,0,0"/>
+                        <TextBlock Text="Wybierz opcję z menu po lewej stronie, aby rozpocząć pracę" 
+                           FontSize="14" 
+                           Foreground="#666666" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,70,0,0"/>
                     </Grid>
-                </Grid>
+                </ContentControl>
             </StackPanel>
         </Grid>
     </Grid>
