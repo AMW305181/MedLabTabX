@@ -91,6 +91,34 @@ namespace MedLabTab.Views.OtherViews
         {
             if (ValidateInputs())
             {
+                // First, refresh available slots to ensure the selected slot is still available
+                if (VisitCalendar.SelectedDate.HasValue)
+                {
+                    DateOnly selectedDate = DateOnly.FromDateTime(VisitCalendar.SelectedDate.Value);
+                    // Store previously selected slot ID before refreshing
+                    int? previouslySelectedSlotId = _selectedSlotId;
+
+                    // Reload available slots
+                    _AvaibleSlots = DbManager.GetAvailableSlotsForDate(selectedDate);
+
+                    // Check if the previously selected slot is still available
+                    bool slotStillAvailable = false;
+                    if (_AvaibleSlots != null && _AvaibleSlots.Count > 0)
+                    {
+                        slotStillAvailable = _AvaibleSlots.Any(slot => slot.id == previouslySelectedSlotId);
+                    }
+
+                    if (!slotStillAvailable)
+                    {
+                        MessageBox.Show("The selected time slot is no longer available. Please select another time slot.",
+                                        "Time Slot Unavailable", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                        // Refresh the UI to show updated slots
+                        RefreshTimeSlots();
+                        return; // Exit the method without proceeding to registration
+                    }
+                }
+
                 try
                 {
                     using (var db = new MedLabContext())
@@ -105,19 +133,15 @@ namespace MedLabTab.Views.OtherViews
                                 bool testIsActive = IsActiveCheckBox.IsChecked ?? false;
                                 int testPatientId = _currentUser.id;
                                 int? testTimeSlotId = _selectedSlotId;
-
                                 Visit newVisit = visitsManager.CreateVisit(db, testCost, testPaymentStatus,
-                                                           testIsActive, testPatientId, testTimeSlotId);
-
+                                                       testIsActive, testPatientId, testTimeSlotId);
                                 if (newVisit != null && newVisit.id > 0)
                                 {
                                     int visitId = newVisit.id;
-
                                     // Add TestHistory records for each selected test
                                     foreach (ListBoxItem item in TestsListBox.Items)
                                     {
                                         int testId = (int)item.Tag;
-
                                         TestHistory testHistory = new TestHistory
                                         {
                                             VisitId = visitId,
@@ -126,16 +150,15 @@ namespace MedLabTab.Views.OtherViews
                                             Status = 1, // Default status
                                             AnalystId = null // Default null
                                         };
-
                                         db.TestHistories.Add(testHistory);
                                     }
-
                                     db.SaveChanges();
-
                                     transaction.Commit();
-
                                     MessageBox.Show("Visit and tests registered successfully!", "Success",
                                                    MessageBoxButton.OK, MessageBoxImage.Information);
+
+                                    // Refresh the time slots after successful registration
+                                    RefreshTimeSlots();
                                 }
                                 else
                                 {
@@ -158,6 +181,42 @@ namespace MedLabTab.Views.OtherViews
                                    MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        // Add this helper method to refresh the time slots
+        private void RefreshTimeSlots()
+        {
+            // Setting _isInitialLoad to true to prevent showing message box during refresh
+            bool originalInitialLoadState = _isInitialLoad;
+            _isInitialLoad = true;
+
+            // Clear and repopulate the time combo box
+            TimeComboBox.Items.Clear();
+            _selectedSlotId = null;
+
+            if (VisitCalendar.SelectedDate.HasValue)
+            {
+                DateOnly selectedDate = DateOnly.FromDateTime(VisitCalendar.SelectedDate.Value);
+                _AvaibleSlots = DbManager.GetAvailableSlotsForDate(selectedDate);
+
+                if (_AvaibleSlots != null && _AvaibleSlots.Count > 0)
+                {
+                    foreach (var slot in _AvaibleSlots)
+                    {
+                        string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
+                        string timeInfo = slot.Time.ToString("HH:mm");
+                        ListBoxItem item = new ListBoxItem
+                        {
+                            Content = $"{timeInfo} - {nurseInfo}",
+                            Tag = slot.id
+                        };
+                        TimeComboBox.Items.Add(item);
+                    }
+                }
+            }
+
+            // Restore original initial load state
+            _isInitialLoad = originalInitialLoadState;
         }
 
         private void TestsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -232,11 +291,10 @@ namespace MedLabTab.Views.OtherViews
                     // Wypełniamy combobox dostępnymi slotami
                     foreach (var slot in _AvaibleSlots)
                     {
-                        string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
                         string timeInfo = slot.Time.ToString("HH:mm");
                         ListBoxItem item = new ListBoxItem
                         {
-                            Content = $"{timeInfo} - {nurseInfo}",
+                            Content = $"{timeInfo}",
                             Tag = slot.id
                         };
                         TimeComboBox.Items.Add(item);
