@@ -31,6 +31,7 @@ namespace MedLabTab.Views.OtherViews
         private int? _selectedSlotId;
         private List<Schedule> _AvaibleSlots;
         private User _currentUser;
+        private bool _isInitialLoad = true;
         public NewVisit(User currentUser, Window parentWindow)
         {
             InitializeComponent();
@@ -221,12 +222,10 @@ namespace MedLabTab.Views.OtherViews
             // Czyścimy combobox z poprzednich wartości
             TimeComboBox.Items.Clear();
             _selectedSlotId = null;
-
             if (VisitCalendar.SelectedDate.HasValue)
             {
                 DateOnly selectedDate = DateOnly.FromDateTime(VisitCalendar.SelectedDate.Value);
                 _AvaibleSlots = DbManager.GetAvailableSlotsForDate(selectedDate);
-
                 // Sprawdzamy czy są dostępne sloty
                 if (_AvaibleSlots != null && _AvaibleSlots.Count > 0)
                 {
@@ -235,23 +234,24 @@ namespace MedLabTab.Views.OtherViews
                     {
                         string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
                         string timeInfo = slot.Time.ToString("HH:mm");
-
                         ListBoxItem item = new ListBoxItem
                         {
                             Content = $"{timeInfo} - {nurseInfo}",
                             Tag = slot.id
                         };
-
                         TimeComboBox.Items.Add(item);
                     }
                 }
-                else
+                else if (!_isInitialLoad) // Only show message box if it's not the initial load
                 {
                     // Jeśli nie ma dostępnych slotów, informujemy o tym użytkownika
                     MessageBox.Show("Brak dostępnych terminów na wybrany dzień.",
                         "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
+
+            // After first execution, set flag to false
+            _isInitialLoad = false;
         }
 
 
