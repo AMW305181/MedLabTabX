@@ -41,8 +41,8 @@ namespace MedLabTab.Views.OtherViews
             {
                 var visitsWithNames = visits.Select(v => new
                 {
-                    Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date,
-                    Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time,
+                    Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date.ToString("dd.MM.yyyy"),
+                    Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time.ToString(@"HH\:mm") ?? "",
                     Tests = string.Join(", ", DbManager.GetTestsInVisit(v.id)
                         .Select(th => DbManager.GetTest(th.TestId))
                         .Where(test => test != null && !string.IsNullOrEmpty(test.TestName))
@@ -50,7 +50,7 @@ namespace MedLabTab.Views.OtherViews
                     Cost = v.Cost + " zł",
                     Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " +
                         DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,
-                    PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
+                    PaymentStatus = v.PaymentStatus,
                     v.IsActive,
                     OriginalVisit = v,
                 }).ToList();
@@ -60,8 +60,23 @@ namespace MedLabTab.Views.OtherViews
         }
 
         private void BtnEditVisit_Click(object sender, RoutedEventArgs e)
+        
         {
+            if (VisitsDataGrid.SelectedItem != null)
+            {
+                dynamic selectedItem = VisitsDataGrid.SelectedItem;
+                Visit selectedVisit = selectedItem.OriginalVisit;
 
+                EditVisitAdmin editVisitAdmin = new EditVisitAdmin(selectedVisit, _currentUser, this);
+                editVisitAdmin.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Proszę wybrać wizytę do edycji.", "Brak zaznaczenia",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        
         }
 
         private void BtnCancelVisit_Click(object sender, RoutedEventArgs e)

@@ -138,7 +138,6 @@ namespace MedLabTab.Views.OtherViews
                                 if (newVisit != null && newVisit.id > 0)
                                 {
                                     int visitId = newVisit.id;
-                                    // Add TestHistory records for each selected test
                                     foreach (ListBoxItem item in TestsListBox.Items)
                                     {
                                         int testId = (int)item.Tag;
@@ -168,9 +167,8 @@ namespace MedLabTab.Views.OtherViews
                             }
                             catch (Exception ex)
                             {
-                                // Rollback transaction if anything fails
                                 transaction.Rollback();
-                                throw; // Re-throw for outer exception handling
+                                throw;
                             }
                         }
                     }
@@ -183,7 +181,6 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        // Add this helper method to refresh the time slots
         private void RefreshTimeSlots()
         {
             // Setting _isInitialLoad to true to prevent showing message box during refresh
@@ -203,11 +200,9 @@ namespace MedLabTab.Views.OtherViews
                 {
                     foreach (var slot in _AvaibleSlots)
                     {
-                        string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
                         string timeInfo = slot.Time.ToString("HH:mm");
                         ListBoxItem item = new ListBoxItem
                         {
-                            Content = $"{timeInfo} - {nurseInfo}",
                             Tag = slot.id
                         };
                         TimeComboBox.Items.Add(item);
@@ -266,15 +261,6 @@ namespace MedLabTab.Views.OtherViews
                 MessageBox.Show("Zaznacz badanie do usunięcia.", "Brak zaznaczenia", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-
-        /*private void PatientComboBox_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            if (TestsListBox.SelectedItem is ListBoxItem selectedItem)
-            {
-
-            }
-
-        }*/
 
         private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -355,7 +341,7 @@ namespace MedLabTab.Views.OtherViews
             }
 
             var result = MessageBox.Show(
-                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.TimeSlot?.Date.ToString("dd.MM.yyyy")} o {selectedVisit.TimeSlot?.Time.ToString("hh\\:mm")}?",
+                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.TimeSlot?.Date.ToString("dd.MM.yyyy")} o {selectedVisit.TimeSlot?.Time.ToString("HH\\:mm")}?",
                 "Potwierdzenie anulowania",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
@@ -456,19 +442,15 @@ namespace MedLabTab.Views.OtherViews
 
         private void TimeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Pobieramy wybrany item z comboboxa
             ListBoxItem selectedItem = TimeComboBox.SelectedItem as ListBoxItem;
 
-            // Jeśli coś zostało wybrane, pobieramy id slotu
             if (selectedItem != null)
             {
-                // Zapisujemy id wybranego slotu do zmiennej _selectedSlotId
                 _selectedSlotId = (int)selectedItem.Tag;
 
             }
             else
             {
-                // Jeśli nic nie wybrano, resetujemy _selectedSlotId
                 _selectedSlotId = null;
             }
         }

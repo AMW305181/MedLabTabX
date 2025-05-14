@@ -81,12 +81,10 @@ namespace MedLabTab.Views.OtherViews
 
             BadaniaDataGrid.ItemsSource = _filteredTests.Where(t =>
             {
-                // Get property values safely with null checks
                 string testName = t.TestName?.ToString().ToLower() ?? string.Empty;
                 string description = t.Description?.ToString().ToLower() ?? string.Empty;
                 string category = t.Category?.ToString().ToLower() ?? string.Empty;
 
-                // Check if any of the properties contain the filter text
                 return testName.Contains(searchText) ||
                        description.Contains(searchText) ||
                        category.Contains(searchText);

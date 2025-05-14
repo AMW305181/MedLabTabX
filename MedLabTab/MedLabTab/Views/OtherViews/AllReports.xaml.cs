@@ -28,10 +28,9 @@ namespace MedLabTab.Views.OtherViews
         public AllReports(User currentUser, Window parentWindow)
         {
             InitializeComponent();
-            LoadCompletedTests();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
-
+            //LoadCompletedTests();
             LoadCompletedTests(_currentUser.UserType == 4 ? _currentUser.id : (int?)null);
 
             switch (_currentUser.UserType)
@@ -54,13 +53,18 @@ namespace MedLabTab.Views.OtherViews
             {
                 var tests = DbManager.GetCompletedTests();
 
+                if (patientId.HasValue)
+                {
+                    tests = tests.Where(t => t.PatientId == patientId.Value).ToList();
+                }
+
                 if (tests != null && tests.Any())
                 {
                     var completedTests = tests.Select(t => new
                     {
                         Patient = DbManager.GetUserById(t.PatientId)?.Name + " " + DbManager.GetUserById(t.PatientId)?.Surname,
-                        Date = t.Visit?.TimeSlot?.Date,
-                        Time = t.Visit?.TimeSlot?.Time,
+                        Date = t.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy"),
+                        Time = t.Visit?.TimeSlot?.Time.ToString(@"HH\:mm"),
                         Test = t.Test?.TestName,
                         OriginalTest = t,
                     }).ToList();
@@ -79,6 +83,7 @@ namespace MedLabTab.Views.OtherViews
                                MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private void ShowReport_Click(object sender, RoutedEventArgs e)
         {

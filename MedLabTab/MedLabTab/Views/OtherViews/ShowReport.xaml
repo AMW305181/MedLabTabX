@@ -312,7 +312,7 @@
             <!-- Wyniki -->
                 <Label Content="Wyniki:" Margin="0,5,0,2" Style="{StaticResource FormLabelStyle}"/>
 
-                <TextBlock x:Name="ResultTextBox" Width="200" Height="80" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}" />
+                <TextBlock x:Name="ResultTextBox" Width="200" Height="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}" />
                 <Button Style="{StaticResource PrimaryButtonStyle}" 
                         Content="Cofnij"
                         Click="BackButton_Click"

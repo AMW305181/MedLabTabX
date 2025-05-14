@@ -24,21 +24,32 @@ namespace MedLabTab.Views.OtherViews
     {
         DateOnly date;
         private Visit _originalVisit;
-        private AllVisitsAdmin _parentWindow;
+        private Window _parentWindow;
+        private User _currentUser;
         private float visitCost;
-        private int visitTime;
+        private int visitTime=15;
         public EditVisitAdmin(Visit visitToEdit, AllVisitsAdmin parentWindow)
         {
             InitializeComponent();
             _originalVisit = visitToEdit;
             _parentWindow = parentWindow;
+            _currentUser = curentUser;
             LoadData();
+
+            switch (_currentUser.UserType)
+            {
+                case 4:
+                    IsPaidCheckBox.Visibility = Visibility.Collapsed;
+                    PatientComboBox.IsEnabled = false;
+                    
+                    break;
+            }
         }
 
         private void LoadData()
         {
             visitCost = _originalVisit.Cost;
-            visitTime = (DbManager.GetTestsInVisit(_originalVisit.id).Count) * 15;
+           
 
             //załadowanie listy pacjentów
             PatientComboBox.Items.Clear();
@@ -92,6 +103,9 @@ namespace MedLabTab.Views.OtherViews
                     Tag = test.id
                 });
             }
+            visitCost = 0;
+         
+            UpdateValues();
 
             //załadowanie listy dostepnych terminow
             DateComboBox.Items.Clear();
@@ -148,7 +162,7 @@ namespace MedLabTab.Views.OtherViews
 
                 var newVisit = new Visit
                 {
-                    id = _originalVisit.id,
+                    //id = _originalVisit.id,
                     Cost = visitCost,
                     PaymentStatus = IsPaidCheckBox.IsChecked == true,
                     IsActive = IsActiveCheckBox.IsChecked == true,
@@ -159,28 +173,31 @@ namespace MedLabTab.Views.OtherViews
                 bool editedVisit = DbManager.EditVisit(_originalVisit, newVisit);
                 bool addedAllTests = true;
 
-                DbManager.RemoveTestHistory(_originalVisit.id);
-
-                foreach (ListBoxItem item in TestsListBox.Items)
+                if (editedVisit)
                 {
-                    if (item.Tag is int testId)
+                    DbManager.RemoveTestHistory(_originalVisit.id);
+
+                    foreach (ListBoxItem item in TestsListBox.Items)
                     {
-                        var test = DbManager.GetTest(testId);
-
-                        var newTestHistory = new TestHistory
+                        if (item.Tag is int testId)
                         {
-                            VisitId = newVisit.id,
-                            TestId = test.id,
-                            PatientId = DbManager.GetUser(patientPESEL).id,
-                            Status = IsPaidCheckBox.IsChecked == true ? 2 : 1, // jezeli jest zaplacone to do etapu 2 a jak nie to czeka na 1
-                            AnalystId = null,
-                        };
+                            var test = DbManager.GetTest(testId);
 
-                        bool added = DbManager.AddTestHistory(newTestHistory);
+                            var newTestHistory = new TestHistory
+                            {
+                                VisitId = _originalVisit.id,
+                                TestId = test.id,
+                                PatientId = DbManager.GetUser(patientPESEL).id,
+                                Status = IsPaidCheckBox.IsChecked == true ? 2 : 1, // jezeli jest zaplacone to do etapu 2 a jak nie to czeka na 1
+                                AnalystId = null,
+                            };
 
-                        if (!added)
-                        {
-                            addedAllTests = false;
+                            bool added = DbManager.AddTestHistory(newTestHistory);
+
+                            if (!added)
+                            {
+                                addedAllTests = false;
+                            }
                         }
                     }
                 }
@@ -189,7 +206,6 @@ namespace MedLabTab.Views.OtherViews
                 {
                     MessageBox.Show("Wizyta została zedytowana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
-                    _parentWindow?.LoadVisits();
                     _parentWindow?.Show();
                 }
                 else
@@ -215,7 +231,6 @@ namespace MedLabTab.Views.OtherViews
                 Test test = DbManager.GetTest(testId);
 
                 visitCost += test.Price;
-                visitTime += 15; // zakładamy że każde badanie trwa 15 minut
 
                 UpdateValues();
 
@@ -232,7 +247,6 @@ namespace MedLabTab.Views.OtherViews
                     var test = DbManager.GetTest(testId);
 
                     visitCost -= test.Price;
-                    visitTime -= 15;
 
                     TestsListBox.Items.Remove(selectedItem);
                     UpdateValues();
