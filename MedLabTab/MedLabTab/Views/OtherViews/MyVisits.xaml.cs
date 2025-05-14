@@ -50,7 +50,7 @@ namespace MedLabTab.Views.OtherViews
                     Cost = v.Cost + " zł",
                     Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " +
                         DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,
-                    PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
+                    PaymentStatus = v.PaymentStatus,
                     v.IsActive,
                     OriginalVisit = v,
                 }).ToList();
