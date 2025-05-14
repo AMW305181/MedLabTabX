@@ -23,10 +23,10 @@ namespace MedLabTab.Views.OtherViews
     public partial class EditVisitAdmin : Window
     {
         private Visit _originalVisit;
-        private AllVisitsAdmin _parentWindow;
+        private Window _parentWindow;
         private float visitCost;
         private int visitTime;
-        public EditVisitAdmin(Visit visitToEdit, AllVisitsAdmin parentWindow)
+        public EditVisitAdmin(Visit visitToEdit, Window parentWindow)
         {
             InitializeComponent();
             _originalVisit = visitToEdit;
@@ -203,7 +203,6 @@ namespace MedLabTab.Views.OtherViews
                 {
                     MessageBox.Show("Wizyta została zedytowana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
-                    _parentWindow?.LoadVisits();
                     _parentWindow?.Show();
                 }
                 else
