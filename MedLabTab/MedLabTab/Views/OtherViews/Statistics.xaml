@@ -238,7 +238,7 @@
                     <Label Content="Całościowy przychód:"  Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
                     <TextBlock Name="Income" Text="12 500 zł" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
 
-                <Label Content="Najpopularniejsze badanie:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
+                    <Label Content="Najpopularniejsze badanie:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
                 <TextBlock Name="Test" Text="Morfologia" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
 
                 <Label Content="Najlepsza pielęgniarka:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />

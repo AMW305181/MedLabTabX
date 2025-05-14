@@ -91,6 +91,18 @@ namespace MedLabTab.Views.OtherViews
                     Tag = test.id
                 });
             }
+            visitCost = 0;
+            visitTime = 0;
+            foreach (ListBoxItem item in TestsListBox.Items)
+            {
+                if (item.Tag is int testId)
+                {
+                    var test = DbManager.GetTest(testId);
+                    visitCost += test.Price;
+                    visitTime += 15;
+                }
+            }
+            UpdateValues();
 
             //załadowanie listy dostepnych terminow
             DateComboBox.Items.Clear();
