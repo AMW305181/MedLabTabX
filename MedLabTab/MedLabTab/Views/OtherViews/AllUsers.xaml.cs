@@ -229,7 +229,7 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
 
-            User selectedUser = button?.DataContext as User;
+            User selectedUser = (sender as Button)?.CommandParameter as User;
 
             if (selectedUser != null)
             {
@@ -315,6 +315,11 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         private void DgUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _selectedUser = dgUsers.SelectedItem as User;
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

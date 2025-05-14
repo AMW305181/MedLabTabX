@@ -110,8 +110,8 @@ namespace MedLabTab.Views.OtherViews
 
                     if (!slotStillAvailable)
                     {
-                        MessageBox.Show("The selected time slot is no longer available. Please select another time slot.",
-                                        "Time Slot Unavailable", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("Ten termin nie jest już dostępny. Proszę o wybranie innego.",
+                                        "Informacja", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                         // Refresh the UI to show updated slots
                         RefreshTimeSlots();
@@ -161,7 +161,7 @@ namespace MedLabTab.Views.OtherViews
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Błąd rejestracji wizyty.", "Błąd",
+                                    MessageBox.Show("Nie udało się zarejestrować wizyty", "Błąd",
                                                    MessageBoxButton.OK, MessageBoxImage.Error);
                                 }
                             }
@@ -175,7 +175,7 @@ namespace MedLabTab.Views.OtherViews
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"An error occurred: {ex.Message}", "Error",
+                    MessageBox.Show($"Błąd: {ex.Message}", "Błąd",
                                    MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
