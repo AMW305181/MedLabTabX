@@ -83,7 +83,7 @@ namespace MedLabTab.Views.OtherViews
             {
                 if (selectedVisit != null)
                 {
-                    var editVisitWindow = new EditVisitAdmin(selectedVisit, this);
+                    var editVisitWindow = new EditVisitAdmin(selectedVisit,_currentUser, this);
                     editVisitWindow.Show();
                     this.Hide();
                 }

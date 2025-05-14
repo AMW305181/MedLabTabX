@@ -28,12 +28,13 @@ namespace MedLabTab.Views.OtherViews
         private User _currentUser;
         private float visitCost;
         private int visitTime=15;
-        public EditVisitAdmin(Visit visitToEdit, AllVisitsAdmin parentWindow)
+        int selectedSchedule = -1;
+        public EditVisitAdmin(Visit visitToEdit, User currentUser,AllVisitsAdmin parentWindow)
         {
             InitializeComponent();
             _originalVisit = visitToEdit;
             _parentWindow = parentWindow;
-            _currentUser = curentUser;
+            _currentUser = currentUser;
             LoadData();
 
             switch (_currentUser.UserType)
@@ -42,6 +43,23 @@ namespace MedLabTab.Views.OtherViews
                     IsPaidCheckBox.Visibility = Visibility.Collapsed;
                     PatientComboBox.IsEnabled = false;
                     
+                    break;
+            }
+        }
+        public EditVisitAdmin(Visit visitToEdit, User currentUser, MyVisits parentWindow)
+        {
+            InitializeComponent();
+            _originalVisit = visitToEdit;
+            _parentWindow = parentWindow;
+            _currentUser = currentUser;
+            LoadData();
+
+            switch (_currentUser.UserType)
+            {
+                case 4:
+                    IsPaidCheckBox.Visibility = Visibility.Collapsed;
+                    PatientComboBox.IsEnabled = false;
+
                     break;
             }
         }
@@ -158,7 +176,7 @@ namespace MedLabTab.Views.OtherViews
                 string patientPESEL = (string)selectedPatient.Tag;
 
                 var selectedTimeSlot = (ComboBoxItem)DateComboBox.SelectedItem;
-                int timeSlotId = (int)selectedTimeSlot.Tag;
+                int timeSlotId = selectedSchedule;
 
                 var newVisit = new Visit
                 {
@@ -266,6 +284,10 @@ namespace MedLabTab.Views.OtherViews
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
+            }
+            if(selectedSchedule==-1)
+            {
+                MessageBox.Show("Nie wybrano właściwego terminu.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             return true;

@@ -229,7 +229,7 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
 
-            User selectedUser = button?.DataContext as User;
+            User selectedUser = (sender as Button)?.CommandParameter as User;
 
             if (selectedUser != null)
             {

@@ -143,6 +143,12 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Margin" Value="0,0,0,15"/>
         </Style>
+        <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
+        </Style>
 
         <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Padding" Value="5,3"/>
@@ -151,7 +157,7 @@
             <Setter Property="Margin" Value="0,0,0,15"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
-        
+
     </Window.Resources>
 
     <Grid>
@@ -193,7 +199,6 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszyscy użytkownicy" x:Name="btnAllUsers" Click="BtnAllUsers_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Zarejestruj" x:Name="btnRegister" Click="BtnRegister_Click"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Harmonogram" x:Name="btnSchedule" Click="BtnSchedule_Click"/>
 
                         <!-- Sekcja RAPORTY -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
@@ -252,7 +257,10 @@
                     <TextBox Style="{StaticResource TextBoxStyle}" Name="txtLogin" Margin="0,0,0,15" Text=""/>
 
                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Hasło"/>
-                    <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" Margin="0,0,0,20"/>
+                    <PasswordBox Style="{StaticResource PasswordBoxStyle}" Name="txtPassword"/>
+
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Powtórz hasło"/>
+                    <PasswordBox Style="{StaticResource PasswordBoxStyle}" Name="txtRepeatPassword" />
 
                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Rola użytkownika"/>
                     <ComboBox Style="{StaticResource ComboBoxStyle}" Name="cmbUserRole">
