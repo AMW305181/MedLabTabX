@@ -80,7 +80,7 @@ namespace MedLabTab.DatabaseManager
         {
             TransactionOptions specialOptions = new TransactionOptions
             {
-                IsolationLevel = IsolationLevel.RepeatableRead,
+                IsolationLevel = IsolationLevel.Serializable,
                 Timeout = TransactionManager.DefaultTimeout
             };
             using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
@@ -103,7 +103,7 @@ namespace MedLabTab.DatabaseManager
         {
             TransactionOptions specialOptions = new TransactionOptions
             {
-                IsolationLevel = IsolationLevel.RepeatableRead,
+                IsolationLevel = IsolationLevel.Serializable,
                 Timeout = TransactionManager.DefaultTimeout
             };
             using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
@@ -118,6 +118,21 @@ namespace MedLabTab.DatabaseManager
                         return true;
                     }
                     scope.Complete();
+                    return false;
+                }
+                catch { return false; }
+            }
+        }
+
+        public bool IsTestNameTaken(MedLabContext db, string testName) 
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                try
+                {
+                    var test = db.Tests.Where(t => t.TestName == testName).FirstOrDefault();
+                    scope.Complete();
+                    if (test != null) { return true; }
                     return false;
                 }
                 catch { return false; }

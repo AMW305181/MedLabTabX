@@ -70,6 +70,10 @@ namespace MedLabTab.Views.OtherViews
                     IsActive = IsActiveCheckBox.IsChecked == true
                 };
 
+                bool exists = DbManager.IsTestNameTaken(newTest.TestName);
+                if (exists) { MessageBox.Show("Badanie o podanej nazwie już istnieje.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 bool added = DbManager.AddTest(newTest); // zakładamy że zwraca bool
 
                 if (added)
