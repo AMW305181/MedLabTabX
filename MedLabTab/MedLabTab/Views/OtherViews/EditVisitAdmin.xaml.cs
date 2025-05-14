@@ -27,7 +27,6 @@ namespace MedLabTab.Views.OtherViews
         private User _currentUser;
         private float visitCost;
         private int visitTime;
-        bool IsPatient;
         public EditVisitAdmin(Visit visitToEdit, User curentUser ,Window parentWindow)
         {
             InitializeComponent();
@@ -38,12 +37,9 @@ namespace MedLabTab.Views.OtherViews
 
             switch (_currentUser.UserType)
             {
-                case 1:
-                    IsPatient = false;
-                    break;
                 case 4:
                     IsPaidCheckBox.Visibility = Visibility.Collapsed;
-                    IsPatient = true;
+                    PatientComboBox.IsEnabled = false;
                     
                     break;
             }
