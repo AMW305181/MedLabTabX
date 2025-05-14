@@ -121,8 +121,8 @@ namespace MedLabTab.Views.OtherViews
 
                     if (!slotStillAvailable)
                     {
-                        MessageBox.Show("The selected time slot is no longer available. Please select another time slot.",
-                                        "Time Slot Unavailable", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("Ten termin nie jest już dostępny. Proszę o wybranie innego.",
+                                        "Informacja", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                         // Refresh the UI to show updated slots
                         RefreshTimeSlots();
@@ -165,7 +165,7 @@ namespace MedLabTab.Views.OtherViews
                                     }
                                     db.SaveChanges();
                                     transaction.Commit();
-                                    MessageBox.Show("Visit and tests registered successfully!", "Success",
+                                    MessageBox.Show("Wizyta zarejestrowana!", "Sukces",
                                                    MessageBoxButton.OK, MessageBoxImage.Information);
 
                                     // Refresh the time slots after successful registration
@@ -173,7 +173,7 @@ namespace MedLabTab.Views.OtherViews
                                 }
                                 else
                                 {
-                                    MessageBox.Show("Failed to register visit.", "Error",
+                                    MessageBox.Show("Nie udało się zarejestrować wizyty", "Błąd",
                                                    MessageBoxButton.OK, MessageBoxImage.Error);
                                 }
                             }
@@ -188,7 +188,7 @@ namespace MedLabTab.Views.OtherViews
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"An error occurred: {ex.Message}", "Error",
+                    MessageBox.Show($"Błąd: {ex.Message}", "Błąd",
                                    MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }

@@ -110,8 +110,8 @@ namespace MedLabTab.Views.OtherViews
 
                     if (!slotStillAvailable)
                     {
-                        MessageBox.Show("The selected time slot is no longer available. Please select another time slot.",
-                                        "Time Slot Unavailable", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("Ten termin nie jest już dostępny. Proszę o wybranie innego.",
+                                        "Informacja", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                         // Refresh the UI to show updated slots
                         RefreshTimeSlots();
