@@ -319,7 +319,9 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
 
         private void BtnSchedule_Click(object sender, RoutedEventArgs e)
         {
-
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
         }
     }
 }

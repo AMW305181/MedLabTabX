@@ -264,7 +264,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void BtnSchedule_Click(object sender, RoutedEventArgs e)
         {
-
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
         }
     }
 }
