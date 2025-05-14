@@ -22,6 +22,7 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class EditVisitAdmin : Window
     {
+        DateOnly date;
         private Visit _originalVisit;
         private Window _parentWindow;
         private User _currentUser;
@@ -108,7 +109,7 @@ namespace MedLabTab.Views.OtherViews
 
             //załadowanie listy dostepnych terminow
             DateComboBox.Items.Clear();
-            var dates = DbManager.GetAllDates(); // tutaj metoda do poprawki - zalezy jak bedzie wygladal harmonogram
+            var dates = DbManager.GetAllSlotsForDate(date); // tutaj metoda do poprawki - zalezy jak bedzie wygladal harmonogram
             int selectedSchedule = -1;
             if (_originalVisit.TimeSlotId.HasValue)
             {
@@ -274,6 +275,51 @@ namespace MedLabTab.Views.OtherViews
         {
             this.Close();
             _parentWindow?.Show();
+        }
+
+        private void VisitCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Sprawdź czy jakaś data została wybrana
+            if (VisitCalendar.SelectedDate.HasValue)
+            {
+                DateTime selectedDate = VisitCalendar.SelectedDate.Value;
+
+                DateOnly date = DateOnly.FromDateTime(selectedDate);
+                UpdateAvailableTimeSlots(date);
+            }
+            else
+            {
+                DateComboBox.Items.Clear();
+            }
+        }
+        private void UpdateAvailableTimeSlots(DateOnly date)
+        {
+            DateComboBox.Items.Clear();
+            List<Schedule> availableTimeSlots = DbManager.GetAllSlotsForDate(date);
+
+            if (availableTimeSlots == null || availableTimeSlots.Count == 0)
+            {
+                // Wyświetl MessageBox z informacją o braku terminów
+                MessageBox.Show("Brak terminów tego dnia", "Informacja",
+                                MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            foreach (var timeSlot in availableTimeSlots)
+            {
+                string timeString = timeSlot.Time.ToString("HH:mm");
+                string displayText = timeString;
+                ComboBoxItem item = new ComboBoxItem
+                {
+                    Content = displayText,
+                    Tag = timeSlot
+                };
+                DateComboBox.Items.Add(item);
+            }
+
+            if (DateComboBox.Items.Count > 0)
+            {
+                DateComboBox.SelectedIndex = 0;
+            }
         }
     }
 }

@@ -316,5 +316,10 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             _selectedUser = dgUsers.SelectedItem as User;
         }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

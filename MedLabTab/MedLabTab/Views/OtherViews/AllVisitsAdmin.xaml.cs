@@ -272,5 +272,10 @@ namespace MedLabTab.Views.OtherViews
                 this.Close();
             }
         }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
