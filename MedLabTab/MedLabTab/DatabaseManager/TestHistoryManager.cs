@@ -84,11 +84,12 @@ namespace MedLabTab.DatabaseManager
                     {
                         query = query.Where(th => th.PatientId == patientId.Value);
                     }
-                    List<TestHistory> list = query
-                       .OrderByDescending(th => th.Visit.TimeSlot.Date)
-                       .ThenByDescending(th => th.Visit.TimeSlot.Time)
-                       .ToList();
-                    scope.Complete();
+
+                    List < TestHistory > list= query
+                        .OrderByDescending(th => th.Visit.TimeSlot.Date)
+                        .ThenByDescending(th => th.Visit.TimeSlot.Time)
+                        .ToList();
+                     scope.Complete();
                     return list;
                 }
                 catch

@@ -119,18 +119,28 @@ namespace MedLabTab.DatabaseManager
         public Visit CreateVisit(MedLabContext db, float cost, bool paymentStatus, //the important one
                         bool isActive, int patientId, int? timeSlotId)
         {
-            Visit newVisit = new Visit
+            TransactionOptions specialOptions = new TransactionOptions
             {
-                Cost = cost,
-                PaymentStatus = paymentStatus,
-                IsActive = isActive,
-                PatientId = patientId,
-                TimeSlotId = timeSlotId
+                IsolationLevel = IsolationLevel.Serializable,
+                Timeout = TransactionManager.DefaultTimeout
             };
-            db.Visits.Add(newVisit);
-            db.SaveChanges();
-
-            return newVisit;
+           // using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
+           // {
+                Visit newVisit = new Visit
+                {
+                    Cost = cost,
+                    PaymentStatus = paymentStatus,
+                    IsActive = isActive,
+                    PatientId = patientId,
+                    TimeSlotId = timeSlotId
+                };
+                //bool timeSlotTaken = db.Visits.Any(v => v.IsActive && v.TimeSlotId == timeSlotId);
+                //if (timeSlotTaken) { return null; }
+                db.Visits.Add(newVisit);
+                db.SaveChanges();
+                //scope.Complete();
+                return newVisit;
+            //}
         }
 
         public List<Visit> GetNurseVisits(MedLabContext db,int nurseId)

@@ -29,7 +29,7 @@ namespace MedLabTab.Views.OtherViews
             InitializeComponent();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
-
+            //LoadCompletedTests();
             LoadCompletedTests(_currentUser.UserType == 4 ? _currentUser.id : (int?)null);
 
             switch (_currentUser.UserType)

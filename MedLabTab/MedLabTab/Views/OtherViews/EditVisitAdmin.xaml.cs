@@ -26,8 +26,8 @@ namespace MedLabTab.Views.OtherViews
         private Window _parentWindow;
         private User _currentUser;
         private float visitCost;
-        private int visitTime;
-        public EditVisitAdmin(Visit visitToEdit, User curentUser ,Window parentWindow)
+        private int visitTime=15;
+        public EditVisitAdmin(Visit visitToEdit, AllVisitsAdmin parentWindow)
         {
             InitializeComponent();
             _originalVisit = visitToEdit;
@@ -48,7 +48,7 @@ namespace MedLabTab.Views.OtherViews
         private void LoadData()
         {
             visitCost = _originalVisit.Cost;
-            visitTime = (DbManager.GetTestsInVisit(_originalVisit.id).Count) * 15;
+           
 
             //załadowanie listy pacjentów
             PatientComboBox.Items.Clear();
@@ -103,16 +103,7 @@ namespace MedLabTab.Views.OtherViews
                 });
             }
             visitCost = 0;
-            visitTime = 0;
-            foreach (ListBoxItem item in TestsListBox.Items)
-            {
-                if (item.Tag is int testId)
-                {
-                    var test = DbManager.GetTest(testId);
-                    visitCost += test.Price;
-                    visitTime += 15;
-                }
-            }
+         
             UpdateValues();
 
             //załadowanie listy dostepnych terminow
@@ -239,7 +230,6 @@ namespace MedLabTab.Views.OtherViews
                 Test test = DbManager.GetTest(testId);
 
                 visitCost += test.Price;
-                visitTime += 15; // zakładamy że każde badanie trwa 15 minut
 
                 UpdateValues();
 
@@ -256,7 +246,6 @@ namespace MedLabTab.Views.OtherViews
                     var test = DbManager.GetTest(testId);
 
                     visitCost -= test.Price;
-                    visitTime -= 15;
 
                     TestsListBox.Items.Remove(selectedItem);
                     UpdateValues();

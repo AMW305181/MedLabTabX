@@ -79,15 +79,22 @@ namespace MedLabTab.Views.OtherViews
 
             Visit selectedVisit = (sender as Button)?.CommandParameter as Visit;
 
-            if (selectedVisit != null)
+            if (selectedVisit.TestHistories.Any(t => t.Status <= 2))
             {
-                var editVisitWindow = new EditVisitAdmin(selectedVisit, _currentUser ,this);
-                editVisitWindow.Show();
-                this.Hide();
+                if (selectedVisit != null)
+                {
+                    var editVisitWindow = new EditVisitAdmin(selectedVisit, this);
+                    editVisitWindow.Show();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Nie udało się wczytać danych wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else
             {
-                MessageBox.Show("Nie udało się wczytać danych wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nie można edytować już odbytej wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
