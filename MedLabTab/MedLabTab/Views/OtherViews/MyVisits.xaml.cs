@@ -60,13 +60,23 @@ namespace MedLabTab.Views.OtherViews
         }
 
         private void BtnEditVisit_Click(object sender, RoutedEventArgs e)
+        
         {
-            if ((sender as Button)?.CommandParameter is Visit selectedVisit)
+            if (VisitsDataGrid.SelectedItem != null)
             {
-                EditVisitAdmin editVisitAdmin = new EditVisitAdmin(selectedVisit, this);
+                dynamic selectedItem = VisitsDataGrid.SelectedItem;
+                Visit selectedVisit = selectedItem.OriginalVisit;
+
+                EditVisitAdmin editVisitAdmin = new EditVisitAdmin(selectedVisit, _currentUser, this);
                 editVisitAdmin.Show();
                 this.Hide();
             }
+            else
+            {
+                MessageBox.Show("Proszę wybrać wizytę do edycji.", "Brak zaznaczenia",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        
         }
 
         private void BtnCancelVisit_Click(object sender, RoutedEventArgs e)

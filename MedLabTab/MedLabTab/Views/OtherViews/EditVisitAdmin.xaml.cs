@@ -24,14 +24,29 @@ namespace MedLabTab.Views.OtherViews
     {
         private Visit _originalVisit;
         private Window _parentWindow;
+        private User _currentUser;
         private float visitCost;
         private int visitTime;
-        public EditVisitAdmin(Visit visitToEdit, Window parentWindow)
+        bool IsPatient;
+        public EditVisitAdmin(Visit visitToEdit, User curentUser ,Window parentWindow)
         {
             InitializeComponent();
             _originalVisit = visitToEdit;
             _parentWindow = parentWindow;
+            _currentUser = curentUser;
             LoadData();
+
+            switch (_currentUser.UserType)
+            {
+                case 1:
+                    IsPatient = false;
+                    break;
+                case 4:
+                    IsPaidCheckBox.Visibility = Visibility.Collapsed;
+                    IsPatient = true;
+                    
+                    break;
+            }
         }
 
         private void LoadData()
