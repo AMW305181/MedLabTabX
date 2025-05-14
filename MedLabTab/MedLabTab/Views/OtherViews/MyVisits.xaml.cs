@@ -20,9 +20,9 @@ namespace MedLabTab.Views.OtherViews
     public partial class MyVisits : Window
     {
         private Window _parentWindow;
-        private User _currentUser;
+        private SignedInUser _currentUser;
 
-        public MyVisits(User currentUser, Window parentWindow)
+        public MyVisits(SignedInUser currentUser, Window parentWindow)
         {
             if (currentUser == null)
                 throw new ArgumentNullException(nameof(currentUser));
@@ -83,7 +83,9 @@ namespace MedLabTab.Views.OtherViews
         {
             if (!(sender is Button button)) return;
 
-            if (!(button.DataContext is Visit selectedVisit))
+            dynamic selectedItem = button.DataContext;
+
+            if (!(selectedItem.OriginalVisit is Visit selectedVisit))
             {
                 MessageBox.Show("Nie udało się pobrać wybranej wizyty.",
                               "Błąd",
@@ -93,7 +95,7 @@ namespace MedLabTab.Views.OtherViews
             }
 
             var result = MessageBox.Show(
-                $"Czy na pewno chcesz anulować wizytę z dnia {selectedVisit.TimeSlot?.Date.ToString("dd.MM.yyyy")} o {selectedVisit.TimeSlot?.Time.ToString("hh\\:mm")}?",
+                $"Czy na pewno chcesz anulować wizytę z dnia {DbManager.GetSchedule(selectedVisit.TimeSlotId.Value)?.Date.ToString("dd.MM.yyyy")} o {DbManager.GetSchedule(selectedVisit.TimeSlotId.Value)?.Time.ToString(@"HH\:mm")}?",
                 "Potwierdzenie anulowania",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);

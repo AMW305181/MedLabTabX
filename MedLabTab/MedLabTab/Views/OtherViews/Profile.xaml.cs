@@ -13,7 +13,33 @@ namespace MedLabTab.Views.OtherViews
     public partial class Profile : Window
     {
         private SignedInUser _currentUser;
+        private User __currentUser;
         private Window _parentWindow;
+        public Profile(User currentUser, Window parentWindow)
+        {
+            InitializeComponent();
+            __currentUser = currentUser;
+            _parentWindow = parentWindow;
+            FillForm();
+            txtPhone.PreviewTextInput += NumberValidationTextBox;
+
+            switch (__currentUser.UserType)
+            {
+                case 1:
+                    ReceptionMenu.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    NurseMenu.Visibility = Visibility.Visible;
+                    break;
+                case 3:
+                    AnalystMenu.Visibility = Visibility.Visible;
+                    break;
+                case 4:
+                    PatientMenu.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+
         public Profile(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();

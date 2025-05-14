@@ -233,7 +233,7 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {"Pacjent", "patient"}
         };
 
-        private void BtnEditUser_Click(object sender, RoutedEventArgs e)
+ private void BtnEditUser_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
 
@@ -322,7 +322,11 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
 
         private void DgUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _selectedUser = dgUsers.SelectedItem as User;
+            if (dgUsers.SelectedItem != null)
+            {
+                dynamic selectedItem = dgUsers.SelectedItem;
+                User selectedUser = selectedItem.OriginalUser;
+            }
         }
 
     }
