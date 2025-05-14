@@ -262,9 +262,9 @@
         <DataGrid x:Name="SamplesDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10" Style="{StaticResource DataGridStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Data" Binding="{Binding Date}" Width="*" />
-                <DataGridTextColumn Header="Data" Binding="{Binding Time}" Width="*" />
+                <DataGridTextColumn Header="Czas" Binding="{Binding Time}" Width="*" />
                 <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*" />
-                <DataGridTextColumn Header="Badania" Binding="{Binding Patient}" Width="*" />
+                <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
                 <DataGridTemplateColumn Header="Akcje" Width="160">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

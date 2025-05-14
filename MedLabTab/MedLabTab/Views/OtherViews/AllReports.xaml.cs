@@ -29,8 +29,8 @@ namespace MedLabTab.Views.OtherViews
             InitializeComponent();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
-
-            LoadCompletedTests(_currentUser.UserType == 4 ? _currentUser.id : (int?)null);
+            LoadCompletedTests();
+            //LoadCompletedTests(_currentUser.UserType == 4 ? _currentUser.id : (int?)null);
 
             switch (_currentUser.UserType)
             {
@@ -46,7 +46,7 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void LoadCompletedTests(int? patientId = null)
+        private void LoadCompletedTests()
         {
             try
             {
