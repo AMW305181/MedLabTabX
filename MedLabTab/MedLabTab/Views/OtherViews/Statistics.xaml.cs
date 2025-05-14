@@ -47,6 +47,7 @@ namespace MedLabTab.Views.OtherViews
             // Income
             float income = tests.Sum(t => DbManager.GetTest(t.TestId)?.Price ?? 0);
             Income.Text = income.ToString();
+            Income.Text = string.Format("{0:N2} zł", income);
 
             // Most common test
             var mostCommonTest = tests

@@ -91,15 +91,18 @@ namespace MedLabTab.DatabaseManager
         }
         public bool AddUser(MedLabContext db, User user)
         {
-
-            try
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                user.Password=PasswordHasher.Hash(user.Password);
-                db.Users.Add(user);
-                db.SaveChanges();
-                return true;
+                try
+                {
+                    user.Password = PasswordHasher.Hash(user.Password);
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    scope.Complete();
+                    return true;
+                }
+                catch (Exception) { return false; }
             }
-            catch (Exception) { return false; }
         }
         public List<User> GetActivePatients(MedLabContext db)
         {
@@ -180,6 +183,7 @@ namespace MedLabTab.DatabaseManager
                 try
                 {
                     var user = db.Users.Where(u => u.id == Id).FirstOrDefault();
+                    scope.Complete();
                     if (user != null) { return user; }
                     return null;
                 }
@@ -192,9 +196,11 @@ namespace MedLabTab.DatabaseManager
             {
                 try
                 {
-                    return db.Users
+                    List<User>  users=db.Users
                                      .Include(u => u.UserTypeNavigation)
                                      .ToList();
+                    scope.Complete();
+                    return users;
                 }
                 catch (Exception ex)
                 {
@@ -202,6 +208,31 @@ namespace MedLabTab.DatabaseManager
                                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     return null;
                 }
+            }
+        }
+
+        public bool ChangeUserStatus (MedLabContext db, int userId)
+        {
+            TransactionOptions specialOptions = new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.Serializable,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
+            {
+                try
+                {
+                    var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
+                    if (user != null)
+                    {
+                        user.IsActive = !user.IsActive;
+                        db.SaveChanges();
+                        scope.Complete();
+                        return true;
+                    }
+                    return false;
+                }
+                catch { return false; }
             }
         }
 

@@ -502,7 +502,7 @@
                         <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="*"/>
                         <DataGridTextColumn Header="Imię" Binding="{Binding Name}" Width="*"/>
                         <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}" Width="*"/>
-                        <DataGridTextColumn Header="Rola" Binding="{Binding UserTypeNavigation.TypeName}" Width="*"/>
+                        <DataGridTextColumn Header="Rola" Binding="{Binding UserType}" Width="*"/>
                         <DataGridTextColumn Header="PESEL" Binding="{Binding PESEL}" Width="*"/>
                         <DataGridTextColumn Header="Nr telefonu" Binding="{Binding PhoneNumber}" Width="*"/>
                         <DataGridTemplateColumn Header="Aktywny" Width="*">

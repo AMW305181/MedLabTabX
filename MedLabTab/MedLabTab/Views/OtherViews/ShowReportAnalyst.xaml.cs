@@ -48,7 +48,7 @@ namespace MedLabTab.Views.OtherViews
             PatientTextBlock.Text = _testHistory.Patient?.Name + " " + _testHistory.Patient?.Surname;
             NurseTextBlock.Text = _testHistory.Visit?.TimeSlot?.Nurse?.Name + " " + _testHistory.Visit?.TimeSlot?.Nurse?.Surname;
             AnalystTextBlock.Text = _testHistory.Analyst != null ? $"{_testHistory.Analyst.Name} {_testHistory.Analyst.Surname}" : "Brak analityka";
-            DateTextBlock.Text = $"{_testHistory.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty"} {_testHistory.Visit?.TimeSlot?.Time.ToString(@"hh\:mm") ?? "Brak godziny"}";
+            DateTextBlock.Text = $"{_testHistory.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty"} {_testHistory.Visit?.TimeSlot?.Time.ToString(@"HH\:mm") ?? "Brak godziny"}";
             ResultTextBox.Text = DbManager.GetReport(_testHistory.id).Results;
         }
 
