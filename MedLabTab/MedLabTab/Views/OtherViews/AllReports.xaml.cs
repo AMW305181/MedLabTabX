@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -213,6 +214,13 @@ namespace MedLabTab.Views.OtherViews
                 loginWindow.Show();
                 this.Close();
             }
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            /*EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();*/
         }
     }
 }

@@ -456,5 +456,10 @@ namespace MedLabTab.Views.OtherViews
                 _selectedSlotId = null;
             }
         }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
