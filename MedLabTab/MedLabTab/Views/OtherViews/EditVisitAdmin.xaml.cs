@@ -23,21 +23,32 @@ namespace MedLabTab.Views.OtherViews
     public partial class EditVisitAdmin : Window
     {
         private Visit _originalVisit;
-        private AllVisitsAdmin _parentWindow;
+        private Window _parentWindow;
+        private User _currentUser;
         private float visitCost;
-        private int visitTime;
+        private int visitTime=15;
         public EditVisitAdmin(Visit visitToEdit, AllVisitsAdmin parentWindow)
         {
             InitializeComponent();
             _originalVisit = visitToEdit;
             _parentWindow = parentWindow;
+            _currentUser = curentUser;
             LoadData();
+
+            switch (_currentUser.UserType)
+            {
+                case 4:
+                    IsPaidCheckBox.Visibility = Visibility.Collapsed;
+                    PatientComboBox.IsEnabled = false;
+                    
+                    break;
+            }
         }
 
         private void LoadData()
         {
             visitCost = _originalVisit.Cost;
-            visitTime = (DbManager.GetTestsInVisit(_originalVisit.id).Count) * 15;
+           
 
             //załadowanie listy pacjentów
             PatientComboBox.Items.Clear();
@@ -92,16 +103,7 @@ namespace MedLabTab.Views.OtherViews
                 });
             }
             visitCost = 0;
-            visitTime = 0;
-            foreach (ListBoxItem item in TestsListBox.Items)
-            {
-                if (item.Tag is int testId)
-                {
-                    var test = DbManager.GetTest(testId);
-                    visitCost += test.Price;
-                    visitTime += 15;
-                }
-            }
+         
             UpdateValues();
 
             //załadowanie listy dostepnych terminow
@@ -203,7 +205,6 @@ namespace MedLabTab.Views.OtherViews
                 {
                     MessageBox.Show("Wizyta została zedytowana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
-                    _parentWindow?.LoadVisits();
                     _parentWindow?.Show();
                 }
                 else
@@ -229,7 +230,6 @@ namespace MedLabTab.Views.OtherViews
                 Test test = DbManager.GetTest(testId);
 
                 visitCost += test.Price;
-                visitTime += 15; // zakładamy że każde badanie trwa 15 minut
 
                 UpdateValues();
 
@@ -246,7 +246,6 @@ namespace MedLabTab.Views.OtherViews
                     var test = DbManager.GetTest(testId);
 
                     visitCost -= test.Price;
-                    visitTime -= 15;
 
                     TestsListBox.Items.Remove(selectedItem);
                     UpdateValues();

@@ -309,7 +309,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*"/>
                         <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*"/>
-                        <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="Auto"/>
+                        <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*"/>
                         <DataGridTextColumn Header="Koszt" Binding="{Binding Cost}" Width="*"/>
                         <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*"/>
 

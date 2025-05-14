@@ -124,8 +124,8 @@ namespace MedLabTab.DatabaseManager
                 IsolationLevel = IsolationLevel.Serializable,
                 Timeout = TransactionManager.DefaultTimeout
             };
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
-            {
+           // using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
+           // {
                 Visit newVisit = new Visit
                 {
                     Cost = cost,
@@ -134,13 +134,13 @@ namespace MedLabTab.DatabaseManager
                     PatientId = patientId,
                     TimeSlotId = timeSlotId
                 };
-                bool timeSlotTaken = db.Visits.Any(v => v.IsActive && v.TimeSlotId == timeSlotId);
-                if (timeSlotTaken) { return null; }
+                //bool timeSlotTaken = db.Visits.Any(v => v.IsActive && v.TimeSlotId == timeSlotId);
+                //if (timeSlotTaken) { return null; }
                 db.Visits.Add(newVisit);
                 db.SaveChanges();
-                scope.Complete();
+                //scope.Complete();
                 return newVisit;
-            }
+            //}
         }
 
         public List<Visit> GetNurseVisits(MedLabContext db,int nurseId)
