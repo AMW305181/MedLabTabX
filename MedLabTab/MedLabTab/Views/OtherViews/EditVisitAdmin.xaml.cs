@@ -23,7 +23,8 @@ namespace MedLabTab.Views.OtherViews
     public partial class EditVisitAdmin : Window
     {
         private Visit _originalVisit;
-        private AllVisitsAdmin _parentWindow;
+        private Window _parentWindow;
+        private User _currentUser;
         private float visitCost;
         private int visitTime=15;
         public EditVisitAdmin(Visit visitToEdit, AllVisitsAdmin parentWindow)
@@ -31,7 +32,17 @@ namespace MedLabTab.Views.OtherViews
             InitializeComponent();
             _originalVisit = visitToEdit;
             _parentWindow = parentWindow;
+            _currentUser = curentUser;
             LoadData();
+
+            switch (_currentUser.UserType)
+            {
+                case 4:
+                    IsPaidCheckBox.Visibility = Visibility.Collapsed;
+                    PatientComboBox.IsEnabled = false;
+                    
+                    break;
+            }
         }
 
         private void LoadData()
@@ -194,7 +205,6 @@ namespace MedLabTab.Views.OtherViews
                 {
                     MessageBox.Show("Wizyta została zedytowana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
-                    _parentWindow?.LoadVisits();
                     _parentWindow?.Show();
                 }
                 else
