@@ -108,7 +108,7 @@ namespace MedLabTab.Views.OtherViews
 
             if (TestsComboBox.Items.Count > 0)
                 TestsComboBox.SelectedIndex = 0;
-
+            
             //załadowanie badań
             TestsListBox.Items.Clear();
             var selectedTests = DbManager.GetTestsInVisit(_originalVisit.id)
@@ -121,13 +121,12 @@ namespace MedLabTab.Views.OtherViews
                     Tag = test.id
                 });
             }
-            visitCost = 0;
-         
+
             UpdateValues();
 
             //załadowanie listy dostepnych terminow
             DateComboBox.Items.Clear();
-            var dates = DbManager.GetAllSlotsForDate(date); // tutaj metoda do poprawki - zalezy jak bedzie wygladal harmonogram
+            var dates = DbManager.GetAvailableSlotsForDate(date); 
             int selectedSchedule = -1;
             if (_originalVisit.TimeSlotId.HasValue)
             {
@@ -137,21 +136,32 @@ namespace MedLabTab.Views.OtherViews
                     selectedSchedule = schedule.id;
                 }
             }
+            //foreach (var date in dates)
+            //{
+            //    var item = new ComboBoxItem
+            //    {
+            //        Content = date.Date + " " + date.Time,
+            //        Tag = date.id
+            //    };
+
+            //    DateComboBox.Items.Add(item);
+
+            //    if (date.id == selectedSchedule)
+            //    {
+            //        DateComboBox.SelectedItem = item;
+            //    }
+            //}
             foreach (var date in dates)
             {
-                var item = new ComboBoxItem
+                DateComboBox.Items.Add(new ComboBoxItem
                 {
                     Content = date.Date + " " + date.Time,
                     Tag = date.id
-                };
-
-                DateComboBox.Items.Add(item);
-
-                if (date.id == selectedSchedule)
-                {
-                    DateComboBox.SelectedItem = item;
-                }
+                });
             }
+
+            if (DateComboBox.Items.Count > 0)
+                DateComboBox.SelectedIndex = 0;
 
             IsActiveCheckBox.IsChecked = _originalVisit.IsActive;
             IsPaidCheckBox.IsChecked = _originalVisit.PaymentStatus;
@@ -176,19 +186,22 @@ namespace MedLabTab.Views.OtherViews
                 string patientPESEL = (string)selectedPatient.Tag;
 
                 var selectedTimeSlot = (ComboBoxItem)DateComboBox.SelectedItem;
-                int timeSlotId = selectedSchedule;
-
-                var newVisit = new Visit
+                bool editedVisit = false;
+                if (selectedTimeSlot.Tag is int timeId)
                 {
-                    //id = _originalVisit.id,
-                    Cost = visitCost,
-                    PaymentStatus = IsPaidCheckBox.IsChecked == true,
-                    IsActive = IsActiveCheckBox.IsChecked == true,
-                    PatientId = (DbManager.GetUser(patientPESEL)).id,
-                    TimeSlotId = timeSlotId,
-                };
+                    var newVisit = new Visit
+                    {
+                        //id = _originalVisit.id,
+                        Cost = visitCost,
+                        PaymentStatus = IsPaidCheckBox.IsChecked == true,
+                        IsActive = IsActiveCheckBox.IsChecked == true,
+                        PatientId = (DbManager.GetUser(patientPESEL)).id,
+                        TimeSlotId = timeId,
 
-                bool editedVisit = DbManager.EditVisit(_originalVisit, newVisit);
+                    };
+                     editedVisit= DbManager.EditVisit(_originalVisit, newVisit);
+                }
+  
                 bool addedAllTests = true;
 
                 if (editedVisit)
@@ -285,10 +298,7 @@ namespace MedLabTab.Views.OtherViews
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
-            if(selectedSchedule==-1)
-            {
-                MessageBox.Show("Nie wybrano właściwego terminu.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+           
 
             return true;
         }
@@ -317,7 +327,7 @@ namespace MedLabTab.Views.OtherViews
         private void UpdateAvailableTimeSlots(DateOnly date)
         {
             DateComboBox.Items.Clear();
-            List<Schedule> availableTimeSlots = DbManager.GetAllSlotsForDate(date);
+            List<Schedule> availableTimeSlots = DbManager.GetAvailableSlotsForDate(date);
 
             if (availableTimeSlots == null || availableTimeSlots.Count == 0)
             {
@@ -333,7 +343,7 @@ namespace MedLabTab.Views.OtherViews
                 ComboBoxItem item = new ComboBoxItem
                 {
                     Content = displayText,
-                    Tag = timeSlot
+                    Tag = timeSlot.id,
                 };
                 DateComboBox.Items.Add(item);
             }

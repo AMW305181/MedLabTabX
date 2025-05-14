@@ -528,7 +528,8 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button Content="Edytuj" 
-                                                Style="{StaticResource ButtonStyle}" 
+                                                Style="{StaticResource ButtonStyle}"
+                                                CommandParameter="{Binding OriginalUser}"
                                                 Width="100"
                                                 Margin="5,0"
                                                 Click="BtnEditUser_Click"/>
