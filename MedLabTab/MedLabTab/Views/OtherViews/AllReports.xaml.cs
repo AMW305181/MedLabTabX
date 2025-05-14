@@ -27,7 +27,7 @@ namespace MedLabTab.Views.OtherViews
         public AllReports(User currentUser, Window parentWindow)
         {
             InitializeComponent();
-            LoadCompletedTests();
+            //LoadCompletedTests();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
 
@@ -59,7 +59,7 @@ namespace MedLabTab.Views.OtherViews
                     {
                         Patient = DbManager.GetUserById(t.PatientId)?.Name + " " + DbManager.GetUserById(t.PatientId)?.Surname,
                         Date = t.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy"),
-                        Time = t.Visit?.TimeSlot?.Time.ToString(@"hh\:mm"),
+                        Time = t.Visit?.TimeSlot?.Time.ToString(@"HH\:mm"),
                         Test = t.Test?.TestName,
                         OriginalTest = t,
                     }).ToList();
