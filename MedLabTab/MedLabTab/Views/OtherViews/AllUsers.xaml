@@ -407,6 +407,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszyscy użytkownicy" x:Name="btnAllUsers" Click="BtnAllUsers_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Zarejestruj" x:Name="btnRegister" Click="BtnRegister_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Harmonogram" x:Name="btnSchedule" Click="BtnSchedule_Click"/>
 
                         <!-- Sekcja RAPORTY -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
@@ -527,7 +528,8 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button Content="Edytuj" 
-                                                Style="{StaticResource ButtonStyle}" 
+                                                Style="{StaticResource ButtonStyle}"
+                                                CommandParameter="{Binding OriginalUser}"
                                                 Width="100"
                                                 Margin="5,0"
                                                 Click="BtnEditUser_Click"/>
