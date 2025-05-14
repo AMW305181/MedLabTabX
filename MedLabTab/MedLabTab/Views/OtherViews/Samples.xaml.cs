@@ -38,7 +38,7 @@ namespace MedLabTab.Views.OtherViews
                 {
                     TestName = t.Test?.TestName,
                     Date = t.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy"),
-                    Time = t.Visit?.TimeSlot?.Time.ToString(@"hh\:mm"),
+                    Time = t.Visit?.TimeSlot?.Time.ToString(@"HH\:mm"),
                     Patient = $"{t.Patient.Name} {t.Patient.Surname}",
                     TestCategory = t.Test?.CategoryNavigation?.CategoryName,
                     Status = t.StatusNavigation.StatusName, 

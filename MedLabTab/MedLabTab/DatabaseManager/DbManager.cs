@@ -57,7 +57,8 @@ namespace MedLabTab.DatabaseManager
         public static bool AddTestHistory(TestHistory newTest) { return testHistoryManager.AddTestHistory(db, newTest); }
         public static bool RemoveTestHistory(int visitId) { return testHistoryManager.RemoveTestHistory(db, visitId); }
         public static List<TestHistory> GetTestsInVisit(int visitId) { return testHistoryManager.GetTestsInVisit(db, visitId); }
-        public static List<TestHistory> GetCompletedTests() { return testHistoryManager.GetCompletedTests(db);}
+        public static List<TestHistory> GetCompletedTests(MedLabContext db, int? patientId) { return testHistoryManager.GetCompletedTests(db);}
+        public static List<TestHistory> GetCompletedTests() { return testHistoryManager.GetCompletedTests(db); }
         public static List<Visit> GetNurseVisits(int nurseId) {   return visitsManager.GetNurseVisits(db, nurseId); }
         public static List<TestHistory> GetAnalystTests(int analystId)    { return testHistoryManager.GetAnalystTests(db, analystId); }
         public static bool EditTestHistory(TestHistory oldTest, TestHistory newTest)    { return testHistoryManager.EditTestHistory(db, oldTest, newTest);  }
