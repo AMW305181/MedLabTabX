@@ -37,11 +37,11 @@ namespace MedLabTab.Views.OtherViews
                 var samples = tests.Select(t => new
                 {
                     TestName = t.Test?.TestName,
-                    Date = t.Visit?.TimeSlot?.Date,
-                    Time = t.Visit?.TimeSlot?.Time,
+                    Date = t.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy"),
+                    Time = t.Visit?.TimeSlot?.Time.ToString(@"HH\:mm"),
                     Patient = $"{t.Patient.Name} {t.Patient.Surname}",
                     TestCategory = t.Test?.CategoryNavigation?.CategoryName,
-                    Status = t.Status == 3 ? "Do analizy" : "Do uzupełnienia wyniki", // tu jakiś enum żeby pokazywało wszystkie opcje
+                    Status = t.StatusNavigation.StatusName, 
                     OriginalTest = t
                 }).ToList();
 

@@ -21,11 +21,15 @@ namespace MedLabTab.Views.OtherViews
     public partial class AllVisitsAdmin : Window
     {
         private User _currentUser;
+        private List<dynamic> _allVisits;  
+        private List<dynamic> _filteredVisits;
+
         public AllVisitsAdmin(User currentUser)
         {
             InitializeComponent();
             LoadVisits(); // Załaduj dane po inicjalizacji okna
             _currentUser = currentUser;
+            txtSearch.TextChanged += TxtSearch_TextChanged;
             switch (_currentUser.UserType)
             {
                 case 1:
@@ -43,10 +47,10 @@ namespace MedLabTab.Views.OtherViews
 
             if (visits != null)
             {
-                var visitsWithNames = visits.Select(v => new
+                _allVisits = visits.Select(v => new
                 {
-                    Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date,
-                    Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time,
+                    Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date.ToString("dd.MM.yyyy"),
+                    Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time.ToString(@"HH\:mm"),
                     Tests = string.Join(", ", DbManager.GetTestsInVisit(v.id)
                         .Select(th => DbManager.GetTest(th.TestId))
                         .Where(test => test != null && !string.IsNullOrEmpty(test.TestName))
@@ -58,9 +62,10 @@ namespace MedLabTab.Views.OtherViews
                     PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
                     v.IsActive,
                     OriginalVisit = v,
-                }).ToList();
+                }).ToList<dynamic>();
 
-                VisitsDataGrid.ItemsSource = visitsWithNames;
+                _filteredVisits = new List<dynamic>(_allVisits);
+                VisitsDataGrid.ItemsSource = _allVisits;
             }
             else
             {
@@ -119,6 +124,49 @@ namespace MedLabTab.Views.OtherViews
                 MessageBox.Show("Nie udało się pobrać wybranej wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_allVisits == null) return;
+
+            var searchText = txtSearch.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                _filteredVisits = new List<dynamic>(_allVisits);
+            }
+            else
+            {
+                var parts = searchText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                _filteredVisits = _allVisits.Where(vw =>
+                {
+                    string date = vw.Date != null
+                    ? $"{vw.Date:yyyy-MM-dd}|{vw.Date:d}|{vw.Date:dd.MM.yyyy}".ToLower()
+                    : "";
+                    string time = vw.Time?.ToString(@"HH\:mm") ?? "";
+                    string tests = (vw.Tests as string)?.ToLower() ?? "";
+                    string patient = (vw.Patient as string)?.ToLower() ?? "";
+                    string nurse = (vw.Nurse as string)?.ToLower() ?? "";
+                    string payment = (vw.PaymentStatus as string)?.ToLower() ?? "";
+                    string isActive = (Convert.ToBoolean(vw.IsActive)) ? "aktywna" : "nieaktywna";
+
+                    return parts.All(p =>
+                        date.Contains(p) ||
+                        time.Contains(p) ||
+                        tests.Contains(p) ||
+                        patient.Contains(p) ||
+                        nurse.Contains(p) ||
+                        payment.Contains(p) ||
+                        isActive.Contains(p));
+                }).ToList();
+
+            }
+
+            VisitsDataGrid.ItemsSource = _filteredVisits;
+        }
+
+
 
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {

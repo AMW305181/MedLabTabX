@@ -38,135 +38,17 @@ namespace MedLabTab.DatabaseManager
         public static User GetUser(string PESEL) {return usersManager.GetUser(db, PESEL); }
         public static User GetUserById(int Id) { return usersManager.GetUserById(db, Id);}
         public static Schedule GetSchedule(int Id){return schedulesManager.GetSchedule(db, Id);}
-        public static bool IsTestNameTaken(string testName)
-        {
-            try
-            {
-                var test = db.Tests.Where(t => t.TestName == testName).FirstOrDefault();
-                if (test != null) { return true; }
-                return false;
-            }
-            catch { return false; }
-        }
+        public static bool IsTestNameTaken(string testName)  {return testsManager.IsTestNameTaken(db, testName); }
         public static bool AddTest(Test test) { return testsManager.AddTest(db, test); }
         public static bool EditTest(Test test, Test newData){return testsManager.EditTest(db, test, newData); }
         public static bool DeactivateVisit(Visit visit){ return visitsManager.DeactivateVisit(db, visit);}
         public static bool ChangeTestStatus(Test test) { return testsManager.ChangeTestStatus(db, test); }
-        public static bool ChangeTestStatus(int testId)
-        {
-            try
-            {
-                var test=db.Tests.Where(t=>t.id==testId).FirstOrDefault();
-                if (test != null)
-                {
-                    test.IsActive = !test.IsActive;
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch { return false; }
-        }
         public static List<CategoryDictionary> GetCategories() {return categoriesManager.GetCategories(db);}
         public static Dictionary<int, string> GetCategoriesDictionary() { return categoriesManager.GetCategoriesDictionary(db); }
         public static List<User> LoadUsers()  { return usersManager.LoadUsers(db);}
-        public static bool ChangeUserStatus(int userId)
-        {
-            try
-            {
-                var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
-                if (user != null)
-                {
-                    user.IsActive = !user.IsActive;
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch { return false; }
-        }
-
-        public static bool EditUserAdmin(int userId, string login, int userType, string password, string name, string surname, string PESEL, string? phone = null)
-        {
-            try
-            {
-                var user = db.Users.Where(u => u.id == userId).FirstOrDefault();
-                if (user != null)
-                {
-                    user.Login = login;
-                    user.UserType = userType;
-                    user.Password = password;
-                    user.Name = name;
-                    user.Surname = surname;
-                    user.PESEL = PESEL;
-                    user.PhoneNumber = phone;
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch { return false; }
-        }
-        public static bool EditUserAdmin(User user, string login, int userType, string password, string name, string surname, string PESEL, string? phone = null)
-        {
-            try
-            {
-                if (user != null)
-                {
-                    user.Login = login;
-                    user.UserType = userType;
-                    user.Password = password;
-                    user.Name = name;
-                    user.Surname = surname;
-                    user.PESEL = PESEL;
-                    user.PhoneNumber = phone;
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch { return false; }
-        }    
-        public static bool EditUserAdmin(User user, User newData)
-        {
-            try
-            {
-                if (user != null&&newData!=null)
-                {
-                    user.Login = newData.Login;
-                    user.UserType = newData.UserType;
-                    user.Password = newData.Password;
-                    user.Name = newData.Name;
-                    user.Surname = newData.Surname;
-                    user.PESEL = newData.PESEL;
-                    user.PhoneNumber = newData.PhoneNumber;
-                    user.IsActive = newData.IsActive;
-                    db.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch { return false; }
-        }
+        public static bool ChangeUserStatus(int userId) { return usersManager.ChangeUserStatus(db, userId); }
+ 
         public static List<Visit> GetMyVisits(int userId) {  return visitsManager.GetMyVisits(db, userId);}
-
-        //public static bool DeactivateVisit(Visit visit)
-        //{
-        //    try
-        //    {
-        //        var visitToUpdate = db.Visits.FirstOrDefault(v => v.id == visit.id);
-        //        if (visitToUpdate == null) return false;
-
-        //        visitToUpdate.IsActive = false;
-        //        db.SaveChanges();
-        //        return true;
-        //    }
-        //    catch
-        //    {
-        //        return false;
-        //    }
-        //}
-
         public static List<Schedule> GetAllDates() { return schedulesManager.GetAllDates(db); }
 
         public static List<Schedule> GetAvailableSlotsForDate(DateOnly date) { return schedulesManager.GetAvailableSlotsForDate(db, date); }
@@ -175,107 +57,14 @@ namespace MedLabTab.DatabaseManager
         public static bool AddTestHistory(TestHistory newTest) { return testHistoryManager.AddTestHistory(db, newTest); }
         public static bool RemoveTestHistory(int visitId) { return testHistoryManager.RemoveTestHistory(db, visitId); }
         public static List<TestHistory> GetTestsInVisit(int visitId) { return testHistoryManager.GetTestsInVisit(db, visitId); }
-        public static List<TestHistory> GetCompletedTests() { return testHistoryManager.GetCompletedTests(db);}
-
-        //to do poprawki - lista wizyt dla danej pielegniarki, aktywne, status = "Sample to be collected"
-        //done uwu
-        public static List<Visit> GetNurseVisits(int nurseId)
-        {
-            return db.Visits
-                .Include(v => v.TimeSlot)
-                    .ThenInclude(ts => ts.Nurse)
-                .Include(v => v.TestHistories)
-                    .ThenInclude(th => th.Test)
-                .Include(v => v.Patient)
-                .Where(v => v.IsActive == true && v.TestHistories.Any(th => th.Status == 2) && v.TimeSlot != null && v.TimeSlot.NurseId == nurseId)
-                .ToList();
-        }
-
-        //to do poprawki - lista wizyt dla analizy - status = "Sample collected" lub "Analysis pending"
-        public static List<TestHistory> GetAnalystTests(int analystId) //int analystId
-        {
-            return db.TestHistories
-                .Include(th => th.Test)
-                    .ThenInclude(t => t.CategoryNavigation)
-                .Include(th => th.Patient)
-                .Include(th => th.Visit)
-                    .ThenInclude(v => v.TimeSlot)
-                .Where(th=>th.Status==3 || (th.Status==4 && th.AnalystId==analystId))
-                .ToList();
-        }
-
-
-        public static bool EditTestHistory(TestHistory oldTest, TestHistory newTest)
-        {
-            try
-            {
-                oldTest.id = newTest.id;
-                oldTest.VisitId = newTest.VisitId;
-                oldTest.TestId = newTest.TestId;
-                oldTest.PatientId = newTest.PatientId;
-                oldTest.Status = newTest.Status;
-                oldTest.AnalystId = newTest.AnalystId;
-                db.SaveChanges();
-                return true;
-            }
-            catch { return false; }
-        }
-
-        public static List<TestHistory> GetAllTestHistories()
-        {
-            try
-            {
-                List<TestHistory> AllTests = db.TestHistories
-                    .Include(t => t.Test)
-                        .ThenInclude(te => te.CategoryNavigation)
-                    .Include(t => t.Patient)
-                    .Include(t => t.Visit)
-                        .ThenInclude(v => v.TimeSlot)
-                    .Include(t => t.StatusNavigation)
-                    .ToList();
-                return AllTests;
-            }
-            catch { return null; }
-        }
-
-        public static Report GetReport(int Id)
-        {
-            try
-            {
-                var reports = db.Reports.Where(t => t.SampleId == Id).FirstOrDefault();
-                if (reports != null) { return reports; }
-                return null;
-            }
-            catch { return null; }
-        }
-
-
-        public static List<TestHistory> GetPatientResults(int patientId)
-        {
-            try
-            {
-                using (var context = new MedLabContext())
-                {
-                    return context.TestHistories
-                        .Include(th => th.Test)
-                        .Include(th => th.Visit)
-                            .ThenInclude(v => v.TimeSlot)
-                        .Include(th => th.Patient)
-                        .Include(th => th.StatusNavigation) // Dodane załadowanie słownika statusów
-                        .Include(th => th.Analyst) // Dodane załadowanie analityka
-                        .Include(th => th.Reports) // Dodane załadowanie raportów
-                        .Where(th => th.PatientId == patientId)
-                        .OrderByDescending(th => th.Visit.TimeSlot.Date)
-                        .ThenByDescending(th => th.Visit.TimeSlot.Time)
-                        .ToList();
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
+        public static List<TestHistory> GetCompletedTests(MedLabContext db, int? patientId) { return testHistoryManager.GetCompletedTests(db);}
+        public static List<TestHistory> GetCompletedTests() { return testHistoryManager.GetCompletedTests(db); }
+        public static List<Visit> GetNurseVisits(int nurseId) {   return visitsManager.GetNurseVisits(db, nurseId); }
+        public static List<TestHistory> GetAnalystTests(int analystId)    { return testHistoryManager.GetAnalystTests(db, analystId); }
+        public static bool EditTestHistory(TestHistory oldTest, TestHistory newTest)    { return testHistoryManager.EditTestHistory(db, oldTest, newTest);  }
+        public static List<TestHistory> GetAllTestHistories()    {  return testHistoryManager.GetAllTestHistories(db);   }
+        public static Report GetReport(int Id)   { return reportsManager.GetReport(db, Id); }
+        public static List<TestHistory> GetPatientResults(int patientId)    {   return testHistoryManager.GetPatientResults(db, patientId); }
         public static string GetHashedPassword(string username)  {  return usersManager.GetHashedPassword(db, username);}
         public static bool AddReport(Report report){ return reportsManager.AddReport(db, report); }
         public static bool EditReport(Report report, Report newReport) { return reportsManager.EditReport(db, report, newReport); }

@@ -18,23 +18,32 @@ namespace MedLabTab.DatabaseManager
         };
         public bool DeactivateVisit(MedLabContext db,Visit visit)
         {
-            try
+            TransactionOptions specialOptions = new TransactionOptions
             {
-                if (visit != null)
+                IsolationLevel = IsolationLevel.Serializable,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                try
                 {
-                    visit.IsActive = false;
-                    db.SaveChanges();
-                    return true;
+                    if (visit != null)
+                    {
+                        visit.IsActive = false;
+                        db.SaveChanges();
+                        scope.Complete();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
+                catch { return false; }
             }
-            catch { return false; }
         }
         public List<Visit> GetMyVisits(MedLabContext db, int userId)
         {
             using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                return db.Visits
+                List<Visit>  visits=db.Visits
                 .Include(v => v.TimeSlot)
                     .ThenInclude(ts => ts.Nurse)
                 .Include(v => v.TestHistories)
@@ -42,6 +51,8 @@ namespace MedLabTab.DatabaseManager
                 .Where(v => v.PatientId == userId)
                 .AsNoTracking()
                 .ToList();
+                scope.Complete();
+                return visits;
             }
         }
         public List<Visit> GetAllVisits(MedLabContext db)
@@ -51,6 +62,7 @@ namespace MedLabTab.DatabaseManager
                 try
                 {
                     List<Visit> AllVisits = db.Visits.ToList();
+                    scope.Complete();
                     return AllVisits;
                 }
                 catch { return null; }
@@ -63,16 +75,19 @@ namespace MedLabTab.DatabaseManager
                 IsolationLevel = IsolationLevel.Serializable,
                 Timeout = TransactionManager.DefaultTimeout
             };
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
             {
                 try
                 {
+                    var existingVisit = db.Visits.Find(oldVisit.id);
+                    if (existingVisit == null) return false;
                     oldVisit.Cost = newVisit.Cost;
                     oldVisit.PaymentStatus = newVisit.PaymentStatus;
                     oldVisit.IsActive = newVisit.IsActive;
                     oldVisit.PatientId = newVisit.PatientId;
                     oldVisit.TimeSlotId = newVisit.TimeSlotId;
                     db.SaveChanges();
+                    scope.Complete();
                     return true;
                 }
                 catch { return false; }
@@ -104,18 +119,45 @@ namespace MedLabTab.DatabaseManager
         public Visit CreateVisit(MedLabContext db, float cost, bool paymentStatus, //the important one
                         bool isActive, int patientId, int? timeSlotId)
         {
-            Visit newVisit = new Visit
+            TransactionOptions specialOptions = new TransactionOptions
             {
-                Cost = cost,
-                PaymentStatus = paymentStatus,
-                IsActive = isActive,
-                PatientId = patientId,
-                TimeSlotId = timeSlotId
+                IsolationLevel = IsolationLevel.Serializable,
+                Timeout = TransactionManager.DefaultTimeout
             };
-            db.Visits.Add(newVisit);
-            db.SaveChanges();
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
+            {
+                Visit newVisit = new Visit
+                {
+                    Cost = cost,
+                    PaymentStatus = paymentStatus,
+                    IsActive = isActive,
+                    PatientId = patientId,
+                    TimeSlotId = timeSlotId
+                };
+                bool timeSlotTaken = db.Visits.Any(v => v.IsActive && v.TimeSlotId == timeSlotId);
+                if (timeSlotTaken) { return null; }
+                db.Visits.Add(newVisit);
+                db.SaveChanges();
+                scope.Complete();
+                return newVisit;
+            }
+        }
 
-            return newVisit;
+        public List<Visit> GetNurseVisits(MedLabContext db,int nurseId)
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                List<Visit> nurseVisits = db.Visits
+                .Include(v => v.TimeSlot)
+                    .ThenInclude(ts => ts.Nurse)
+                .Include(v => v.TestHistories)
+                    .ThenInclude(th => th.Test)
+                .Include(v => v.Patient)
+                .Where(v => v.IsActive == true && v.TestHistories.Any(th => th.Status == 2) && v.TimeSlot != null && v.TimeSlot.NurseId == nurseId)
+                .ToList();
+                scope.Complete();
+                return nurseVisits;
+            }
         }
 
     }
