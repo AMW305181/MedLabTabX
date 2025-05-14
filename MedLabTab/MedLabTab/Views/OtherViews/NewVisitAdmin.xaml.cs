@@ -144,6 +144,7 @@ namespace MedLabTab.Views.OtherViews
                                 bool testIsActive = IsActiveCheckBox.IsChecked ?? false;
                                 int testPatientId = _selectedUser.id;
                                 int? testTimeSlotId = _selectedSlotId;
+
                                 Visit newVisit = visitsManager.CreateVisit(db, testCost, testPaymentStatus,
                                                        testIsActive, testPatientId, testTimeSlotId);
                                 if (newVisit != null && newVisit.id > 0)
@@ -273,6 +274,7 @@ namespace MedLabTab.Views.OtherViews
                         ListBoxItem item = new ListBoxItem
                         {
                             Content = $"{timeInfo}",
+
                             Tag = slot.id
                         };
                         TimeComboBox.Items.Add(item);

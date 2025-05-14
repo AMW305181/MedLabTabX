@@ -18,21 +18,45 @@ namespace MedLabTab.DatabaseManager
         };
         public bool AddReport(MedLabContext db, Report report ) 
         {
-            try {
-                db.Reports.Add( report );
-                return true;
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                try
+                {
+                    db.Reports.Add(report);
+                    scope.Complete();
+                    return true;
+                }
+                catch { return false; }
             }
-            catch { return false; }
         }
 
         public bool EditReport (MedLabContext db, Report ogReport, Report newData)
         {
-            try {
-                ogReport.Results = newData.Results;
-                db.SaveChanges();
-                return true;
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                try
+                {
+                    ogReport.Results = newData.Results;
+                    db.SaveChanges();
+                    scope.Complete();
+                    return true;
+                }
+                catch { return false; }
             }
-            catch { return false; }
+        }
+        public Report GetReport(MedLabContext db, int Id)
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                try
+                {
+                    var reports = db.Reports.Where(t => t.SampleId == Id).FirstOrDefault();
+                    scope.Complete();
+                    if (reports != null) { return reports; }
+                    return null;
+                }
+                catch { return null; }
+            }
         }
     }
 }
