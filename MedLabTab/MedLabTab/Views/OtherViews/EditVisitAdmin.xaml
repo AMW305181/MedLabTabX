@@ -5,57 +5,91 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedLabTab.Views.OtherViews"
         mc:Ignorable="d"
-        Title="EditVisitAdmin" Height="450" Width="800">
+        Title="EditVisitAdmin" Height="750" Width="1135">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Tytuł -->
-            <RowDefinition/>
-            <!-- Formularz -->
-            <RowDefinition Height="Auto" MinHeight="92.497"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Dane pacjenta i badania -->
+            <RowDefinition Height="Auto"/>
+            <!-- Kalendarz -->
+            <RowDefinition Height="Auto"/>
+            <!-- Termin -->
+            <RowDefinition Height="Auto"/>
             <!-- Koszt i czas -->
             <RowDefinition Height="Auto"/>
             <!-- Przyciski -->
         </Grid.RowDefinitions>
 
         <!-- Tytuł -->
-        <TextBlock Text="Edycja wizyty" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold" Width="169"/>
+        <TextBlock Text="Edycja wizyty" Grid.Row="0" Margin="0,20,0,20" 
+                   HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
 
-        <!-- Środkowy panel (formularz) -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="280" Width="200">
+        <!-- Dane pacjenta i badania -->
+        <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="0,10,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
             <!-- Pacjent -->
-            <Label Content="Pacjent:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="PatientComboBox" Width="200" Margin="0,0,0,5"/>
-
-            <!-- Badania -->
-            <Label Content="Badania:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="TestsComboBox" Width="200" Margin="0,0,0,5" SelectionChanged="TestsComboBox_SelectionChanged"/>
-            <ListBox x:Name="TestsListBox" Width="200" Height="60" SelectionMode="Multiple" Margin="0,0,0,5"/>
-
-            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <Button Content="Usuń zaznaczone badanie" Width="200" Height="25" Click="RemoveSelectedTest_Click"/>
+            <StackPanel Grid.Column="0" Margin="10,0,30,0">
+                <Label Content="Pacjent:" Margin="0,5,0,2"/>
+                <ComboBox x:Name="PatientComboBox" Width="200" Margin="0,0,0,15"/>
             </StackPanel>
 
-            <!-- Data -->
-            <Label Content="Termin:" Margin="0,5,0,2"/>
+            <!-- Badania -->
+            <StackPanel Grid.Column="1" Margin="30,0,10,0">
+                <Label Content="Badania:" Margin="0,5,0,2"/>
+                <ComboBox x:Name="TestsComboBox" Width="200" Margin="0,0,0,5" 
+                          SelectionChanged="TestsComboBox_SelectionChanged"/>
+                <ListBox x:Name="TestsListBox" Width="200" Height="60" 
+                         SelectionMode="Multiple" Margin="0,0,0,5"/>
+                <Button Content="Usuń zaznaczone badanie" Width="200" Height="25" 
+                        Click="RemoveSelectedTest_Click" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Kalendarz - wyśrodkowany -->
+        <Border Grid.Row="2" HorizontalAlignment="Center" Margin="0,20,0,20"
+                BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="5">
+            <Calendar x:Name="VisitCalendar" 
+                      Width="350" 
+                      Height="270"
+                      SelectedDatesChanged="VisitCalendar_SelectedDatesChanged"
+                      DisplayMode="Month" 
+                      SelectionMode="SingleDate">
+                <Calendar.Resources>
+                    <!-- Kolor wybranego dnia -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF69B4"/>
+                    <!-- Kolor tekstu wybranego dnia -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
+                </Calendar.Resources>
+            </Calendar>
+        </Border>
+
+        <!-- Termin -->
+        <StackPanel Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Label Content="Termin:" HorizontalAlignment="Center" Margin="0,5,0,2"/>
             <ComboBox x:Name="DateComboBox" Width="200" Margin="0,0,0,5"/>
         </StackPanel>
 
         <!-- Koszt i czas -->
-        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,5,0,5" Width="250">
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,5">
-                <TextBlock x:Name="CostTextBlock" Text = "Koszt: " FontWeight="SemiBold" FontSize="14" Margin="0,0,80,4"/>
+        <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,10" Width="350">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                <TextBlock x:Name="CostTextBlock" Text="Koszt: " FontWeight="SemiBold" FontSize="14" Margin="0,0,80,4"/>
                 <CheckBox x:Name="IsPaidCheckBox" Content="Zapłacone" FontWeight="SemiBold" Margin="0,0,0,4" FontSize="14" Foreground="#333"/>
             </StackPanel>
-            <TextBlock x:Name="TimeTextBlock" Text="Czas: " FontWeight="SemiBold" FontSize="14"/>
-            <CheckBox x:Name="IsActiveCheckBox" Content="Wizyta aktywna" FontWeight="SemiBold" Margin="0,5,0,4" FontSize="14" Foreground="#333"/>
+            <TextBlock x:Name="TimeTextBlock" Text="Czas: " FontWeight="SemiBold" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,5"/>
+            <CheckBox x:Name="IsActiveCheckBox" Content="Wizyta aktywna" FontWeight="SemiBold" Margin="0,5,0,4" 
+                      FontSize="14" Foreground="#333" HorizontalAlignment="Center"/>
         </StackPanel>
 
-        <!-- Przyciski obok siebie -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20" Width="260" >
-            <Button Content="Anuluj" Width="120" Margin="5,0" Click="Cancel_Click"/>
-            <Button Content="Zarejestruj" Width="120" Margin="5,0" Click="Register_Click"/>
+        <!-- Przyciski -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,20">
+            <Button Content="Anuluj" Width="120" Margin="10,0" Click="Cancel_Click"/>
+            <Button Content="Zarejestruj" Width="120" Margin="10,0" Click="Register_Click"/>
         </StackPanel>
     </Grid>
 </Window>
