@@ -27,7 +27,6 @@ namespace MedLabTab.Views.OtherViews
         public AllReports(User currentUser, Window parentWindow)
         {
             InitializeComponent();
-            //LoadCompletedTests();
             _parentWindow = parentWindow;
             _currentUser = currentUser;
 
@@ -52,6 +51,11 @@ namespace MedLabTab.Views.OtherViews
             try
             {
                 var tests = DbManager.GetCompletedTests();
+
+                if (patientId.HasValue)
+                {
+                    tests = tests.Where(t => t.PatientId == patientId.Value).ToList();
+                }
 
                 if (tests != null && tests.Any())
                 {
@@ -78,6 +82,7 @@ namespace MedLabTab.Views.OtherViews
                                MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private void ShowReport_Click(object sender, RoutedEventArgs e)
         {

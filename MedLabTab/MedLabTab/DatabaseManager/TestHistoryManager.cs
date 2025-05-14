@@ -92,7 +92,7 @@ namespace MedLabTab.DatabaseManager
                 }
                 catch
                 {
-                    return null;
+                    return new List<TestHistory>();
                 }
             }
         }

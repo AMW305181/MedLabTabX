@@ -41,8 +41,8 @@ namespace MedLabTab.Views.OtherViews
             {
                 var visitsWithNames = visits.Select(v => new
                 {
-                    Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date,
-                    Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time,
+                    Date = DbManager.GetSchedule(v.TimeSlotId.Value)?.Date.ToString("dd.MM.yyyy"),
+                    Time = DbManager.GetSchedule(v.TimeSlotId.Value)?.Time.ToString(@"HH\:mm") ?? "",
                     Tests = string.Join(", ", DbManager.GetTestsInVisit(v.id)
                         .Select(th => DbManager.GetTest(th.TestId))
                         .Where(test => test != null && !string.IsNullOrEmpty(test.TestName))
