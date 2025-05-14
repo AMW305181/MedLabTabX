@@ -58,8 +58,8 @@ namespace MedLabTab.Views.OtherViews
                     var completedTests = tests.Select(t => new
                     {
                         Patient = DbManager.GetUserById(t.PatientId)?.Name + " " + DbManager.GetUserById(t.PatientId)?.Surname,
-                        Date = t.Visit?.TimeSlot?.Date,
-                        Time = t.Visit?.TimeSlot?.Time,
+                        Date = t.Visit?.TimeSlot?.Date.ToString("dd.MM.yyyy"),
+                        Time = t.Visit?.TimeSlot?.Time.ToString(@"hh\:mm"),
                         Test = t.Test?.TestName,
                         OriginalTest = t,
                     }).ToList();
