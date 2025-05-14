@@ -117,6 +117,8 @@ namespace MedLabTab.Views.OtherViews
                                 int testPatientId = _selectedUser.id;
                                 int? testTimeSlotId = _selectedSlotId;
 
+
+
                                 Visit newVisit = visitsManager.CreateVisit(db, testCost, testPaymentStatus,
                                                            testIsActive, testPatientId, testTimeSlotId);
 
@@ -211,11 +213,11 @@ namespace MedLabTab.Views.OtherViews
                     // Wypełniamy combobox dostępnymi slotami
                     foreach (var slot in _AvaibleSlots)
                     {
-                        string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
+                        //string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
                         string timeInfo = slot.Time.ToString("HH:mm");
                         ListBoxItem item = new ListBoxItem
                         {
-                            Content = $"{timeInfo} - {nurseInfo}",
+                            Content = $"{timeInfo}", //- {nurseInfo}",
                             Tag = slot.id
                         };
                         TimeComboBox.Items.Add(item);
