@@ -25,6 +25,7 @@ namespace MedLabTab.DatabaseManager
         private static ReportsManager reportsManager = new ReportsManager();
        
         public static bool LogInUser(string username, ref SignedInUser user) {return usersManager.LogInUser(db, username, ref user); }
+
         public static bool CheckUser(string username, string password) {return usersManager.CheckUser(db,username,password); }
         public static bool IsPESELTaken(string PESEL){return usersManager.IsPESELTaken(db, PESEL);}
         public static bool IsLoginTaken(string login){ return usersManager.IsLoginTaken(db, login);}
@@ -32,6 +33,8 @@ namespace MedLabTab.DatabaseManager
         public static bool AddUser(User user){ return usersManager.AddUser(db, user);}
         public static List<Test> GetActiveTests() {return testsManager.GetActiveTests(db); }
         public static List<User> GetActivePatients() {return usersManager.GetActivePatients(db);}
+
+        public static List<User> GetActiveNurses() { return usersManager.GetActiveNurses(db); }
         public static List<Test> GetAllTests() {return testsManager.GetAllTests(db); }
         public static Test GetTest(int Id){return testsManager.GetTest(db, Id);}
         public static bool EditUserCommon(string login, string password, string phoneNumber, int userId){ return usersManager.EditUserCommon(db, login, password, phoneNumber, userId);}
@@ -168,8 +171,9 @@ namespace MedLabTab.DatabaseManager
         //}
 
         public static List<Schedule> GetAllDates() { return schedulesManager.GetAllDates(db); }
-
         public static List<Schedule> GetAvailableSlotsForDate(DateOnly date) { return schedulesManager.GetAvailableSlotsForDate(db, date); }
+        public static List<Schedule> GetAllSlotsForDate(DateOnly date) { return schedulesManager.GetAllSlotsForDate(db, date); }
+        public static bool AddScheduleSlots(List<Schedule> slots) { return schedulesManager.AddScheduleSlots(db, slots); }
         public static List<Visit> GetAllVisits(){return visitsManager.GetAllVisits(db); }
         public static bool EditVisit(Visit oldVisit, Visit newVisit) { return visitsManager.EditVisit(db, oldVisit, newVisit); }
         public static bool AddTestHistory(TestHistory newTest) { return testHistoryManager.AddTestHistory(db, newTest); }

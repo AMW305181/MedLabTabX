@@ -90,5 +90,12 @@ namespace MedLabTab.Views.MainViews
                 this.Close();
             }
         }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
     }
 }

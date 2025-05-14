@@ -114,6 +114,19 @@ namespace MedLabTab.DatabaseManager
                 catch { return null; }
             }
         }
+        public List<User> GetActiveNurses(MedLabContext db)
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                try
+                {
+                    List<User> ActiveUsers = db.Users.Where(t => t.IsActive == true && t.UserType == 2).ToList();
+                    scope.Complete();
+                    return ActiveUsers;
+                }
+                catch { return null; }
+            }
+        }
         public bool EditUserCommon(MedLabContext db, string login, string password, string phoneNumber, int userId)
         {
             TransactionOptions specialOptions = new TransactionOptions
