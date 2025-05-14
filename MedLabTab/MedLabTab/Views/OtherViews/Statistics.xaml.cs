@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
@@ -22,8 +23,8 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class Statistics : Window
     {
-        private User _currentUser;
-        public Statistics(User currentUser)
+        private SignedInUser _currentUser;
+        public Statistics(SignedInUser currentUser)
         {
             InitializeComponent();
             _currentUser = currentUser;
@@ -103,6 +104,12 @@ namespace MedLabTab.Views.OtherViews
             newVisit.Show();
             this.Hide();
         }
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples(_currentUser);
@@ -165,9 +172,5 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

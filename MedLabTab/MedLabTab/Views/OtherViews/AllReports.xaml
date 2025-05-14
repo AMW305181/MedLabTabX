@@ -247,6 +247,7 @@
                             <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY" FontWeight="Bold" Margin="10,15,0,5"/>
                             <Button Style="{StaticResource NavButtonStyle2}" Content="Wszystkie wizyty" Click="BtnAllVisits_Click"/>
                             <Button Style="{StaticResource NavButtonStyle2}" Content="Nowa wizyta" Click="BtnNewVisit_Click"/>
+                            <Button Style="{StaticResource NavButtonStyle}" Content="Harmonogram" x:Name="btnSchedule" Click="BtnSchedule_Click"/>
                             <Button Style="{StaticResource NavButtonStyle2}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                             <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA" FontWeight="Bold" Margin="10,15,0,5"/>
@@ -256,7 +257,6 @@
                             <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA" FontWeight="Bold" Margin="10,15,0,5"/>
                             <Button Style="{StaticResource NavButtonStyle2}" Content="Wszyscy użytkownicy" Click="BtnAllUsers_Click"/>
                             <Button Style="{StaticResource NavButtonStyle2}" Content="Zarejestruj" Click="BtnRegister_Click"/>
-                            <Button Style="{StaticResource NavButtonStyle}" Content="Harmonogram" x:Name="btnSchedule" Click="BtnSchedule_Click"/>
 
                             <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
                             <Button Style="{StaticResource NavButtonStyle2}" Content="Raporty badań" x:Name="btnReports" Click="BtnReports_Click"/>

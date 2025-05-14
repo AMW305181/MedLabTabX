@@ -12,9 +12,9 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class Profile : Window
     {
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private Window _parentWindow;
-        public Profile(User currentUser, Window parentWindow)
+        public Profile(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             _currentUser = currentUser;
@@ -159,6 +159,13 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
+
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples(_currentUser);
@@ -262,9 +269,5 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

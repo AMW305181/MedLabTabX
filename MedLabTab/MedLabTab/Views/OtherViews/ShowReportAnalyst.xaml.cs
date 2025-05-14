@@ -1,5 +1,6 @@
 ﻿using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,9 @@ namespace MedLabTab.Views.OtherViews
     public partial class ShowReportAnalyst : Window
     {
         private Window _parentWindow;
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private readonly TestHistory _testHistory;
-        public ShowReportAnalyst(TestHistory testHistory, User currentUser, Window parentWindow)
+        public ShowReportAnalyst(TestHistory testHistory, SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             _parentWindow = parentWindow;
@@ -115,6 +116,12 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples(_currentUser);
@@ -197,11 +204,6 @@ namespace MedLabTab.Views.OtherViews
                 loginWindow.Show();
                 this.Close();
             }
-        }
-
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
