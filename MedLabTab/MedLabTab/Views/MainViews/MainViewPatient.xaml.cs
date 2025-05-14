@@ -79,7 +79,7 @@ namespace MedLabTab.Views.MainViews
                     Patient = DbManager.GetUserById(v.PatientId)?.Name + " " + DbManager.GetUserById(v.PatientId)?.Surname,
                     Nurse = DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Name + " " +
                         DbManager.GetUserById(DbManager.GetSchedule(v.TimeSlotId.Value).NurseId)?.Surname,
-                    PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
+                    PaymentStatus = v.PaymentStatus ? "Opłacona" : "Nieopłacona",
                     v.IsActive,
                     OriginalVisit = v,
                 }).ToList();
