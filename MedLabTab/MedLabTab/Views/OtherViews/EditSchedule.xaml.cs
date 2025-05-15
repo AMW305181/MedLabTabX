@@ -113,7 +113,6 @@ namespace MedLabTab.Views.OtherViews
                 EndTime = TimeOnly.Parse(ToTimeComboBox.SelectedItem.ToString());
             }
 
-            // Aktualizuj podsumowanie
             UpdateTimeSummary();
         }
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
@@ -127,6 +126,13 @@ namespace MedLabTab.Views.OtherViews
         {
             NewVisitAdmin newVisit = new NewVisitAdmin(currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(currentUser);
+            editschedule.Show();
             this.Hide();
         }
 
@@ -190,12 +196,6 @@ namespace MedLabTab.Views.OtherViews
                 loginWindow.Show();
                 this.Close();
             }
-        }
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-            EditSchedule editschedule = new EditSchedule(currentUser);
-            editschedule.Show();
-            this.Hide();
         }
 
         private string GetNurseName(int nurseId)

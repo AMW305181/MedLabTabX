@@ -158,6 +158,36 @@
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
 
+        <Style x:Key="DeleteStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF3333"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF3333"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                  BorderBrush="{TemplateBinding BorderBrush}" 
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -188,6 +218,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Harmonogram" x:Name="btnSchedule" Click="BtnSchedule_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
@@ -276,7 +307,7 @@
                                 Width="116" 
                                 Margin="0,0,10,0" 
                                 Click="btnAccept_Click"/>
-                        <Button Style="{StaticResource ButtonStyle}" 
+                        <Button Style="{StaticResource DeleteStyle}" 
                                 Content="Anuluj" 
                                 Width="116" 
                                 Margin="10,0,0,0" 

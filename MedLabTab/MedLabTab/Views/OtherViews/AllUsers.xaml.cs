@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedLabTab.Views.OtherViews
@@ -24,10 +25,10 @@ namespace MedLabTab.Views.OtherViews
     public partial class AllUsers : Window
     {
         private User _selectedUser;
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private List<User> _allUsers;
         private List<User> _filteredUsers;
-        public AllUsers(User currentUser)
+        public AllUsers(SignedInUser currentUser)
         {
             InitializeComponent();
             _currentUser = currentUser;
@@ -121,6 +122,13 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
             this.Hide();
         }
 
@@ -225,7 +233,7 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {"Pacjent", "patient"}
         };
 
-        private void BtnEditUser_Click(object sender, RoutedEventArgs e)
+ private void BtnEditUser_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
 
@@ -314,12 +322,12 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
 
         private void DgUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _selectedUser = dgUsers.SelectedItem as User;
+            if (dgUsers.SelectedItem != null)
+            {
+                dynamic selectedItem = dgUsers.SelectedItem;
+                User selectedUser = selectedItem.OriginalUser;
+            }
         }
 
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

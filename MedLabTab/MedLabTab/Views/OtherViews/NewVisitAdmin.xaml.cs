@@ -1,5 +1,6 @@
 ﻿using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -25,7 +26,7 @@ namespace MedLabTab.Views.OtherViews
     public partial class NewVisitAdmin : Window
     {
         private Window _parentWindow;
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private float visitCost;
         private int visitTime;
         private int? _selectedSlotId;
@@ -33,7 +34,7 @@ namespace MedLabTab.Views.OtherViews
         private List<Schedule> _AvaibleSlots;
         private bool _isInitialLoad = true;
 
-        public NewVisitAdmin(User currentUser, Window parentWindow)
+        public NewVisitAdmin(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             ClearForm();
@@ -371,6 +372,13 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
+
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples(_currentUser);
@@ -457,11 +465,6 @@ namespace MedLabTab.Views.OtherViews
                 // Jeśli nic nie wybrano, resetujemy _selectedSlotId
                 _selectedSlotId = null;
             }
-        }
-
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

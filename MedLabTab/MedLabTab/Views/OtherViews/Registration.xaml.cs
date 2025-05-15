@@ -13,8 +13,8 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class Registration : Window
     {
-        private User _currentUser;
-        public Registration(User currentUser)
+        private SignedInUser _currentUser;
+        public Registration(SignedInUser currentUser)
         {
             InitializeComponent();
             InitializeUserRoles();
@@ -36,6 +36,13 @@ namespace MedLabTab.Views.OtherViews
         {
             NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
             this.Hide();
         }
 

@@ -14,17 +14,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MedLabTab.Views.OtherViews
 {
     public partial class AllVisitsAdmin : Window
     {
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private List<dynamic> _allVisits;  
         private List<dynamic> _filteredVisits;
 
-        public AllVisitsAdmin(User currentUser)
+        public AllVisitsAdmin(SignedInUser currentUser)
         {
             InitializeComponent();
             LoadVisits(); // Załaduj dane po inicjalizacji okna
@@ -189,6 +190,13 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
+
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples(_currentUser);
@@ -273,9 +281,5 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
