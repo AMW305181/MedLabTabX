@@ -95,7 +95,7 @@ namespace MedLabTab.DatabaseManager
                     user.UserType = newUser.UserType;
                     db.SaveChanges();
                     scope.Complete();
-                    return false;
+                    return true ;
                 }
                 catch { return false; }
             }

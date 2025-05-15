@@ -140,8 +140,9 @@ namespace MedLabTab.Views.OtherViews
 
                 if (ValidateInputs())
                 {
-                    string newName = txtName.Text.Trim().Split(' ').First();
-                    string newSurname = txtName.Text.Trim();
+                    var nameParts = txtName.Text.Trim().Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+                    string newName = nameParts.Length > 0 ? nameParts[0] : "";
+                    string newSurname = nameParts.Length > 1 ? nameParts[1] : "";
                     string newPesel = txtPesel.Text.Trim();
                     string newLogin = txtLogin.Text.Trim();
                     string newPassword = txtPassword.Password.Trim();
@@ -187,38 +188,70 @@ namespace MedLabTab.Views.OtherViews
                         return;
                     }
 
+                bool updated;
+                if (_editedUser != null) // Tryb admina
+                {
                     var oldUser = DbManager.GetUserById(UserId);
-                if (newPassword == "")
-                {
-                    newPassword = oldUser.Password;
+                    if (oldUser == null)
+                    {
+                        MessageBox.Show("Nie znaleziono użytkownika do aktualizacji.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(newPassword))
+                    {
+                        newPassword = oldUser.Password;
+                    }
+
+                    var newUser = new User
+                    {
+                        id = UserId,
+                        Name = newName,
+                        Surname = newSurname,
+                        PESEL = newPesel,
+                        PhoneNumber = newPhone,
+                        Login = newLogin,
+                        Password = newPassword,
+                        UserType = newRole,
+                    };
+
+                    updated = DbManager.EditUserAdmin(oldUser, newUser);
                 }
-                var newUser = new User
+                else
                 {
-                    id = UserId,
-                    Name = newName,
-                    Surname = newSurname,
-                    PESEL = newPesel,
-                    PhoneNumber = newPhone,
-                    Login = newLogin,
-                    Password = newPassword,
-                    UserType = newRole,
-                };
-
-                // Aktualizacja profilu użytkownika
-                bool updated = DbManager.EditUserAdmin(oldUser, newUser);
-
+                    updated = DbManager.EditUserCommon(newLogin, newPassword, newPhone, UserId);
+                }
                 if (updated)
                 {
                     MessageBox.Show("Profil został zaktualizowany!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                    _parentWindow.Show();
-                    this.Close();
+
+                    if (_currentUser != null)
+                    {
+                        _currentUser.Name = txtName.Text.Trim();
+                        _currentUser.PhoneNumber = txtPhone.Text.Trim();
+                        _currentUser.Login = txtLogin.Text.Trim();
+                        if (!string.IsNullOrEmpty(txtPassword.Password))
+                            _currentUser.Password = txtPassword.Password.Trim();
+                    }
+                    if (_editedUser!=null)
+                    {
+                        AllUsers allUsers = new AllUsers(_currentUser);
+                        allUsers.LoadUsers();
+                        allUsers.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        _parentWindow.Show();
+                        this.Close();
+                    }
                 }
                 else
                 {
                     MessageBox.Show("Wystąpił błąd podczas aktualizacji.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+                }
             }
-        }
 
         private bool ValidateInputs()
         {
@@ -230,9 +263,9 @@ namespace MedLabTab.Views.OtherViews
                 return false;
             }
 
-            if (txtPhone.Text.Length < 9)
+            if (txtPhone.Text.Length != 9)
             {
-                MessageBox.Show("Numer telefonu musi zawierać co najmniej 9 cyfr.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Numer telefonu musi zawierać 9 cyfr.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
