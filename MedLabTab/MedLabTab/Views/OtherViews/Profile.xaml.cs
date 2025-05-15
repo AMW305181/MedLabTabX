@@ -13,17 +13,17 @@ namespace MedLabTab.Views.OtherViews
     public partial class Profile : Window
     {
         private SignedInUser _currentUser;
-        private User __currentUser;
+        private User _editedUser;
         private Window _parentWindow;
-        public Profile(User currentUser, Window parentWindow)
+        public Profile(User editedUser, Window parentWindow)
         {
             InitializeComponent();
-            __currentUser = currentUser;
+            _editedUser = editedUser;
             _parentWindow = parentWindow;
-            FillForm();
+            FillForm_Admin();
             txtPhone.PreviewTextInput += NumberValidationTextBox;
 
-            switch (__currentUser.UserType)
+            switch (_editedUser.UserType)
             {
                 case 1:
                     ReceptionMenu.Visibility = Visibility.Visible;
@@ -47,6 +47,10 @@ namespace MedLabTab.Views.OtherViews
             _parentWindow = parentWindow;
             FillForm();
             txtPhone.PreviewTextInput += NumberValidationTextBox;
+
+            txtName.IsEnabled = false;
+            txtPesel.IsEnabled = false;
+            txtRole.IsEnabled = false;
 
             switch (_currentUser.UserType)
             {
@@ -96,37 +100,113 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void FillForm_Admin()
+        {
+            if (_editedUser != null)
+            {
+                txtName.Text = _editedUser.Name + " " + _editedUser.Surname;
+                txtPesel.Text = _editedUser.PESEL;
+                txtPhone.Text = _editedUser.PhoneNumber;
+                txtLogin.Text = _editedUser.Login;
+
+
+                int typeId = _editedUser.UserType;
+                switch (typeId)
+                {
+                    case 1:
+                        txtRole.Text = "Recepcja";
+                        break;
+                    case 2:
+                        txtRole.Text = "Pielęgniarka";
+                        break;
+                    case 3:
+                        txtRole.Text = "Analityk";
+                        break;
+                    case 4:
+                        txtRole.Text = "Pacjent";
+                        break;
+                }
+            }
+        }
         private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void btnAccept_Click(object sender, RoutedEventArgs e)
-        {
-            if (ValidateInputs())
+            private void btnAccept_Click(object sender, RoutedEventArgs e)
             {
-                string newLogin = txtLogin.Text.Trim();
-                string newPassword = txtPassword.Password.Trim();
-                string repeatPassword = txtRepeatPassword.Password.Trim();
-                string newPhone = txtPhone.Text.Trim();
+                int UserId = 1;
 
-                // Sprawdzenie czy hasła się zgadzają
-                if (newPassword != repeatPassword)
+                if (ValidateInputs())
                 {
-                    MessageBox.Show("Hasła się nie zgadzają.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
+                    string newName = txtName.Text.Trim().Split(' ').First();
+                    string newSurname = txtName.Text.Trim();
+                    string newPesel = txtPesel.Text.Trim();
+                    string newLogin = txtLogin.Text.Trim();
+                    string newPassword = txtPassword.Password.Trim();
+                    string repeatPassword = txtRepeatPassword.Password.Trim();
+                    string newPhone = txtPhone.Text.Trim();
+                int newRole = 1;
+                switch (txtRole.Text.Trim())
+                {
+                    case "Recepcja":
+                        newRole = 1;
+                        break;
+                    case "Pielęgniarka":
+                        newRole = 2;
+                        break;
+                    case "Analityk":
+                        newRole = 3;
+                        break;
+                    case "Pacjent":
+                        newRole = 4;
+                        break;
                 }
 
-                // Sprawdź, czy login nie jest zajęty przez innego użytkownika
-                if (DbManager.IsLoginTakenByAnotherUser(newLogin, _currentUser.id))
+                        if (_currentUser != null)
+                    {
+                        UserId = _currentUser.id;
+                    }
+                    else if (_editedUser != null)
+                    {
+                        UserId = _editedUser.id;
+                    }
+
+                    // Sprawdzenie czy hasła się zgadzają
+                    if (newPassword != repeatPassword)
+                    {
+                        MessageBox.Show("Hasła się nie zgadzają.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    // Sprawdź, czy login nie jest zajęty przez innego użytkownika
+                    if (DbManager.IsLoginTakenByAnotherUser(newLogin, UserId))
+                    {
+                        MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    var oldUser = DbManager.GetUserById(UserId);
+                if (newPassword == "")
                 {
-                    MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
+                    newPassword = oldUser.Password;
                 }
+                var newUser = new User
+                {
+                    id = UserId,
+                    Name = newName,
+                    Surname = newSurname,
+                    PESEL = newPesel,
+                    PhoneNumber = newPhone,
+                    Login = newLogin,
+                    Password = newPassword,
+                    UserType = newRole,
+                };
 
                 // Aktualizacja profilu użytkownika
-                bool updated = DbManager.EditUserCommon(newLogin, newPassword, newPhone, _currentUser.id);
+                bool updated = DbManager.EditUserAdmin(oldUser, newUser);
+
                 if (updated)
                 {
                     MessageBox.Show("Profil został zaktualizowany!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
