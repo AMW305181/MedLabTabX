@@ -44,7 +44,7 @@ namespace MedLabTab.DatabaseManager
         public static bool IsTestNameTaken(string testName)  {return testsManager.IsTestNameTaken(db, testName); }
         public static bool AddTest(Test test) { return testsManager.AddTest(db, test); }
         public static bool EditTest(Test test, Test newData){return testsManager.EditTest(db, test, newData); }
-        public static bool DeactivateVisit(Visit visit){ return visitsManager.DeactivateVisit(db, visit);}
+        public static bool DeactivateVisit(Visit visit){ return visitsManager.DeactivateVisit(visit);}
         public static bool ChangeTestStatus(Test test) { return testsManager.ChangeTestStatus(db, test); }
         public static List<CategoryDictionary> GetCategories() {return categoriesManager.GetCategories(db);}
         public static Dictionary<int, string> GetCategoriesDictionary() { return categoriesManager.GetCategoriesDictionary(db); }

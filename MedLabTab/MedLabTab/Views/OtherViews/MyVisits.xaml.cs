@@ -84,10 +84,11 @@ namespace MedLabTab.Views.OtherViews
             if (!(sender is Button button)) return;
 
             dynamic selectedItem = button.DataContext;
+            Visit selectedVisit = selectedItem.OriginalVisit as Visit;
 
-            if (!(selectedItem.OriginalVisit is Visit selectedVisit))
+            if (selectedVisit == null)
             {
-                MessageBox.Show("Nie udało się pobrać wybranej wizyty.",
+                MessageBox.Show("Nie udało się poprawnie zidentyfikować wizyty.",
                               "Błąd",
                               MessageBoxButton.OK,
                               MessageBoxImage.Error);

@@ -16,27 +16,38 @@ namespace MedLabTab.DatabaseManager
             IsolationLevel = IsolationLevel.ReadCommitted,
             Timeout = TransactionManager.DefaultTimeout
         };
-        public bool DeactivateVisit(MedLabContext db,Visit visit)
+        public bool DeactivateVisit(Visit visit)
         {
-            TransactionOptions specialOptions = new TransactionOptions
+            using (var db = new MedLabContext()) 
             {
-                IsolationLevel = IsolationLevel.Serializable,
-                Timeout = TransactionManager.DefaultTimeout
-            };
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
-            {
-                try
+                TransactionOptions options = new TransactionOptions
                 {
-                    if (visit != null)
+                    IsolationLevel = IsolationLevel.Serializable,
+                    Timeout = TransactionManager.DefaultTimeout
+                };
+
+                using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+                {
+                    try
                     {
-                        visit.IsActive = false;
-                        db.SaveChanges();
-                        scope.Complete();
-                        return true;
+                        if (visit != null)
+                        {
+                            var visitToUpdate = db.Visits.Find(visit.id); 
+                            if (visitToUpdate != null)
+                            {
+                                visitToUpdate.IsActive = false;
+                                db.SaveChanges();
+                                scope.Complete();
+                                return true;
+                            }
+                        }
+                        return false;
                     }
-                    return false;
+                    catch (Exception ex)
+                    {
+                        return false;
+                    }
                 }
-                catch { return false; }
             }
         }
         public List<Visit> GetMyVisits(MedLabContext db, int userId)
