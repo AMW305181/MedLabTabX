@@ -15,18 +15,29 @@ using System.Windows.Shapes;
 namespace MedLabTab.Views.OtherViews
 {
     /// <summary>
-    /// Interaction logic for AllVisits.xaml
+    /// Interaction logic for ResultInputDialog.xaml
     /// </summary>
-    public partial class AllVisits : Window
+    public partial class ResultInputDialog : Window
     {
-        public AllVisits()
+        public string ResultText { get; private set; }
+
+        public ResultInputDialog()
         {
             InitializeComponent();
         }
 
-        private void AddVisit_Click(object sender, RoutedEventArgs e)
+        private void OkButton_Click(object sender, RoutedEventArgs e)
         {
+            ResultText = ResultsTextBox.Text;
+            DialogResult = true;
+            Close();
+        }
 
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
         }
     }
 }
+

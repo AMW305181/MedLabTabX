@@ -4,48 +4,361 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Nowa wizyta" Height="450" Width="800">
+        Title="Nowa wizyta" Height="788" Width="1072">
+    <Window.Resources>
+        <!-- Style dla przycisków nawigacyjnych -->
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#FF69B4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFE6F0"/>
+                                <Setter Property="Foreground" Value="#FF69B4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FFD6E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla przycisku wylogowania -->
+        <Style x:Key="LogoutButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
+            <Setter Property="Background" Value="#FFF0F0"/>
+            <Setter Property="Foreground" Value="#FF5555"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FFE0E0"/>
+                                <Setter Property="Foreground" Value="#FF3333"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FFD0D0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF69B4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF69B4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF5BA4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF4A94"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style dla nagłówków sekcji -->
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#FF69B4"/>
+            <Setter Property="Margin" Value="10,15,0,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <!-- Style dla głównego nagłówka -->
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,30,0,20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <!-- Style dla przycisku głównego -->
+        <Style x:Key="SeparatorStyle" TargetType="Separator">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
+        </Style>
+        
+        <Style x:Key="DeleteStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF3333"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF3333"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                         BorderBrush="{TemplateBinding BorderBrush}" 
+                         BorderThickness="{TemplateBinding BorderThickness}"
+                         CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Calendar">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+
+        <Style TargetType="CalendarDayButton">
+            <Setter Property="MinWidth" Value="50"/>
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CalendarDayButton">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Rectangle Fill="Transparent" 
+                                       Stroke="#FFE0E0E0" 
+                                       StrokeThickness="0.5"
+                                       RadiusX="2" RadiusY="2"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox" x:Key="ReadOnlyTextBoxStyle">
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+        </Style>
+        
+    </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <!-- Tytuł -->
-            <RowDefinition Height="*"/>
-            <!-- Formularz -->
-            <RowDefinition Height="Auto"/>
-            <!-- Koszt i czas -->
-            <RowDefinition Height="Auto"/>
-            <!-- Przyciski -->
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Tytuł -->
-        <TextBlock Text="Nowa wizyta" Grid.Row="0" Margin="0,20,0,10" HorizontalAlignment="Center" FontSize="26" FontWeight="Bold"/>
+        <!-- Pasek nawigacyjny (lewa strona) -->
+        <Border Grid.Column="0" Background="White" BorderBrush="#EEEEEE" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-        <!-- Środkowy panel (formularz) -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!-- Logo i nazwa -->
+                <StackPanel Grid.Row="0" Margin="0,20,0,20">
+                    <TextBlock Text="MedLabTab" FontSize="22" FontWeight="Bold" Foreground="#FF69B4" HorizontalAlignment="Center"/>
+                    <TextBlock Text="System Laboratoryjny" FontSize="12" Foreground="#888888" HorizontalAlignment="Center"/>
+                </StackPanel>
 
-            <!-- Pacjent -->
-            <Label Content="Pacjent:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="PacjentComboBox" Width="200" Margin="0,0,0,8" SelectionChanged="PacjentComboBox_SelectionChanged"/>
+                <!-- Menu nawigacyjne -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <Button Style="{StaticResource NavButtonStyle}" 
+                 Content="BADANIA"
+                 Click="BtnExams_Click"/>
 
-            <!-- Badania -->
-            <Label Content="Badania:" Margin="0,5,0,2"/>
-            <ListBox x:Name="BadaniaListBox" Width="200" Height="80" SelectionMode="Multiple" Margin="0,0,0,8"/>
+                        <Button Style="{StaticResource NavButtonStyle}" 
+                 Content="TWOJE WIZYTY"
+                 Click="BtnVisits_Click"/>
 
-            <!-- Data -->
-            <Label Content="Data:" Margin="0,5,0,2"/>
-            <ComboBox x:Name="DataComboBox" Width="200" Margin="0,0,0,8" SelectionChanged="DataComboBox_SelectionChanged"/>
-        </StackPanel>
+                        <Button Style="{StaticResource NavButtonStyle}" 
+                 Content="NOWA WIZYTA"
+                 Click="BtnNewVisit_Click"/>
 
-        <!-- Koszt i czas -->
-        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,5">
-            <TextBlock x:Name="KosztTextBlock" Text="Koszt: 0 zł" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
-            <TextBlock x:Name="CzasTextBlock" Text="Czas trwania: 0 min" FontWeight="SemiBold" FontSize="14"/>
-        </StackPanel>
+                        <Button Style="{StaticResource NavButtonStyle}" 
+                 Content="WYNIKI"
+                 Click="BtnResults_Click"/>
 
-        <!-- Przyciski obok siebie -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20" >
-            <Button Content="Zapłać" Width="120" Margin="5,0" Click="Zaplac_Click"/>
-            <Button Content="Zarejestruj" Width="120" Margin="5,0" Click="Zarejestruj_Click"/>
-        </StackPanel>
+                        <Button Style="{StaticResource NavButtonStyle}" 
+                 Content="PROFIL"
+                 Click="BtnProfile_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Przycisk wylogowania -->
+                <Button Grid.Row="2" 
+                 Style="{StaticResource LogoutButtonStyle}" 
+                 Content="Wyloguj się" 
+                 x:Name="btnLogout"
+                 Click="BtnLogout_Click"
+                 Margin="10,20,10,20"/>
+            </Grid>
+        </Border>
+
+        <!-- Główna treść (prawa strona) -->
+        <Grid Grid.Column="1">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#f8f5ff" Offset="0"/>
+                    <GradientStop Color="#fff0f5" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Tytuł -->
+                <TextBlock Text="Nowa wizyta" Grid.Row="0" Style="{StaticResource HeaderStyle}"/>
+
+                <!-- Formularz -->
+                <Grid Grid.Row="1" Margin="0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Lewa kolumna -->
+                    <StackPanel Grid.Column="0" Margin="10">
+                        <!-- Pacjent -->
+                        <Label Content="Pacjent:" FontSize="14" FontWeight="SemiBold" Margin="0,5"/>
+                        <TextBox x:Name="PatientTextBox" Height="30" FontSize="14" Background="Transparent"
+                             Style="{StaticResource ReadOnlyTextBoxStyle}"/>  
+
+                        <!-- Badania -->
+                        <Label Content="Wybierz badania:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
+                        <ComboBox x:Name="TestsComboBox" Height="30" FontSize="14" 
+                          SelectionChanged="TestsComboBox_SelectionChanged"/>
+                        <Label Content="Wybrane badania:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ListBox x:Name="TestsListBox" Height="120" FontSize="14" 
+                                SelectionMode="Multiple" Margin="0,0,0,10"/>
+
+                        </Grid>
+                        <Button Content="Usuń" Width="60" Height="30" Margin="5,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                                Click="RemoveSelectedTest_Click" Style="{StaticResource DeleteStyle}"/>
+                    </StackPanel>
+
+                    <!-- Prawa kolumna - kalendarz -->
+                    <StackPanel Grid.Column="1" Margin="10">
+                        <Label Content="Wybierz termin:" FontSize="14" FontWeight="SemiBold" Margin="0,5"/>
+
+                        <!-- Kalendarz -->
+                        <!-- Kalendarz -->
+                        <Calendar x:Name="VisitCalendar" 
+                              Margin="0,5" 
+                              Width="452" 
+                              Height="282"
+                              SelectedDatesChanged="VisitCalendar_SelectedDatesChanged"
+                              DisplayMode="Month" 
+                              SelectionMode="SingleDate">
+                            <Calendar.Resources>
+                                <!-- Kolor wybranego dnia -->
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF69B4"/>
+                                <!-- Kolor tekstu wybranego dnia -->
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
+                            </Calendar.Resources>
+                        </Calendar>
+
+                        <!-- Dostępne godziny -->
+                        <Label Content="Dostępne godziny:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
+                        <ComboBox x:Name="TimeComboBox" Height="30" FontSize="14"
+                                  SelectionChanged="TimeComboBox_SelectionChanged"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Podsumowanie -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
+                    <StackPanel Margin="20,0">
+                        <TextBlock Text="Szacowany czas:" FontSize="14" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="TimeTextBlock" FontSize="16" Margin="0,5" Text="-" 
+                           HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="20,0">
+                        <TextBlock Text="Koszt:" FontSize="14" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="CostTextBlock" FontSize="16" Margin="0,5" Text="0.00 zł" 
+                           HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <CheckBox x:Name="IsActiveCheckBox" Content="Aktywna" FontSize="14" 
+                     FontWeight="SemiBold" Margin="20,10" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Przyciski -->
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
+                    <Button Content="Zarejestruj" Width="150" Height="35" Margin="10,0" 
+                    Click="Register_Click" Style="{StaticResource ButtonStyle}"/>
+                    <Button Content="Anuluj" Width="150" Height="35" Margin="10,0" 
+                    Click="Cancel_Click" Style="{StaticResource DeleteStyle}"/>
+
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

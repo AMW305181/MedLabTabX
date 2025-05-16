@@ -13,99 +13,146 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
-    /// <summary>
-    /// Interaction logic for Tests.xaml
-    /// </summary>
     public partial class AllTests : Window
     {
         private Window _parentWindow;
-        public AllTests(Window parentWindow)
+        private SignedInUser _currentUser;
+        private List<dynamic> _allTests;
+        private List<dynamic> _filteredTests;
+        public AllTests(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
-            LoadTests(); // Załaduj dane po inicjalizacji okna
+            
             _parentWindow = parentWindow;
-        }
+            _currentUser = currentUser;
+            LoadTests(); // Załaduj dane po inicjalizacji okna
+            txtSearch.TextChanged += txtSearch_TextChanged;
 
-        private void LoadTests()
-        {
-            var tests = DbManager.GetAllTests(); // <-- Zmienna klasa, np. TestRepository
-            if (tests != null)
+            switch (_currentUser.UserType)
             {
-                BadaniaDataGrid.ItemsSource = tests;
+                case 3:
+                    AnalystMenu.Visibility = Visibility.Visible;
+                    break;
+                case 4:
+                    PatientMenu.Visibility = Visibility.Visible;
+                    ScheduleButton.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+        public void LoadTests()
+        {
+            var tests = DbManager.GetActiveTests();
+            var categoryDict = DbManager.GetCategoriesDictionary();
+
+            if (tests != null && categoryDict != null)
+            {
+                _allTests = tests.Select(t => new
+                {
+                    t.TestName,
+                    t.Description,
+                    Price = t.Price.ToString("0.00"),
+                    Category = categoryDict.TryGetValue(t.Category, out var catName) ? catName : "Nieznana",
+                    OriginalTest = t
+                }).ToList<dynamic>();
+
+                _filteredTests = new List<dynamic>(_allTests);
+                BadaniaDataGrid.ItemsSource = _allTests;
             }
             else
             {
-                MessageBox.Show("Błąd podczas ładowania aktywnych testów.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Błąd podczas ładowania danych.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void AddTest_Click(object sender, RoutedEventArgs e)
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var newTestWindow = new NewTest(this);
-            newTestWindow.Show();
+            if (_allTests == null || _filteredTests == null) return;
+
+            var searchText = txtSearch.Text.Trim().ToLower();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                BadaniaDataGrid.ItemsSource = _filteredTests;
+                return;
+            }
+
+            BadaniaDataGrid.ItemsSource = _filteredTests.Where(t =>
+            {
+                string testName = t.TestName?.ToString().ToLower() ?? string.Empty;
+                string description = t.Description?.ToString().ToLower() ?? string.Empty;
+                string category = t.Category?.ToString().ToLower() ?? string.Empty;
+
+                return testName.Contains(searchText) ||
+                       description.Contains(searchText) ||
+                       category.Contains(searchText);
+            }).ToList();
+        }
+
+        private void BtnExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTests allTests = new AllTests(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+        private void BtnResults_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports reports = new AllReports(_currentUser, this);
+            reports.Show();
             this.Hide();
         }
 
-        private void Edit_Click(object sender, RoutedEventArgs e)
+        private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-
-            // odnalezienie kontekstu wiersza - czyli obiektu testu
-            Test selectedTest = button?.DataContext as Test;
-
-            if (selectedTest != null)
-            {
-                var editTestWindow = new EditTest(selectedTest, this);
-                editTestWindow.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Nie udało się wczytać danych badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            var profile = new Profile(_currentUser, this);
+            profile.Show();
+            this.Hide();
         }
 
-        private void Deactivate_Click(object sender, RoutedEventArgs e)
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-            Test selectedTest = button?.DataContext as Test;
-
-            if (selectedTest != null)
-            {
-                var result = MessageBox.Show(
-                    $"Czy na pewno chcesz usunąć badanie \"{selectedTest.TestName}\"?",
-                    "Potwierdzenie usunięcia",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    bool deleted = DbManager.DeleteTest(selectedTest);
-
-                    if (deleted)
-                    {
-                        MessageBox.Show("Badanie zostało usunięte.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadTests(); // Odświeżenie tabeli
-                    }
-                    else
-                    {
-                        MessageBox.Show("Wystąpił błąd podczas usuwania badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Nie udało się pobrać wybranego badania.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
+            SamplesAnalyst samples = new SamplesAnalyst(_currentUser);
+            samples.Show();
             this.Close();
-            _parentWindow?.Show();
         }
+
+        private void BtnReport_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports newReport = new AllReports(_currentUser, this);
+            newReport.Show();
+            this.Hide();
+        }
+
+        private void BtnVisits_Click(object sender, RoutedEventArgs e)
+        {
+            MyVisits allVisits = new MyVisits(_currentUser, this);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(_currentUser,this);
+            newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
+        }
+
+
     }
 }

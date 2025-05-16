@@ -23,12 +23,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
+                 BorderBrush="{TemplateBinding BorderBrush}" 
+                 BorderThickness="{TemplateBinding BorderThickness}"
+                 CornerRadius="5">
                             <ContentPresenter Margin="{TemplateBinding Padding}" 
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                              VerticalAlignment="Center"/>
+                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                               VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -43,6 +43,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
 
         <!-- Style dla głównego nagłówka -->
         <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
@@ -108,47 +109,40 @@
                 </StackPanel>
 
                 <!-- Menu nawigacyjne -->
-                <StackPanel Grid.Row="1" Margin="10,20,10,282" Grid.RowSpan="2">
-                    <!-- Przycisk BADANIA -->
-                    <Button Style="{StaticResource NavButtonStyle}" 
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <!-- Przycisk BADANIA -->
+                        <Button Style="{StaticResource NavButtonStyle}" 
                         x:Name="btnExams" 
-                        Margin="0,5,0,5"
                         Content="BADANIA"
-                        FontWeight="SemiBold"
                         Click="BtnExams_Click"/>
 
-                    <!-- Przycisk PRÓBKI -->
-                    <Button Style="{StaticResource NavButtonStyle}" 
+                        <!-- Przycisk PRÓBKI -->
+                        <Button Style="{StaticResource NavButtonStyle}" 
                         x:Name="btnSamples" 
-                        Margin="0,5,0,5"
                         Content="PRÓBKI"
-                        FontWeight="SemiBold"
-                        Click="BtnSamples_Click"/>                  
+                        Click="BtnSamples_Click"/>
 
-                    <!-- Przycisk RAPORT -->
-                    <Button Style="{StaticResource NavButtonStyle}" 
+                        <!-- Przycisk RAPORT -->
+                        <Button Style="{StaticResource NavButtonStyle}" 
                         x:Name="btnReport" 
-                        Margin="0,5,0,5"
                         Content="RAPORT"
-                        FontWeight="SemiBold"
                         Click="BtnReport_Click"/>
 
-                    <!-- Przycisk PROFIL -->
-                    <Button Style="{StaticResource NavButtonStyle}" 
+                        <!-- Przycisk PROFIL -->
+                        <Button Style="{StaticResource NavButtonStyle}" 
                         x:Name="btnProfile" 
-                        Margin="0,5,0,5"
                         Content="PROFIL"
-                        FontWeight="SemiBold"
                         Click="BtnProfile_Click"/>
-                </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
 
-                <!-- Przycisk wylogowania -->
-                <Button Grid.Row="2" 
+                        <!-- Przycisk wylogowania -->
+                        <Button Grid.Row="2" 
                         Style="{StaticResource LogoutButtonStyle}" 
                         Content="Wyloguj się" 
-                        x:Name="btnLogout"
                         Click="BtnLogout_Click"
-                        Margin="10,250,10,20"/>
+                        Margin="10,20,10,20"/>
             </Grid>
         </Border>
 

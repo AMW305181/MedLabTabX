@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +13,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MedLabTab.DatabaseManager;
+using MedLabTab.DatabaseModels;
 using MedLabTab.ViewModels;
 using MedLabTab.Views.OtherViews;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MedLabTab.Views.MainViews
 {
@@ -30,21 +36,31 @@ namespace MedLabTab.Views.MainViews
 
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {
-            AllTests allTests = new AllTests(this);
+            AllTests allTests = new AllTests(currentUser, this);
             allTests.Show();
             this.Hide();
         }
 
         private void BtnVisits_Click(object sender, RoutedEventArgs e)
         {
-            AllVisits allVisits = new AllVisits();
+            MyVisits allVisits = new MyVisits(currentUser, this);
             allVisits.Show();
-            this.Close();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisit newVisit = new NewVisit(currentUser, this);
+            newVisit.Show();
+            this.Hide();
         }
 
         private void BtnResults_Click(object sender, RoutedEventArgs e)
         {
 
+            AllReports allReports = new AllReports(currentUser, this);
+            allReports.Show();
+            this.Hide();
         }
 
         private void BtnProfile_Click(object sender, RoutedEventArgs e)

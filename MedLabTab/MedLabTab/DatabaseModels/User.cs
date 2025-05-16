@@ -17,7 +17,7 @@ public partial class User
 
     public int UserType { get; set; }
 
-    [StringLength(20)]
+    [StringLength(255)]
     [Unicode(false)]
     public string Password { get; set; } = null!;
 

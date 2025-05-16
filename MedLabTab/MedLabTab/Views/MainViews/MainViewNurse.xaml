@@ -63,12 +63,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="5">
+                         BorderBrush="{TemplateBinding BorderBrush}" 
+                         BorderThickness="{TemplateBinding BorderThickness}"
+                         CornerRadius="5">
                             <ContentPresenter Margin="{TemplateBinding Padding}" 
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                      VerticalAlignment="Center"/>
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                       VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -83,6 +83,65 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Style dla DataGrid -->
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFF8FB"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEEEEE"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <!-- Style dla DataGridColumnHeader -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#FFF0F5"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Style dla DataGridRow -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Height" Value="36"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFF0F8"/>
+                    <Setter Property="BorderBrush" Value="#FF69B4"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFEFF5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style dla DataGridCell -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="#333333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
     </Window.Resources>
 
     <Grid>
@@ -107,38 +166,34 @@
                 </StackPanel>
 
                 <!-- Menu nawigacyjne -->
-                <StackPanel Grid.Row="1" Margin="10,20,10,0">
-                    <!-- Przycisk BADANIA -->
-                    <Button Style="{StaticResource NavButtonStyle}" 
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <!-- Przycisk WZIYTY -->
+                        <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnExams" 
-                            Content="BADANIA"
-                            FontWeight="SemiBold"
-                            Click="BtnExams_Click"
-                            Margin="0,5,0,5"/>
+                            Content="WIZYTY"
+                            Click="BtnExams_Click"/>    
 
-                    <!-- Przycisk PRÓBKI -->
-                    <Button Style="{StaticResource NavButtonStyle}" 
+                        <!-- Przycisk PRÓBKI -->
+                        <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnSamples" 
                             Content="PRÓBKI"
-                            FontWeight="SemiBold"
-                            Click="BtnSamples_Click"
-                            Margin="0,5,0,5"/>
+                            Click="BtnSamples_Click"/>
 
-                    <!-- Przycisk PROFIL -->
-                    <Button Style="{StaticResource NavButtonStyle}" 
+                        <!-- Przycisk PROFIL -->
+                        <Button Style="{StaticResource NavButtonStyle}" 
                             x:Name="btnProfile" 
                             Content="PROFIL"
-                            FontWeight="SemiBold"
-                            Click="BtnProfile_Click"
-                            Margin="0,5,0,5"/>
-                    
-                    <!-- Przycisk wylogowania -->
-                    <Button Style="{StaticResource LogoutButtonStyle}" 
-                            Content="Wyloguj się" 
-                            x:Name="btnLogout"
-                            Click="BtnLogout_Click"
-                            Margin="0,270,0,0"/>
-                </StackPanel>
+                            Click="BtnProfile_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Przycisk wylogowania -->
+                <Button Grid.Row="2" 
+                    Style="{StaticResource LogoutButtonStyle}" 
+                    Content="Wyloguj się" 
+                    Click="BtnLogout_Click"
+                    Margin="10,20,10,20"/>
             </Grid>
         </Border>
 
@@ -156,45 +211,20 @@
                 <TextBlock Style="{StaticResource MainHeaderStyle}" Text="PIELĘGNIARKA" HorizontalAlignment="Center"/>
                 <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
 
-                <!-- Dynamiczna zawartość -->
-                <Grid x:Name="ContentArea" Margin="20">
-                    <!-- Domyślna zawartość - lista badań -->
+                <!-- Tutaj będzie wyświetlana zawartość wybranej sekcji -->
+                <ContentControl x:Name="MainContent" Margin="20">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Text="NADCHODZĄCE BADANIA" 
-                                   FontSize="18" 
-                                   FontWeight="Bold" 
-                                   Margin="0,0,0,15"/>
-
-                        <DataGrid Grid.Row="1" 
-                                  x:Name="TestsDataGrid"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  SelectionMode="Single"
-                                  HeadersVisibility="Column"
-                                  BorderThickness="0"
-                                  Background="Transparent">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nazwa badania" 
-                                                   Binding="{Binding TestName}" 
-                                                   Width="*"/>
-                                <DataGridTextColumn Header="Kategoria" 
-                                                   Binding="{Binding CategoryNavigation.CategoryName}" 
-                                                   Width="*"/>
-                                <DataGridTextColumn Header="Opis" 
-                                                   Binding="{Binding Description}" 
-                                                   Width="2*"/>
-                                <DataGridTextColumn Header="Cena" 
-                                                   Binding="{Binding Price, StringFormat='{}{0:C}'}" 
-                                                   Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <TextBlock Text="Witaj w panelu pielęgniarki laboratorium medycznego" 
+                           FontSize="18" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,40,0,0"/>
+                        <TextBlock Text="Wybierz opcję z menu po lewej stronie, aby rozpocząć pracę" 
+                           FontSize="14" 
+                           Foreground="#666666" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,70,0,0"/>
                     </Grid>
-                </Grid>
+                </ContentControl>
             </StackPanel>
         </Grid>
     </Grid>

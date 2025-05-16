@@ -30,6 +30,9 @@ public partial class TestHistory
     [InverseProperty("TestHistoryPatients")]
     public virtual User Patient { get; set; } = null!;
 
+    [InverseProperty("Sample")]
+    public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
+
     [ForeignKey("Status")]
     [InverseProperty("TestHistories")]
     public virtual StatusDictionary StatusNavigation { get; set; } = null!;

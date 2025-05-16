@@ -83,13 +83,20 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
+        <!-- Style dla Separator -->
+        <Style x:Key="SeparatorStyle" TargetType="Separator">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
+        </Style>
+
         <!-- Style dla głównego nagłówka -->
         <Style x:Key="MainHeaderStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#333333"/>
             <Setter Property="Margin" Value="20"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
 
         <!-- Style dla przycisków formularza -->
@@ -136,6 +143,12 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Margin" Value="0,0,0,15"/>
         </Style>
+        <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,1"/>
+        </Style>
 
         <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Padding" Value="5,3"/>
@@ -144,6 +157,37 @@
             <Setter Property="Margin" Value="0,0,0,15"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
+
+        <Style x:Key="DeleteStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF3333"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="#FF3333"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                  BorderBrush="{TemplateBinding BorderBrush}" 
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF2222"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -174,6 +218,8 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Harmonogram" x:Name="btnSchedule" Click="BtnSchedule_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="BADANIA"/>
@@ -211,9 +257,20 @@
                 </LinearGradientBrush>
             </Grid.Background>
 
+            <!-- Nagłówek -->
+            <StackPanel Grid.Row="0">
+                <TextBlock Style="{StaticResource MainHeaderStyle}" Text="FORMULARZ REJESTRACJI" HorizontalAlignment="Center"/>
+                <Border Height="1" Background="#EEEEEE" Margin="20,0"/>
+                <TextBlock Text="Formularz rejestracji nowego użytkownika w laboratorium" 
+                              Foreground="#666666" 
+                              FontSize="14"
+                              HorizontalAlignment="Center"
+                              Margin="0,-15,0,15"/>
+                <Separator Style="{StaticResource SeparatorStyle}"/>
+            </StackPanel>
+
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,20,0,0">
-                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Formularz rejestracji" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
 
                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Imię"/>
                     <TextBox Style="{StaticResource TextBoxStyle}" Name="txtName" Margin="0,0,0,15" Text=""/>
@@ -231,7 +288,10 @@
                     <TextBox Style="{StaticResource TextBoxStyle}" Name="txtLogin" Margin="0,0,0,15" Text=""/>
 
                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Hasło"/>
-                    <TextBox Style="{StaticResource TextBoxStyle}" Name="txtPassword" Margin="0,0,0,20"/>
+                    <PasswordBox Style="{StaticResource PasswordBoxStyle}" Name="txtPassword"/>
+
+                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Powtórz hasło"/>
+                    <PasswordBox Style="{StaticResource PasswordBoxStyle}" Name="txtRepeatPassword" />
 
                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Rola użytkownika"/>
                     <ComboBox Style="{StaticResource ComboBoxStyle}" Name="cmbUserRole">
@@ -247,7 +307,7 @@
                                 Width="116" 
                                 Margin="0,0,10,0" 
                                 Click="btnAccept_Click"/>
-                        <Button Style="{StaticResource ButtonStyle}" 
+                        <Button Style="{StaticResource DeleteStyle}" 
                                 Content="Anuluj" 
                                 Width="116" 
                                 Margin="10,0,0,0" 

@@ -6,19 +6,22 @@ using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
 using MedLabTab.DatabaseManager;
 using System.Globalization;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
     public partial class NewTest : Window
     {
         private Window _parentWindow;
-        public NewTest(Window parentWindow)
+        private SignedInUser _currentUser;
+        public NewTest(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             InitializeCategories();
             ClearForm();
             PriceTextBox.PreviewTextInput += NumberValidationTextBox;
             _parentWindow = parentWindow;
+            _currentUser = currentUser;
         }
 
         private void InitializeCategories()
@@ -68,10 +71,16 @@ namespace MedLabTab.Views.OtherViews
                     IsActive = IsActiveCheckBox.IsChecked == true
                 };
 
+                bool exists = DbManager.IsTestNameTaken(newTest.TestName);
+                if (exists) { MessageBox.Show("Badanie o podanej nazwie już istnieje.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 bool added = DbManager.AddTest(newTest); // zakładamy że zwraca bool
 
                 if (added)
                 {
+                    if (_parentWindow is AllTestsAdmin allTestsAdmin)
+                        allTestsAdmin.LoadTests();
                     MessageBox.Show("Badanie zostało dodane pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
                     _parentWindow?.Show();
@@ -121,6 +130,89 @@ namespace MedLabTab.Views.OtherViews
         {
             this.Close();
             _parentWindow?.Show();
+        }
+
+     private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
+        {
+            AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
+            allVisits.Show();
+            this.Hide();
+        }
+
+        private void BtnNewVisit_Click(object sender, RoutedEventArgs e)
+        {
+            NewVisitAdmin newVisitAdmin = new NewVisitAdmin(_currentUser, this);
+            newVisitAdmin.Show();
+            this.Hide();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
+
+        private void BtnSamples_Click(object sender, RoutedEventArgs e)
+        {
+            Samples samples = new Samples(_currentUser);
+            samples.Show();
+            this.Hide();
+        }
+
+        private void BtnAllExams_Click(object sender, RoutedEventArgs e)
+        {
+            AllTestsAdmin allTests = new AllTestsAdmin(_currentUser, this);
+            allTests.Show();
+            this.Hide();
+        }
+
+        private void BtnNewExam_Click(object sender, RoutedEventArgs e)
+        {
+            NewTest newTest = new NewTest(_currentUser, this);
+            newTest.Show();
+            this.Hide();
+        }
+
+        private void BtnAllUsers_Click(object sender, RoutedEventArgs e)
+        {
+            AllUsers allUsers = new AllUsers(_currentUser);
+            allUsers.Show();
+            this.Close();
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registration = new Registration(_currentUser);
+            registration.Show();
+            this.Close();
+        }
+
+        private void BtnReports_Click(object sender, RoutedEventArgs e)
+        {
+            AllReports allReports = new AllReports(_currentUser, this);
+            allReports.Show();
+            this.Hide();
+        }
+
+        private void BtnStats_Click(object sender, RoutedEventArgs e)
+        {
+            Statistics statistics = new Statistics(_currentUser);
+            statistics.Show();
+            this.Hide();
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wylogowanie",
+                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var loginWindow = new Login();
+                loginWindow.Show();
+                this.Close();
+            }
         }
     }
 }
