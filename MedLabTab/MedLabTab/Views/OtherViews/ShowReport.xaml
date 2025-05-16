@@ -313,12 +313,21 @@
                 <Label Content="Wyniki:" Margin="0,5,0,2" Style="{StaticResource FormLabelStyle}"/>
 
                 <TextBlock x:Name="ResultTextBox" Width="200" Height="Auto" Margin="0,0,0,2" Style="{StaticResource FormValueStyle}" />
+                <Button x:Name="BtnPdf" Style="{StaticResource PrimaryButtonStyle}" 
+                        Content="Eksportuj do PDF"
+                        Click="ExportToPdf_Click"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Visibility="Collapsed"
+                        Width="150"/>
+            
                 <Button Style="{StaticResource PrimaryButtonStyle}" 
                         Content="Cofnij"
                         Click="BackButton_Click"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Bottom"
                         Width="150"/>
+            
             </StackPanel>
     </Grid>
         </Grid>

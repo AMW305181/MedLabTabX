@@ -72,12 +72,10 @@ namespace MedLabTab.Views.OtherViews
                 return;
             }
 
-            // Income
             float income = tests.Sum(t => DbManager.GetTest(t.TestId)?.Price ?? 0);
             Income.Text = income.ToString();
             Income.Text = string.Format("{0:N2} zł", income);
 
-            // Most common test
             var mostCommonTest = tests
                 .GroupBy(t => t.TestId)
                 .Select(g => new { TestId = g.Key, Count = g.Count() })
@@ -87,7 +85,6 @@ namespace MedLabTab.Views.OtherViews
             var testInfo = mostCommonTest != null ? DbManager.GetTest(mostCommonTest.TestId) : null;
             Test.Text = testInfo?.TestName ?? "Brak danych";
 
-            // Most common nurse
             var mostCommonNurse = tests
                 .GroupBy(t => DbManager.GetNurseIdFromTestHistory(t))
                 .Select(g => new { NurseId = g.Key, Count = g.Count() })
@@ -97,7 +94,6 @@ namespace MedLabTab.Views.OtherViews
             var nurseInfo = mostCommonNurse != null ? DbManager.GetUserById(mostCommonNurse.NurseId) : null;
             Nurse.Text = nurseInfo != null ? $"{nurseInfo.Name} {nurseInfo.Surname}" : "Brak danych";
 
-            // Most common analyst
             var mostCommonAnalyst = tests
                 .GroupBy(t => t.AnalystId)
                 .Select(g => new { AnalystId = g.Key, Count = g.Count() })
@@ -107,7 +103,6 @@ namespace MedLabTab.Views.OtherViews
             var analystInfo = mostCommonAnalyst?.AnalystId != null ? DbManager.GetUserById(mostCommonAnalyst.AnalystId.Value) : null;
             Analyst.Text = analystInfo != null ? $"{analystInfo.Name} {analystInfo.Surname}" : "Brak danych";
 
-            // Most common patient
             var mostCommonPatient = tests
                 .GroupBy(t => t.PatientId)
                 .Select(g => new { PatientId = g.Key, Count = g.Count() })
@@ -139,11 +134,10 @@ namespace MedLabTab.Views.OtherViews
                 filtered = filtered.Where(t => t.Visit?.TimeSlot?.Date <= DateOnly.FromDateTime(DateTo.SelectedDate.Value));
             }
 
-            // Poprawione filtrowanie po teście
             if (TestNameComboBox.SelectedValue != null)
             {
                 int selectedTestId = Convert.ToInt32(TestNameComboBox.SelectedValue);
-                if (selectedTestId != 0) // 0 to "Wszystkie testy"
+                if (selectedTestId != 0) 
                 {
                     filtered = filtered.Where(t => t.TestId == selectedTestId);
                 }
@@ -299,22 +293,18 @@ namespace MedLabTab.Views.OtherViews
                     int topMargin = 40;
                     int yPos = topMargin;
 
-                    // Tytuł
                     gfx.DrawString("Raport statystyk MedLabTab", fontTitle,
                         XBrushes.Black, new XRect(0, yPos, page.Width, 30),
                         XStringFormats.TopCenter);
                     yPos += 40;
 
-                    // Informacje o okresie
                     string periodInfo = $"Okres: {DateFrom.SelectedDate?.ToString("dd.MM.yyyy") ?? "brak"} - {DateTo.SelectedDate?.ToString("dd.MM.yyyy") ?? "brak"}";
                     gfx.DrawString(periodInfo, fontHeader, XBrushes.Black, leftMargin, yPos);
                     yPos += 25;
 
-                    // Data generacji
                     gfx.DrawString($"Data generacji: {DateTime.Now:dd.MM.yyyy}", fontNormal, XBrushes.Black, leftMargin, yPos);
                     yPos += 30;
 
-                    // Podsumowanie
                     gfx.DrawString("Podsumowanie:", fontHeader, XBrushes.Black, leftMargin, yPos);
                     yPos += 20;
 
@@ -324,7 +314,6 @@ namespace MedLabTab.Views.OtherViews
                     gfx.DrawString($"• Najpopularniejsze badanie: {Test.Text}", fontNormal, XBrushes.Black, leftMargin, yPos);
                     yPos += 15;
 
-                    // Dodaj informacje o najlepszych aktorach
                     gfx.DrawString($"• Najlepsza pielęgniarka: {Nurse.Text}", fontNormal, XBrushes.Black, leftMargin, yPos);
                     yPos += 15;
 
@@ -334,7 +323,6 @@ namespace MedLabTab.Views.OtherViews
                     gfx.DrawString($"• Najlepszy pacjent: {Patient.Text}", fontNormal, XBrushes.Black, leftMargin, yPos);
                     yPos += 25;
 
-                    // Statystyki miesięczne
                     var tableData = (ChartDataGrid.ItemsSource as IEnumerable<dynamic>)?.ToList();
                     if (tableData != null && tableData.Any())
                     {
@@ -344,7 +332,6 @@ namespace MedLabTab.Views.OtherViews
                         int[] columnWidths = { 100, 80, 100 };
                         string[] headers = { "Miesiąc", "Liczba badań", "Przychód (zł)" };
 
-                        // Nagłówki tabeli
                         int xPos = leftMargin;
                         for (int i = 0; i < headers.Length; i++)
                         {
@@ -356,7 +343,6 @@ namespace MedLabTab.Views.OtherViews
                         }
                         yPos += 20;
 
-                        // Dane tabeli
                         foreach (var item in tableData)
                         {
                             xPos = leftMargin;
@@ -400,7 +386,6 @@ namespace MedLabTab.Views.OtherViews
                     MessageBox.Show("Raport PDF został pomyślnie wygenerowany.", "Sukces",
                         MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Otwórz plik
                     Process.Start(new ProcessStartInfo(saveDialog.FileName) { UseShellExecute = true });
                 }
             }
