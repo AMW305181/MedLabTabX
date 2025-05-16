@@ -29,6 +29,13 @@ namespace MedLabTab.Views.MainViews
             this.Hide();
         }
 
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
+
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples(currentUser);
@@ -91,11 +98,5 @@ namespace MedLabTab.Views.MainViews
             }
         }
 
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-            EditSchedule editschedule = new EditSchedule(currentUser);
-            editschedule.Show();
-            this.Hide();
-        }
     }
 }
