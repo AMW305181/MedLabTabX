@@ -108,7 +108,7 @@ namespace MedLabTab.Views.OtherViews
 
             if (TestsComboBox.Items.Count > 0)
                 TestsComboBox.SelectedIndex = 0;
-            
+
             //załadowanie badań
             TestsListBox.Items.Clear();
             var selectedTests = DbManager.GetTestsInVisit(_originalVisit.id)
@@ -121,6 +121,21 @@ namespace MedLabTab.Views.OtherViews
                     Tag = test.id
                 });
             }
+            //var testHistories = DbManager.GetTestsInVisit(_originalVisit.id);
+            //foreach (var testHistory in testHistories)
+            //{
+            //    var test = DbManager.GetTest(testHistory.TestId); // dla nazwy itp.
+            //    var hist = DbManager.GetTestHistory(testHistory.id); // dla ceny
+
+            //    TestsListBox.Items.Add(new ListBoxItem
+            //    {
+            //        Content = test.TestName,
+            //        Tag = test.id
+            //    });
+
+            //    originalTestPrices[test.id] = hist.TestPrice;
+            //    //visitCost += hist.TestPrice;
+            //}
 
             UpdateValues();
 
@@ -187,13 +202,21 @@ namespace MedLabTab.Views.OtherViews
 
                 var selectedTimeSlot = (ComboBoxItem)DateComboBox.SelectedItem;
                 bool editedVisit = false;
+
+                bool isPaid = IsPaidCheckBox.IsChecked == true;
+
+                if (_currentUser.UserType == 4)
+                {
+                    isPaid = _originalVisit.PaymentStatus;
+                }
+
                 if (selectedTimeSlot.Tag is int timeId)
                 {
                     var newVisit = new Visit
                     {
                         //id = _originalVisit.id,
                         Cost = visitCost,
-                        PaymentStatus = IsPaidCheckBox.IsChecked == true,
+                        PaymentStatus = isPaid,
                         IsActive = IsActiveCheckBox.IsChecked == true,
                         PatientId = (DbManager.GetUser(patientPESEL)).id,
                         TimeSlotId = timeId,
@@ -214,12 +237,12 @@ namespace MedLabTab.Views.OtherViews
                         {
                             var test = DbManager.GetTest(testId);
 
-                            var newTestHistory = new TestHistory
+                            TestHistory newTestHistory = new TestHistory
                             {
                                 VisitId = _originalVisit.id,
                                 TestId = test.id,
                                 PatientId = DbManager.GetUser(patientPESEL).id,
-                                Status = IsPaidCheckBox.IsChecked == true ? 2 : 1, // jezeli jest zaplacone to do etapu 2 a jak nie to czeka na 1
+                                Status = isPaid ? 2 : 1,
                                 AnalystId = null,
                             };
 
@@ -260,7 +283,6 @@ namespace MedLabTab.Views.OtherViews
                 });
 
                 Test test = DbManager.GetTest(testId);
-
                 visitCost += test.Price;
 
                 UpdateValues();

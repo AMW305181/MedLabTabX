@@ -78,20 +78,29 @@ namespace MedLabTab.Views.OtherViews
         {
             Button button = sender as Button;
 
-            Visit selectedVisit = (sender as Button)?.CommandParameter as Visit;
+            Visit selectedVisit = button?.CommandParameter as Visit;
 
-            if (selectedVisit.TestHistories.Any(t => t.Status <= 2))
+            if (selectedVisit == null)
             {
-                if (selectedVisit != null)
-                {
-                    var editVisitWindow = new EditVisitAdmin(selectedVisit,_currentUser, this);
-                    editVisitWindow.Show();
-                    this.Hide();
-                }
-                else
-                {
-                    MessageBox.Show("Nie udało się wczytać danych wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                MessageBox.Show("Nie udało się wczytać danych wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Sprawdzenie, czy czas wizyty już nie minął
+            DateTime visitDateTime = selectedVisit.TimeSlot.Date.ToDateTime(selectedVisit.TimeSlot.Time);
+
+            if (visitDateTime < DateTime.Now)
+            {
+                MessageBox.Show("Nie można edytować wizyty, której czas już minął.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Sprawdzenie, czy wszystkie testy mają status <= 2
+            if (selectedVisit.TestHistories.All(t => t.Status <= 2))
+            {
+                var editVisitWindow = new EditVisitAdmin(selectedVisit, _currentUser, this);
+                editVisitWindow.Show();
+                this.Hide();
             }
             else
             {
