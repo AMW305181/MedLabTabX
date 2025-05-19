@@ -328,6 +328,5 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
                 User selectedUser = selectedItem.OriginalUser;
             }
         }
-
     }
 }
