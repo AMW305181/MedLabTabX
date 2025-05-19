@@ -12,15 +12,45 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class Profile : Window
     {
-        private User _currentUser;
+        private SignedInUser _currentUser;
+        private User _editedUser;
         private Window _parentWindow;
-        public Profile(User currentUser, Window parentWindow)
+        public Profile(User editedUser, Window parentWindow)
+        {
+            InitializeComponent();
+            _editedUser = editedUser;
+            _parentWindow = parentWindow;
+            FillForm_Admin();
+            txtPhone.PreviewTextInput += NumberValidationTextBox;
+
+            switch (_editedUser.UserType)
+            {
+                case 1:
+                    ReceptionMenu.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    NurseMenu.Visibility = Visibility.Visible;
+                    break;
+                case 3:
+                    AnalystMenu.Visibility = Visibility.Visible;
+                    break;
+                case 4:
+                    PatientMenu.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+
+        public Profile(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             _currentUser = currentUser;
             _parentWindow = parentWindow;
             FillForm();
             txtPhone.PreviewTextInput += NumberValidationTextBox;
+
+            txtName.IsEnabled = false;
+            txtPesel.IsEnabled = false;
+            txtRole.IsEnabled = false;
 
             switch (_currentUser.UserType)
             {
@@ -70,49 +100,158 @@ namespace MedLabTab.Views.OtherViews
             }
         }
 
+        private void FillForm_Admin()
+        {
+            if (_editedUser != null)
+            {
+                txtName.Text = _editedUser.Name + " " + _editedUser.Surname;
+                txtPesel.Text = _editedUser.PESEL;
+                txtPhone.Text = _editedUser.PhoneNumber;
+                txtLogin.Text = _editedUser.Login;
+
+
+                int typeId = _editedUser.UserType;
+                switch (typeId)
+                {
+                    case 1:
+                        txtRole.Text = "Recepcja";
+                        break;
+                    case 2:
+                        txtRole.Text = "Pielęgniarka";
+                        break;
+                    case 3:
+                        txtRole.Text = "Analityk";
+                        break;
+                    case 4:
+                        txtRole.Text = "Pacjent";
+                        break;
+                }
+            }
+        }
         private void NumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void btnAccept_Click(object sender, RoutedEventArgs e)
-        {
-            if (ValidateInputs())
+            private void btnAccept_Click(object sender, RoutedEventArgs e)
             {
-                string newLogin = txtLogin.Text.Trim();
-                string newPassword = txtPassword.Password.Trim();
-                string repeatPassword = txtRepeatPassword.Password.Trim();
-                string newPhone = txtPhone.Text.Trim();
+                int UserId = 1;
 
-                // Sprawdzenie czy hasła się zgadzają
-                if (newPassword != repeatPassword)
+                if (ValidateInputs())
                 {
-                    MessageBox.Show("Hasła się nie zgadzają.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
+                    var nameParts = txtName.Text.Trim().Split(new[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+                    string newName = nameParts.Length > 0 ? nameParts[0] : "";
+                    string newSurname = nameParts.Length > 1 ? nameParts[1] : "";
+                    string newPesel = txtPesel.Text.Trim();
+                    string newLogin = txtLogin.Text.Trim();
+                    string newPassword = txtPassword.Password.Trim();
+                    string repeatPassword = txtRepeatPassword.Password.Trim();
+                    string newPhone = txtPhone.Text.Trim();
+                int newRole = 1;
+                switch (txtRole.Text.Trim())
+                {
+                    case "Recepcja":
+                        newRole = 1;
+                        break;
+                    case "Pielęgniarka":
+                        newRole = 2;
+                        break;
+                    case "Analityk":
+                        newRole = 3;
+                        break;
+                    case "Pacjent":
+                        newRole = 4;
+                        break;
                 }
 
-                // Sprawdź, czy login nie jest zajęty przez innego użytkownika
-                if (DbManager.IsLoginTakenByAnotherUser(newLogin, _currentUser.id))
-                {
-                    MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+                        if (_currentUser != null)
+                    {
+                        UserId = _currentUser.id;
+                    }
+                    else if (_editedUser != null)
+                    {
+                        UserId = _editedUser.id;
+                    }
 
-                // Aktualizacja profilu użytkownika
-                bool updated = DbManager.EditUserCommon(newLogin, newPassword, newPhone, _currentUser.id);
+                    // Sprawdzenie czy hasła się zgadzają
+                    if (newPassword != repeatPassword)
+                    {
+                        MessageBox.Show("Hasła się nie zgadzają.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    // Sprawdź, czy login nie jest zajęty przez innego użytkownika
+                    if (DbManager.IsLoginTakenByAnotherUser(newLogin, UserId))
+                    {
+                        MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                bool updated;
+                if (_editedUser != null) // Tryb admina
+                {
+                    var oldUser = DbManager.GetUserById(UserId);
+                    if (oldUser == null)
+                    {
+                        MessageBox.Show("Nie znaleziono użytkownika do aktualizacji.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(newPassword))
+                    {
+                        newPassword = oldUser.Password;
+                    }
+
+                    var newUser = new User
+                    {
+                        id = UserId,
+                        Name = newName,
+                        Surname = newSurname,
+                        PESEL = newPesel,
+                        PhoneNumber = newPhone,
+                        Login = newLogin,
+                        Password = newPassword,
+                        UserType = newRole,
+                    };
+
+                    updated = DbManager.EditUserAdmin(oldUser, newUser);
+                }
+                else
+                {
+                    updated = DbManager.EditUserCommon(newLogin, newPassword, newPhone, UserId);
+                }
                 if (updated)
                 {
                     MessageBox.Show("Profil został zaktualizowany!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                    _parentWindow.Show();
-                    this.Close();
+
+                    if (_currentUser != null)
+                    {
+                        _currentUser.Name = txtName.Text.Trim();
+                        _currentUser.PhoneNumber = txtPhone.Text.Trim();
+                        _currentUser.Login = txtLogin.Text.Trim();
+                        if (!string.IsNullOrEmpty(txtPassword.Password))
+                            _currentUser.Password = txtPassword.Password.Trim();
+                    }
+                    if (_editedUser!=null)
+                    {
+                        AllUsers allUsers = new AllUsers(_currentUser);
+                        allUsers.LoadUsers();
+                        allUsers.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        _parentWindow.Show();
+                        this.Close();
+                    }
                 }
                 else
                 {
                     MessageBox.Show("Wystąpił błąd podczas aktualizacji.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+                }
             }
-        }
 
         private bool ValidateInputs()
         {
@@ -124,9 +263,9 @@ namespace MedLabTab.Views.OtherViews
                 return false;
             }
 
-            if (txtPhone.Text.Length < 9)
+            if (txtPhone.Text.Length != 9)
             {
-                MessageBox.Show("Numer telefonu musi zawierać co najmniej 9 cyfr.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Numer telefonu musi zawierać 9 cyfr.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -156,6 +295,13 @@ namespace MedLabTab.Views.OtherViews
         {
             NewVisit newVisit = new NewVisit(_currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
             this.Hide();
         }
 
@@ -260,13 +406,6 @@ namespace MedLabTab.Views.OtherViews
                 loginWindow.Show();
                 this.Close();
             }
-        }
-
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-            EditSchedule editschedule = new EditSchedule(_currentUser);
-            editschedule.Show();
-            this.Hide();
         }
     }
 }

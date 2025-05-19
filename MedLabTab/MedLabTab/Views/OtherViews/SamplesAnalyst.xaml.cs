@@ -23,8 +23,8 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class SamplesAnalyst : Window
     {
-        private User _currentUser;
-        public SamplesAnalyst(User currentUser)
+        private SignedInUser _currentUser;
+        public SamplesAnalyst(SignedInUser currentUser)
         {
             InitializeComponent();
             _currentUser = currentUser;

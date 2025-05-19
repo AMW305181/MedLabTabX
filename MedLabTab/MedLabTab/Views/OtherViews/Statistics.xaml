@@ -146,6 +146,63 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="16"/>
         </Style>
+        <!-- Style dla DataGrid -->
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFF8FB"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#EEEEEE"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+        </Style>
+
+        <!-- Style dla DataGridColumnHeader -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#FFF0F5"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Style dla DataGridRow -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Height" Value="36"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFF0F8"/>
+                    <Setter Property="BorderBrush" Value="#FF69B4"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFEFF5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style dla DataGridCell -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="#333333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -175,6 +232,7 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="WIZYTY"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie wizyty" x:Name="btnAllVisits" Click="BtnAllVisits_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Nowa wizyta" x:Name="btnNewVisit" Click="BtnNewVisit_Click"/>
+                        <Button Style="{StaticResource NavButtonStyle}" Content="Harmonogram" x:Name="btnSchedule" Click="BtnSchedule_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszystkie próbki" x:Name="btnSamples" Click="BtnSamples_Click"/>
 
                         <!-- Sekcja BADANIA -->
@@ -186,7 +244,6 @@
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="KONTA"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Wszyscy użytkownicy" x:Name="btnAllUsers" Click="BtnAllUsers_Click"/>
                         <Button Style="{StaticResource NavButtonStyle}" Content="Zarejestruj" x:Name="btnRegister" Click="BtnRegister_Click"/>
-                        <Button Style="{StaticResource NavButtonStyle}" Content="Harmonogram" x:Name="btnSchedule" Click="BtnSchedule_Click"/>
 
                         <!-- Sekcja RAPORTY -->
                         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="RAPORTY"/>
@@ -233,25 +290,44 @@
                 <Separator Style="{StaticResource SeparatorStyle}"/>
             </StackPanel>
 
-            <!-- Wyśrodkowane dane -->
-        <Grid Grid.Row="1">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-                    <Label Content="Całościowy przychód:"  Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
-                    <TextBlock Name="Income" Text="12 500 zł" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
+            <StackPanel Grid.Row="1">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+                    <DatePicker x:Name="DateFrom" Width="120" Margin="5"/>
+                    <TextBlock Text="do" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="DateTo" Width="120" Margin="5"/>
+                    <ComboBox x:Name="TestNameComboBox" Width="230" Margin="5"
+              DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                    <Button Content="Filtruj" Click="FilterButton_Click" Margin="5" Width="60 " Style="{StaticResource PrimaryButtonStyle}"/>
+                    <Button Content="Resetuj" Click="ResetButton_Click" Margin="5" Width =" 60" Style="{StaticResource PrimaryButtonStyle}"/>
+                    <CheckBox x:Name="All_Checkbox" Content="Całościowe dane" Click="OfAllTimes_Click" VerticalAlignment="Center" FontSize="14" />
+                </StackPanel>
 
-                    <Label Content="Najpopularniejsze badanie:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
-                <TextBlock Name="Test" Text="Morfologia" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+            <Label Content="Całościowy przychód:"  Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
+            <TextBlock Name="Income" Text="0 zł" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
 
-                <Label Content="Najlepsza pielęgniarka:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
-                <TextBlock Name="Nurse" Text="Anna Kowalska" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
+            <Label Content="Najpopularniejsze badanie:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
+            <TextBlock Name="Test" Text="Brak danych" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
 
-                <Label Content="Najlepszy analityk:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
-                <TextBlock Name="Analyst" Text="Jan Nowak" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
+            <Label Content="Najlepsza pielęgniarka:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
+            <TextBlock Name="Nurse" Text="Brak danych" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
 
-                <Label Content="Najlepszy pacjent:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
-                <TextBlock Name="Patient" Text="Piotr Zieliński" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
-            </StackPanel>
-        </Grid>
+            <Label Content="Najlepszy analityk:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
+            <TextBlock Name="Analyst" Text="Brak danych" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
+
+            <Label Content="Najlepszy pacjent:" Margin="0,5,0,0" Style="{StaticResource FormLabelStyle}" />
+            <TextBlock Name="Patient" Text="Brak danych" Margin="0,0,0,15" Style="{StaticResource FormValueStyle}"/>
+        </StackPanel>
+                
+        <DataGrid x:Name="ChartDataGrid" AutoGenerateColumns="True" Margin="0,20" Style="{StaticResource DataGridStyle}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"/>
+        <Button Grid.Row="2" 
+                     Style="{StaticResource PrimaryButtonStyle}"
+                     Content="Wyeksportuj do PDF" 
+                     Click="BtnExportPdf_Click"
+                     Margin="0,20,10,20" Width="190"/>
+        </StackPanel>
     </Grid>
         </Grid>
 </Window>

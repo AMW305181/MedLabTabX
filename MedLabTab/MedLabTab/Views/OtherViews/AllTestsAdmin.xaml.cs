@@ -13,16 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
     public partial class AllTestsAdmin : Window
     {
         private Window _parentWindow;
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private List<dynamic> _allTests;
         private List<dynamic> _filteredTests;
-        public AllTestsAdmin(User currentUser, Window parentWindow)
+        public AllTestsAdmin(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             LoadTests();
@@ -181,6 +182,14 @@ namespace MedLabTab.Views.OtherViews
             this.Hide();
         }
 
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
+            this.Hide();
+        }
+
         private void BtnSamples_Click(object sender, RoutedEventArgs e)
         {
             Samples samples = new Samples(_currentUser);
@@ -241,13 +250,6 @@ namespace MedLabTab.Views.OtherViews
                 loginWindow.Show();
                 this.Close();
             }
-        }
-
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-            EditSchedule editschedule = new EditSchedule(_currentUser);
-            editschedule.Show();
-            this.Hide();
         }
     }
 }

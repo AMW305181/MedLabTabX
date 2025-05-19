@@ -1,7 +1,12 @@
 ﻿using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
+using Microsoft.Win32;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +27,9 @@ namespace MedLabTab.Views.OtherViews
     public partial class ShowReport : Window
     {
         private Window _parentWindow;
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private readonly TestHistory _testHistory;
-        public ShowReport(TestHistory testHistory, User currentUser, Window parentWindow)
+        public ShowReport(TestHistory testHistory, SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             _parentWindow = parentWindow;
@@ -36,12 +41,14 @@ namespace MedLabTab.Views.OtherViews
             {
                 case 1:
                     ReceptionMenu.Visibility = Visibility.Visible;
+                    BtnPdf.Visibility = Visibility.Visible;
                     break;
                 case 3:
                     AnalystMenu.Visibility = Visibility.Visible;
                     break;
                 case 4:
                     PatientMenu.Visibility = Visibility.Visible;
+                    BtnPdf.Visibility = Visibility.Visible;
                     LoadPatientResults(_currentUser.id);
                     break;
             }
@@ -94,6 +101,134 @@ namespace MedLabTab.Views.OtherViews
 
         }
 
+        private void ExportToPdf_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string patientName = $"{_testHistory.Patient?.Name}_{_testHistory.Patient?.Surname}_{DateTime.Now:yyyyMMdd_HHmm}".Replace(" ", "");
+                string fileName = $"Wyniki_{patientName}.pdf";
+
+                var saveDialog = new SaveFileDialog
+                {
+                    FileName = fileName,
+                    DefaultExt = ".pdf",
+                    Filter = "Pliki PDF (*.pdf)|*.pdf",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                };
+
+                if (saveDialog.ShowDialog() == true)
+                {
+                    var document = new PdfDocument();
+                    var page = document.AddPage();
+
+                    using (var gfx = XGraphics.FromPdfPage(page))
+                    {
+                        var fontTitle = new XFont("Arial", 16);
+                        var fontHeader = new XFont("Arial", 12);
+                        var fontNormal = new XFont("Arial", 10);
+                        var fontResults = new XFont("Arial", 10);
+
+                        int leftMargin = 40;
+                        int topMargin = 40;
+                        int yPos = topMargin;
+
+                        gfx.DrawString("Raport z badania laboratoryjnego", fontTitle,
+                            XBrushes.Black, new XRect(0, yPos, page.Width, 30),
+                            XStringFormats.TopCenter);
+                        yPos += 40;
+
+                        gfx.DrawString("Podstawowe informacje:", fontHeader, XBrushes.Black, leftMargin, yPos);
+                        yPos += 20;
+
+                        gfx.DrawString($"• Badanie: {TestTextBlock.Text}", fontNormal, XBrushes.Black, leftMargin, yPos);
+                        yPos += 15;
+
+                        gfx.DrawString($"• Pacjent: {PatientTextBlock.Text}", fontNormal, XBrushes.Black, leftMargin, yPos);
+                        yPos += 15;
+
+                        gfx.DrawString($"• Data wykonania: {DateTextBlock.Text}", fontNormal, XBrushes.Black, leftMargin, yPos);
+                        yPos += 15;
+
+                        gfx.DrawString($"• Pielęgniarka: {NurseTextBlock.Text}", fontNormal, XBrushes.Black, leftMargin, yPos);
+                        yPos += 15;
+
+                        gfx.DrawString($"• Analityk: {AnalystTextBlock.Text}", fontNormal, XBrushes.Black, leftMargin, yPos);
+                        yPos += 25;
+
+                        gfx.DrawString("Wyniki badania:", fontHeader, XBrushes.Black, leftMargin, yPos);
+                        yPos += 20;
+
+                        var resultsText = ResultTextBox.Text;
+                        var formattedResults = FormatResultsForPdf(resultsText);
+
+                        foreach (var line in formattedResults)
+                        {
+
+                            gfx.DrawString(line, fontResults, XBrushes.Black, leftMargin, yPos);
+                            yPos += 15;
+                        }
+
+                        yPos += 20;
+                        gfx.DrawString($"Wygenerowano: {DateTime.Now:dd.MM.yyyy HH:mm}", fontNormal,
+                            XBrushes.Black, new XRect(0, yPos, page.Width, 20),
+                            XStringFormats.TopCenter);
+                    }
+
+                    document.Save(saveDialog.FileName);
+
+                    MessageBox.Show($"Raport PDF został zapisany jako:\n{saveDialog.FileName}", "Sukces",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    Process.Start(new ProcessStartInfo(saveDialog.FileName) { UseShellExecute = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Wystąpił błąd podczas generowania raportu PDF:\n{ex.Message}",
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private List<string> FormatResultsForPdf(string resultsText)
+        {
+            var lines = new List<string>();
+            var paragraphs = resultsText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+            foreach (var paragraph in paragraphs)
+            {
+                if (string.IsNullOrWhiteSpace(paragraph))
+                {
+                    lines.Add(" "); 
+                    continue;
+                }
+
+                if (paragraph.Length > 100)
+                {
+                    var words = paragraph.Split(' ');
+                    var currentLine = "";
+
+                    foreach (var word in words)
+                    {
+                        if ((currentLine + word).Length > 100)
+                        {
+                            lines.Add(currentLine.Trim());
+                            currentLine = "";
+                        }
+                        currentLine += word + " ";
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(currentLine))
+                        lines.Add(currentLine.Trim());
+                }
+                else
+                {
+                    lines.Add(paragraph);
+                }
+            }
+
+            return lines;
+        }
+
         private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
         {
             AllVisitsAdmin allVisits = new AllVisitsAdmin(_currentUser);
@@ -105,6 +240,13 @@ namespace MedLabTab.Views.OtherViews
         {
             NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
             this.Hide();
         }
 
@@ -203,13 +345,6 @@ namespace MedLabTab.Views.OtherViews
                 loginWindow.Show();
                 this.Close();
             }
-        }
-
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-            EditSchedule editschedule = new EditSchedule(_currentUser);
-            editschedule.Show();
-            this.Hide();
         }
     }
 }

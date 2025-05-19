@@ -1,5 +1,6 @@
 ﻿using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,8 @@ namespace MedLabTab.Views.OtherViews
     /// </summary>
     public partial class SamplesNurse : Window
     {
-        private User _currentUser;
-        public SamplesNurse(User currentUser)
+        private SignedInUser _currentUser;
+        public SamplesNurse(SignedInUser currentUser)
         {
             InitializeComponent();
             _currentUser = currentUser;

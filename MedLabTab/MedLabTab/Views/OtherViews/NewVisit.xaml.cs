@@ -1,5 +1,6 @@
 ﻿using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,9 +31,9 @@ namespace MedLabTab.Views.OtherViews
         private int visitTime;
         private int? _selectedSlotId;
         private List<Schedule> _AvaibleSlots;
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private bool _isInitialLoad = true;
-        public NewVisit(User currentUser, Window parentWindow)
+        public NewVisit(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             ClearForm();

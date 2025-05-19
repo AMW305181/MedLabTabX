@@ -6,14 +6,15 @@ using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
 using MedLabTab.DatabaseManager;
 using System.Globalization;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
     public partial class NewTest : Window
     {
         private Window _parentWindow;
-        private User _currentUser;
-        public NewTest(User currentUser, Window parentWindow)
+        private SignedInUser _currentUser;
+        public NewTest(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             InitializeCategories();
@@ -142,6 +143,13 @@ namespace MedLabTab.Views.OtherViews
         {
             NewVisitAdmin newVisitAdmin = new NewVisitAdmin(_currentUser, this);
             newVisitAdmin.Show();
+            this.Hide();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
             this.Hide();
         }
 

@@ -13,8 +13,8 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class Registration : Window
     {
-        private User _currentUser;
-        public Registration(User currentUser)
+        private SignedInUser _currentUser;
+        public Registration(SignedInUser currentUser)
         {
             InitializeComponent();
             InitializeUserRoles();
@@ -36,6 +36,13 @@ namespace MedLabTab.Views.OtherViews
         {
             NewVisitAdmin newVisit = new NewVisitAdmin(_currentUser, this);
             newVisit.Show();
+            this.Hide();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            EditSchedule editschedule = new EditSchedule(_currentUser);
+            editschedule.Show();
             this.Hide();
         }
 
@@ -118,7 +125,7 @@ namespace MedLabTab.Views.OtherViews
             txtPesel.Text = string.Empty;
             txtPhone.Text = string.Empty;
             txtLogin.Text = string.Empty;
-            txtPassword.Text = string.Empty;
+            txtPassword.Password = string.Empty;
             cmbUserRole.SelectedIndex = 0;
         }
 
@@ -132,8 +139,17 @@ namespace MedLabTab.Views.OtherViews
         {
             if (ValidateInputs())
             {
-                    var selectedRole = (ComboBoxItem)cmbUserRole.SelectedItem;
-                    int userType = (int)selectedRole.Tag;
+                var selectedRole = (ComboBoxItem)cmbUserRole.SelectedItem;
+                int userType = (int)selectedRole.Tag;
+
+                string newPassword = txtPassword.Password.Trim();
+                string repeatPassword = txtRepeatPassword.Password.Trim();
+
+                if (newPassword != repeatPassword)
+                {
+                    MessageBox.Show("Hasła się nie zgadzają.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
                 var newUser = new User
                 {
@@ -142,25 +158,27 @@ namespace MedLabTab.Views.OtherViews
                     PESEL = txtPesel.Text.Trim(),
                     PhoneNumber = txtPhone.Text.Trim(),
                     Login = txtLogin.Text.Trim(),
-                    Password = txtPassword.Text,
-                        UserType = userType,
+                    Password = txtPassword.Password.Trim(),
+                    UserType = userType,
                     IsActive = true
                 };
 
-                        if (DbManager.IsLoginTaken(newUser.Login))
-                        {
-                            MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            return;
-                        }
+                if (DbManager.IsLoginTaken(newUser.Login))
+                {
+                    MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                        if (DbManager.IsPESELTaken(newUser.PESEL))
-                        {
-                            MessageBox.Show("Użytkownik z tym PESEL już istnieje.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                            return;
-                        }
+                if (DbManager.IsPESELTaken(newUser.PESEL))
+                {
+                    MessageBox.Show("Użytkownik z tym PESEL już istnieje.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                       bool userAdded= DbManager.AddUser(newUser);
-                if (userAdded) { MessageBox.Show("Rejestracja zakończona pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                bool userAdded = DbManager.AddUser(newUser);
+                if (userAdded)
+                {
+                    MessageBox.Show("Rejestracja zakończona pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 }
                 else { MessageBox.Show("Wystąpił błąd.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning); }
@@ -192,7 +210,8 @@ namespace MedLabTab.Views.OtherViews
                 string.IsNullOrWhiteSpace(txtPesel.Text) ||
                 string.IsNullOrWhiteSpace(txtPhone.Text) ||
                 string.IsNullOrWhiteSpace(txtLogin.Text) ||
-                string.IsNullOrWhiteSpace(txtPassword.Text))
+                string.IsNullOrWhiteSpace(txtPassword.Password) ||
+                string.IsNullOrWhiteSpace(txtRepeatPassword.Password))
             {
                 MessageBox.Show("Wszystkie pola muszą być wypełnione.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
@@ -210,7 +229,7 @@ namespace MedLabTab.Views.OtherViews
                 return false;
             }
 
-            if (txtPassword.Text.Length < 6)
+            if (!string.IsNullOrWhiteSpace(txtPassword.Password) && txtPassword.Password.Length < 6)
             {
                 MessageBox.Show("Hasło musi zawierać co najmniej 6 znaków.", "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
@@ -239,12 +258,6 @@ namespace MedLabTab.Views.OtherViews
             reception.Show();
             this.Close();
         }
-
-        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-        {
-            EditSchedule editschedule = new EditSchedule(_currentUser);
-            editschedule.Show();
-            this.Hide();
-        }
     }
 }
+  

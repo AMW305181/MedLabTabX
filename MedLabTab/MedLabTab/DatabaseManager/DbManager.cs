@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using MedLabTab.DatabaseModels;
@@ -44,7 +45,7 @@ namespace MedLabTab.DatabaseManager
         public static bool IsTestNameTaken(string testName)  {return testsManager.IsTestNameTaken(db, testName); }
         public static bool AddTest(Test test) { return testsManager.AddTest(db, test); }
         public static bool EditTest(Test test, Test newData){return testsManager.EditTest(db, test, newData); }
-        public static bool DeactivateVisit(Visit visit){ return visitsManager.DeactivateVisit(db, visit);}
+        public static bool DeactivateVisit(Visit visit){ return visitsManager.DeactivateVisit(visit);}
         public static bool ChangeTestStatus(Test test) { return testsManager.ChangeTestStatus(db, test); }
         public static List<CategoryDictionary> GetCategories() {return categoriesManager.GetCategories(db);}
         public static Dictionary<int, string> GetCategoriesDictionary() { return categoriesManager.GetCategoriesDictionary(db); }
@@ -74,7 +75,31 @@ namespace MedLabTab.DatabaseManager
         public static bool EditReport(Report report, Report newReport) { return reportsManager.EditReport(db, report, newReport); }
         public static int GetNurseIdFromTestHistory(TestHistory test) {return testHistoryManager.GetNurseIdFromTestHistory(db, test);}
 
-       
+        public static bool EditUserAdmin(User user, User newUser)
+        {
+            TransactionOptions specialOptions = new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.Serializable,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, specialOptions))
+            {
+                try
+                {
+                    user.Name = newUser.Name;
+                    user.Surname = newUser.Surname;
+                    user.PhoneNumber = newUser.PhoneNumber;
+                    user.Login = newUser.Login;
+                    user.Password = newUser.Password;
+                    user.PESEL = newUser.PESEL;
+                    user.UserType = newUser.UserType;
+                    db.SaveChanges();
+                    scope.Complete();
+                    return true ;
+                }
+                catch { return false; }
+            }
+        }
     }
 }
 

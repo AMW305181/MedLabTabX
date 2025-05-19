@@ -13,16 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MedLabTab.DatabaseManager;
 using MedLabTab.DatabaseModels;
+using MedLabTab.ViewModels;
 
 namespace MedLabTab.Views.OtherViews
 {
     public partial class AllTests : Window
     {
         private Window _parentWindow;
-        private User _currentUser;
+        private SignedInUser _currentUser;
         private List<dynamic> _allTests;
         private List<dynamic> _filteredTests;
-        public AllTests(User currentUser, Window parentWindow)
+        public AllTests(SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             
