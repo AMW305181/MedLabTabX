@@ -41,12 +41,6 @@ namespace MedLabTab.DatabaseManager
             {
                 try
                 {
-                    //List<TestHistory> testHistory = db.TestHistories.Where(t => t.VisitId == visitId).ToList();
-
-                    //foreach (var test in testHistory)
-                    //{
-                    //    db.TestHistories.Remove(test);
-                    //}
                     db.TestHistories.RemoveRange(db.TestHistories.Where(t => t.VisitId == visitId));
                     db.SaveChanges();
                     scope.Complete();

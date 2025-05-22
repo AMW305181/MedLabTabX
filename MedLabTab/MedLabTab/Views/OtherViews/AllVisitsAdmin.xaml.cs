@@ -95,17 +95,20 @@ namespace MedLabTab.Views.OtherViews
                 return;
             }
 
-            // Sprawdzenie, czy wszystkie testy mają status <= 2
-            if (selectedVisit.TestHistories.All(t => t.Status <= 2))
+
+            if (selectedVisit.TestHistories.All(t => t.Status <= 1))
             {
-                var editVisitWindow = new EditVisitAdmin(selectedVisit, _currentUser, this);
-                editVisitWindow.Show();
+                EditVisitAdmin editVisitAdmin = new EditVisitAdmin(selectedVisit, _currentUser, this);
+                editVisitAdmin.Show();
                 this.Hide();
             }
+
             else
             {
-                MessageBox.Show("Nie można edytować już odbytej wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nie można edytować już opłaconej wizyty.", "Błąd",
+                          MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+
         }
 
         private void Deactivate_Click(object sender, RoutedEventArgs e)

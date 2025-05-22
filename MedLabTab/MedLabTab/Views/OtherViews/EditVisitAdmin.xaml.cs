@@ -223,6 +223,17 @@ namespace MedLabTab.Views.OtherViews
                 {
                     MessageBox.Show("Wizyta została zedytowana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
+
+                    //aktualizacja widoku
+                    if (_parentWindow is AllVisitsAdmin allVisitsWindow)
+                    {
+                        allVisitsWindow.LoadVisits();
+                    }
+                    else if (_parentWindow is MyVisits myVisitsWindow)
+                    {
+                        myVisitsWindow.LoadVisits();
+                    }
+
                     _parentWindow?.Show();
                 }
                 else
