@@ -67,9 +67,18 @@ namespace MedLabTab.Views.OtherViews
                 dynamic selectedItem = VisitsDataGrid.SelectedItem;
                 Visit selectedVisit = selectedItem.OriginalVisit;
 
-                EditVisitAdmin editVisitAdmin = new EditVisitAdmin(selectedVisit, _currentUser, this);
-                editVisitAdmin.Show();
-                this.Hide();
+                if (selectedVisit.TestHistories.All(t => t.Status <= 1))
+                {
+                    EditVisitAdmin editVisitAdmin = new EditVisitAdmin(selectedVisit, _currentUser, this);
+                    editVisitAdmin.Show();
+                    this.Hide();
+                }
+
+                else
+                {
+                    MessageBox.Show("Nie można edytować już opłaconej wizyty.", "Błąd",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
             else
             {
