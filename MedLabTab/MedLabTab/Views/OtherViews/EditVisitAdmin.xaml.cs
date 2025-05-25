@@ -227,11 +227,6 @@ namespace MedLabTab.Views.OtherViews
                 if (editedVisit && addedAllTests)
                 {
                     MessageBox.Show("Wizyta została zedytowana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                    if (_parentWindow is AllVisitsAdmin allVisitsWindow)
-                    {
-                        allVisitsWindow.LoadVisits();
-                    }
-                    this.Close();
 
                     //aktualizacja widoku
                     if (_parentWindow is AllVisitsAdmin allVisitsWindow)
@@ -242,7 +237,7 @@ namespace MedLabTab.Views.OtherViews
                     {
                         myVisitsWindow.LoadVisits();
                     }
-
+                    this.Close();
                     _parentWindow?.Show();
                 }
                 else
