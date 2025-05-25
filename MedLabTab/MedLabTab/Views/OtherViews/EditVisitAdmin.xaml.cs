@@ -39,10 +39,15 @@ namespace MedLabTab.Views.OtherViews
 
             switch (_currentUser.UserType)
             {
+                case 1:
+                    IsPaidCheckBox.Visibility = Visibility.Visible;
+                    IsActiveCheckBox.Visibility = Visibility.Visible;
+                    PatientComboBox.IsEnabled = true;
+                    break;
                 case 4:
                     IsPaidCheckBox.Visibility = Visibility.Collapsed;
+                    IsActiveCheckBox.Visibility = Visibility.Collapsed;
                     PatientComboBox.IsEnabled = false;
-                    
                     break;
             }
         }
@@ -191,7 +196,7 @@ namespace MedLabTab.Views.OtherViews
                 {
                     var newVisit = new Visit
                     {
-                        //id = _originalVisit.id,
+                        id = _originalVisit.id,
                         Cost = visitCost,
                         PaymentStatus = IsPaidCheckBox.IsChecked == true,
                         IsActive = IsActiveCheckBox.IsChecked == true,
@@ -236,6 +241,10 @@ namespace MedLabTab.Views.OtherViews
                 if (editedVisit && addedAllTests)
                 {
                     MessageBox.Show("Wizyta została zedytowana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (_parentWindow is AllVisitsAdmin allVisitsWindow)
+                    {
+                        allVisitsWindow.LoadVisits();
+                    }
                     this.Close();
                     _parentWindow?.Show();
                 }

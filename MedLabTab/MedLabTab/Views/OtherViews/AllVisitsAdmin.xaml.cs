@@ -21,14 +21,14 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class AllVisitsAdmin : Window
     {
-        private SignedInUser _currentUser;
+        public SignedInUser _currentUser;
         private List<dynamic> _allVisits;  
         private List<dynamic> _filteredVisits;
 
         public AllVisitsAdmin(SignedInUser currentUser)
         {
             InitializeComponent();
-            LoadVisits(); // Załaduj dane po inicjalizacji okna
+            LoadVisits();
             _currentUser = currentUser;
             txtSearch.TextChanged += TxtSearch_TextChanged;
             switch (_currentUser.UserType)
@@ -63,10 +63,11 @@ namespace MedLabTab.Views.OtherViews
                     PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
                     v.IsActive,
                     OriginalVisit = v,
+                    CanDelete = v.IsActive
                 }).ToList<dynamic>();
 
                 _filteredVisits = new List<dynamic>(_allVisits);
-                VisitsDataGrid.ItemsSource = _allVisits;
+                VisitsDataGrid.ItemsSource = _filteredVisits;
             }
             else
             {
@@ -107,7 +108,7 @@ namespace MedLabTab.Views.OtherViews
             if (selectedVisit != null)
             {
                 var result = MessageBox.Show(
-                    $"Czy na pewno chcesz anulować wizytę \"{selectedVisit.id}\"?",
+                    $"Czy na pewno chcesz anulować wizytę pacjenta {selectedVisit.DisplayPatient} z dnia {selectedVisit.DisplayDate} {selectedVisit.DisplayTime}?",
                     "Potwierdzenie anulowania",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
@@ -119,7 +120,10 @@ namespace MedLabTab.Views.OtherViews
                     if (deleted)
                     {
                         MessageBox.Show("Wizyta została anulowana.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadVisits(); // Odświeżenie tabeli
+                        LoadVisits();
+                        VisitsDataGrid.ItemsSource = null;
+                        VisitsDataGrid.ItemsSource = _filteredVisits;
+
                     }
                     else
                     {

@@ -251,6 +251,7 @@
         <!-- Style dla DataGridRow -->
         <Style TargetType="DataGridRow">
             <Setter Property="Height" Value="36"/>
+            <Setter Property="MinHeight" Value="36"/>
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#FFF0F8"/>
@@ -455,7 +456,22 @@
                 </Grid>
 
                 <!-- Tabela -->
-                <DataGrid x:Name="VisitsDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10" Style="{StaticResource DataGridStyle}">
+                <DataGrid x:Name="VisitsDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="10" Style="{StaticResource DataGridStyle}"  ColumnWidth="*">
+                    <DataGrid.Resources>
+                        <!-- Styl dla nieaktywnych wierszy -->
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Height" Value="36"/>
+                            <Setter Property="MinHeight" Value="36"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                    <Setter Property="Foreground" Value="Gray"/>
+                                    <Setter Property="Background" Value="#FFF5F5F5"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
                         <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
@@ -490,8 +506,34 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Content="Edytuj" Width="60" Margin="5,0" Style="{StaticResource PrimaryButtonStyle}" CommandParameter="{Binding OriginalVisit}" Click="Edit_Click"/>
-                                        <Button Content="Usuń" Width="60" Margin="5,0" Style="{StaticResource DeleteButtonStyle}" CommandParameter="{Binding OriginalVisit}" Click="Deactivate_Click"/>
+                                        <Button Content="Edytuj" Width="60" Margin="5,0" 
+                                                CommandParameter="{Binding OriginalVisit}" 
+                                                Click="Edit_Click">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CanDelete}" Value="False">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                            </Button>
+                                                <Button Content="Usuń" Width="60" Margin="5,0" 
+                                                CommandParameter="{Binding OriginalVisit}" 
+                                                Click="Deactivate_Click">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource DeleteButtonStyle}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding CanDelete}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

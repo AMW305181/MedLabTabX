@@ -18,6 +18,7 @@ namespace MedLabTab.Views.OtherViews
         public Profile(User editedUser, Window parentWindow)
         {
             InitializeComponent();
+            //_currentUser = currentUser;
             _editedUser = editedUser;
             _parentWindow = parentWindow;
             FillForm_Admin();
@@ -29,13 +30,13 @@ namespace MedLabTab.Views.OtherViews
                     ReceptionMenu.Visibility = Visibility.Visible;
                     break;
                 case 2:
-                    NurseMenu.Visibility = Visibility.Visible;
+                    ReceptionMenu.Visibility = Visibility.Visible;
                     break;
                 case 3:
-                    AnalystMenu.Visibility = Visibility.Visible;
+                    ReceptionMenu.Visibility = Visibility.Visible;
                     break;
                 case 4:
-                    PatientMenu.Visibility = Visibility.Visible;
+                    ReceptionMenu.Visibility = Visibility.Visible;
                     break;
             }
         }
@@ -227,9 +228,12 @@ namespace MedLabTab.Views.OtherViews
 
                     if (_currentUser != null)
                     {
-                        _currentUser.Name = txtName.Text.Trim();
-                        _currentUser.PhoneNumber = txtPhone.Text.Trim();
-                        _currentUser.Login = txtLogin.Text.Trim();
+                        _currentUser.Name = newName;
+                        _currentUser.Surname = newSurname;
+                        _currentUser.PESEL = newPesel;
+                        _currentUser.PhoneNumber = newPhone;
+                        _currentUser.Login = newLogin;
+                        _currentUser.UserType = newRole;
                         if (!string.IsNullOrEmpty(txtPassword.Password))
                             _currentUser.Password = txtPassword.Password.Trim();
                     }
@@ -242,7 +246,7 @@ namespace MedLabTab.Views.OtherViews
                     }
                     else
                     {
-                        _parentWindow.Show();
+                        _parentWindow?.Show();
                         this.Close();
                     }
                 }
