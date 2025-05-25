@@ -211,9 +211,9 @@
                     <ControlTemplate TargetType="TextBox">
                         <Grid>
                             <Border Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="4">
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="4">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -222,27 +222,27 @@
 
                                     <!-- Ikona lupy -->
                                     <TextBlock Grid.Column="0" 
-                               Text="🔍" 
-                               FontSize="14" 
-                               Margin="10,0,0,0" 
-                               VerticalAlignment="Center"/>
+                                           Text="🔍" 
+                                           FontSize="14" 
+                                           Margin="10,0,0,0" 
+                                           VerticalAlignment="Center"/>
 
                                     <!-- Główna zawartość -->
                                     <ScrollViewer Grid.Column="1" 
-                                  x:Name="PART_ContentHost"
-                                  Margin="5,0,10,0"
-                                  VerticalAlignment="Center"
-                                  Foreground="#999999"/>
+                                          x:Name="PART_ContentHost"
+                                          Margin="5,0,10,0"
+                                          VerticalAlignment="Center"
+                                          Foreground="#999999"/>
 
                                     <!-- Tekst podpowiedzi -->
                                     <TextBlock Grid.Column="1"
-                               x:Name="placeholderText"
-                               Text="Wyszukaj badanie..."
-                               Foreground="#999999"
-                               FontStyle="Italic"
-                               Margin="15,0,10,0"
-                               VerticalAlignment="Center"
-                               Visibility="Collapsed"/>
+                                           x:Name="placeholderText"
+                                           Text="Wyszukaj badanie..."
+                                           Foreground="#999999"
+                                           FontStyle="Italic"
+                                           Margin="15,0,10,0"
+                                           VerticalAlignment="Center"
+                                           Visibility="Collapsed"/>
                                 </Grid>
                             </Border>
                         </Grid>
