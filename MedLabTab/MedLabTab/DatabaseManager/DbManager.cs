@@ -86,6 +86,10 @@ namespace MedLabTab.DatabaseManager
             {
                 try
                 {
+                    if (!string.IsNullOrWhiteSpace(newUser.Password))
+                    {
+                        newUser.Password = PasswordHasher.Hash(newUser.Password);
+                    }
                     user.Name = newUser.Name;
                     user.Surname = newUser.Surname;
                     user.PhoneNumber = newUser.PhoneNumber;
