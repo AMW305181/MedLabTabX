@@ -17,6 +17,7 @@ namespace MedLabTab.Views.MainViews
         {
             InitializeComponent();
             currentUser = user;
+
         }
         private void BtnExams_Click(object sender, RoutedEventArgs e)
         {

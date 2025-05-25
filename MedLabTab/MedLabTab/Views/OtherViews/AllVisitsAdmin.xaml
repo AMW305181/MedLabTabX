@@ -509,18 +509,18 @@
                                         <Button Content="Edytuj" Width="60" Margin="5,0" 
                                                 CommandParameter="{Binding OriginalVisit}" 
                                                 Click="Edit_Click">
-                                        <Button.Style>
-                                            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding CanDelete}" Value="False">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                            </Button>
-                                                <Button Content="Usuń" Width="60" Margin="5,0" 
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding CanDelete}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                        <Button Content="Usuń" Width="60" Margin="5,0" 
                                                 CommandParameter="{Binding OriginalVisit}" 
                                                 Click="Deactivate_Click">
                                             <Button.Style>

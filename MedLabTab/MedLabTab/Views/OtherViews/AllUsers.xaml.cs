@@ -241,7 +241,7 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
 
             if (selectedUser != null)
             {
-                Profile profile = new Profile(selectedUser, this);
+                Profile profile = new Profile(selectedUser, _currentUser,this);
                 profile.Show();
                 this.Hide();
             }
@@ -328,6 +328,5 @@ private void BtnAllVisits_Click(object sender, RoutedEventArgs e)
                 User selectedUser = selectedItem.OriginalUser;
             }
         }
-
     }
 }

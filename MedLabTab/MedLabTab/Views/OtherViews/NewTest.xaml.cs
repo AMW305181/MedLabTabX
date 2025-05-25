@@ -214,5 +214,6 @@ namespace MedLabTab.Views.OtherViews
                 this.Close();
             }
         }
+
     }
 }
