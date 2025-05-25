@@ -15,10 +15,11 @@ namespace MedLabTab.Views.OtherViews
         private SignedInUser _currentUser;
         private User _editedUser;
         private Window _parentWindow;
-        public Profile(User editedUser, Window parentWindow)
+        public Profile(User editedUser, SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             _editedUser = editedUser;
+            _currentUser = currentUser;
             _parentWindow = parentWindow;
             FillForm_Admin();
             txtPhone.PreviewTextInput += NumberValidationTextBox;
@@ -280,7 +281,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            _parentWindow.Show();
+            AllUsers allUsers = new AllUsers(_currentUser);
+            allUsers.LoadUsers();
+            allUsers.Show();
             this.Close();
         }
 
