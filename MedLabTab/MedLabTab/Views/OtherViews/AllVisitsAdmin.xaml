@@ -475,7 +475,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Data wizyty" Binding="{Binding Date}" Width="*" />
                         <DataGridTextColumn Header="Godzina" Binding="{Binding Time}" Width="*" />
-                        <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="Auto" />
+                        <DataGridTextColumn Header="Badania" Binding="{Binding Tests}" Width="*" />
                         <DataGridTextColumn Header="Koszt" Width="*">
                             <DataGridTextColumn.Binding>
                                 <Binding Path="Cost" StringFormat="{}{0:N2} zł"/>
@@ -509,18 +509,18 @@
                                         <Button Content="Edytuj" Width="60" Margin="5,0" 
                                                 CommandParameter="{Binding OriginalVisit}" 
                                                 Click="Edit_Click">
-                                        <Button.Style>
-                                            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding CanDelete}" Value="False">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                            </Button>
-                                                <Button Content="Usuń" Width="60" Margin="5,0" 
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding CanDelete}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                        <Button Content="Usuń" Width="60" Margin="5,0" 
                                                 CommandParameter="{Binding OriginalVisit}" 
                                                 Click="Deactivate_Click">
                                             <Button.Style>
