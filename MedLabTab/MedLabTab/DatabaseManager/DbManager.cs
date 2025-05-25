@@ -57,7 +57,7 @@ namespace MedLabTab.DatabaseManager
         public static List<Schedule> GetAvailableSlotsForDate(DateOnly date) { return schedulesManager.GetAvailableSlotsForDate(db, date); }
         public static List<Schedule> GetAllSlotsForDate(DateOnly date) { return schedulesManager.GetAllSlotsForDate(db, date); }
         public static bool AddScheduleSlots(List<Schedule> slots) { return schedulesManager.AddScheduleSlots(db, slots); }
-        public static List<Visit> GetAllVisits(){return visitsManager.GetAllVisits(db); }
+        public static List<Visit> GetAllVisits(){return visitsManager.GetAllVisits(); }
         public static bool EditVisit(Visit oldVisit, Visit newVisit) { return visitsManager.EditVisit(db, oldVisit, newVisit); }
         public static bool AddTestHistory(TestHistory newTest) { return testHistoryManager.AddTestHistory(db, newTest); }
         public static bool RemoveTestHistory(int visitId) { return testHistoryManager.RemoveTestHistory(db, visitId); }
@@ -86,6 +86,10 @@ namespace MedLabTab.DatabaseManager
             {
                 try
                 {
+                    if (!string.IsNullOrWhiteSpace(newUser.Password))
+                    {
+                        newUser.Password = PasswordHasher.Hash(newUser.Password);
+                    }
                     user.Name = newUser.Name;
                     user.Surname = newUser.Surname;
                     user.PhoneNumber = newUser.PhoneNumber;

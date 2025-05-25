@@ -66,19 +66,31 @@ namespace MedLabTab.DatabaseManager
                 return visits;
             }
         }
-        public List<Visit> GetAllVisits(MedLabContext db)
+public List<Visit> GetAllVisits()
+{
+    using (var db = new MedLabContext())
+    using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+    {
+        try
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
-            {
-                try
-                {
-                    List<Visit> AllVisits = db.Visits.ToList();
-                    scope.Complete();
-                    return AllVisits;
-                }
-                catch { return null; }
-            }
+            List<Visit> allVisits = db.Visits
+                .Include(v => v.Patient)
+                .Include(v => v.TimeSlot)
+                    .ThenInclude(ts => ts.Nurse)
+                .Include(v => v.TestHistories)
+                    .ThenInclude(th => th.Test)
+                .ToList();
+
+            scope.Complete();
+            return allVisits;
         }
+        catch
+        {
+            return null;
+        }
+    }
+}
+
         public bool EditVisit(MedLabContext db,Visit oldVisit, Visit newVisit)
         {
             TransactionOptions specialOptions = new TransactionOptions
@@ -92,11 +104,11 @@ namespace MedLabTab.DatabaseManager
                 {
                     var existingVisit = db.Visits.Find(oldVisit.id);
                     if (existingVisit == null) return false;
-                    oldVisit.Cost = newVisit.Cost;
-                    oldVisit.PaymentStatus = newVisit.PaymentStatus;
-                    oldVisit.IsActive = newVisit.IsActive;
-                    oldVisit.PatientId = newVisit.PatientId;
-                    oldVisit.TimeSlotId = newVisit.TimeSlotId;
+                    existingVisit.Cost = newVisit.Cost;
+                    existingVisit.PaymentStatus = newVisit.PaymentStatus;
+                    existingVisit.IsActive = newVisit.IsActive;
+                    existingVisit.PatientId = newVisit.PatientId;
+                    existingVisit.TimeSlotId = newVisit.TimeSlotId;
                     db.SaveChanges();
                     scope.Complete();
                     return true;
