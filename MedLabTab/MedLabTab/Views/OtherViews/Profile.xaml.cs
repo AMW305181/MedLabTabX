@@ -15,10 +15,11 @@ namespace MedLabTab.Views.OtherViews
         private SignedInUser _currentUser;
         private User _editedUser;
         private Window _parentWindow;
-        public Profile(User editedUser, Window parentWindow)
+        public Profile(User editedUser, SignedInUser currentUser, Window parentWindow)
         {
             InitializeComponent();
             _editedUser = editedUser;
+            _currentUser = currentUser;
             _parentWindow = parentWindow;
             FillForm_Admin();
             txtPhone.PreviewTextInput += NumberValidationTextBox;
@@ -29,13 +30,13 @@ namespace MedLabTab.Views.OtherViews
                     ReceptionMenu.Visibility = Visibility.Visible;
                     break;
                 case 2:
-                    NurseMenu.Visibility = Visibility.Visible;
+                    ReceptionMenu.Visibility = Visibility.Visible;
                     break;
                 case 3:
-                    AnalystMenu.Visibility = Visibility.Visible;
+                    ReceptionMenu.Visibility = Visibility.Visible;
                     break;
                 case 4:
-                    PatientMenu.Visibility = Visibility.Visible;
+                    ReceptionMenu.Visibility = Visibility.Visible;
                     break;
             }
         }
@@ -44,6 +45,7 @@ namespace MedLabTab.Views.OtherViews
         {
             InitializeComponent();
             _currentUser = currentUser;
+            _editedUser=currentUser;
             _parentWindow = parentWindow;
             FillForm();
             txtPhone.PreviewTextInput += NumberValidationTextBox;
@@ -165,14 +167,15 @@ namespace MedLabTab.Views.OtherViews
                         break;
                 }
 
-                        if (_currentUser != null)
+                     if (_editedUser != null)
+                     {
+                    UserId = _editedUser.id;
+                     }
+                else if (_currentUser != null)
                     {
                         UserId = _currentUser.id;
                     }
-                    else if (_editedUser != null)
-                    {
-                        UserId = _editedUser.id;
-                    }
+                    
 
                     // Sprawdzenie czy hasła się zgadzają
                     if (newPassword != repeatPassword)
@@ -180,16 +183,17 @@ namespace MedLabTab.Views.OtherViews
                         MessageBox.Show("Hasła się nie zgadzają.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
-
+                if (newLogin != _editedUser.Login)
+                {
                     // Sprawdź, czy login nie jest zajęty przez innego użytkownika
                     if (DbManager.IsLoginTakenByAnotherUser(newLogin, UserId))
                     {
                         MessageBox.Show("Login jest już zajęty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
-
+                }
                 bool updated;
-                if (_editedUser != null) // Tryb admina
+                if (_currentUser.UserType == 1) // Tryb admina
                 {
                     var oldUser = DbManager.GetUserById(UserId);
                     if (oldUser == null)
@@ -203,17 +207,17 @@ namespace MedLabTab.Views.OtherViews
                         newPassword = oldUser.Password;
                     }
 
-                    var newUser = new User
-                    {
-                        id = UserId,
-                        Name = newName,
-                        Surname = newSurname,
-                        PESEL = newPesel,
-                        PhoneNumber = newPhone,
-                        Login = newLogin,
-                        Password = newPassword,
-                        UserType = newRole,
-                    };
+                        var newUser = new User
+                        {
+                            id = UserId,
+                            Name = newName,
+                            Surname = newSurname,
+                            PESEL = newPesel,
+                            PhoneNumber = newPhone,
+                            Login = newLogin,
+                            Password = newPassword,
+                            UserType = newRole,
+                        };
 
                     updated = DbManager.EditUserAdmin(oldUser, newUser);
                 }
@@ -225,15 +229,17 @@ namespace MedLabTab.Views.OtherViews
                 {
                     MessageBox.Show("Profil został zaktualizowany!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    if (_currentUser != null)
+                    if (_editedUser != null)
                     {
-                        _currentUser.Name = txtName.Text.Trim();
-                        _currentUser.PhoneNumber = txtPhone.Text.Trim();
-                        _currentUser.Login = txtLogin.Text.Trim();
+                        _editedUser.Name = newName;
+                        _editedUser.Surname = newSurname;
+                        _editedUser.PESEL = newPesel;
+                        _editedUser.PhoneNumber = newPhone;
+                        _editedUser.UserType = newRole;
                         if (!string.IsNullOrEmpty(txtPassword.Password))
-                            _currentUser.Password = txtPassword.Password.Trim();
+                            _editedUser.Password = txtPassword.Password.Trim();
                     }
-                    if (_editedUser!=null)
+                    if (_currentUser.UserType==1)
                     {
                         AllUsers allUsers = new AllUsers(_currentUser);
                         allUsers.LoadUsers();
@@ -242,7 +248,7 @@ namespace MedLabTab.Views.OtherViews
                     }
                     else
                     {
-                        _parentWindow.Show();
+                        _parentWindow?.Show();
                         this.Close();
                     }
                 }
@@ -280,7 +286,9 @@ namespace MedLabTab.Views.OtherViews
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            _parentWindow.Show();
+            AllUsers allUsers = new AllUsers(_currentUser);
+            allUsers.LoadUsers();
+            allUsers.Show();
             this.Close();
         }
 
@@ -407,6 +415,5 @@ namespace MedLabTab.Views.OtherViews
                 this.Close();
             }
         }
-
     }
 }
