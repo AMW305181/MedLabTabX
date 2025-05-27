@@ -10,6 +10,8 @@ using MedLabTab.DatabaseModels;
 using MedLabTab.ViewModels;
 using MedLabTab.Views.OtherViews;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using static System.Formats.Asn1.AsnWriter;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MedLabTab.DatabaseManager
@@ -105,10 +107,36 @@ namespace MedLabTab.DatabaseManager
             }
         }
 
-
         public static void InitForTesting(MedLabContext testContext)
         {
             db = testContext;
+        }
+
+
+       public static bool AddCategory(string category)
+        {
+            using (var context = new MedLabContext())
+            //using (var scope = new TransactionScope(TransactionScopeOption.Required, options))
+            {
+                try
+                {
+                    bool categoryExists = db.CategoryDictionaries.Any(cd => cd.CategoryName.ToLower() == category.ToLower());
+                    if (!categoryExists)
+                    {
+                        var newCategory = new CategoryDictionary
+                        {
+                            CategoryName = category
+                        };
+                        context.CategoryDictionaries.Add(newCategory);
+                        context.SaveChanges();
+                        //scope.Complete();
+                        return true;
+                    }
+                    // scope.Complete();
+                    return false;
+                }
+                catch { return false; }
+            }
         }
 
     }
