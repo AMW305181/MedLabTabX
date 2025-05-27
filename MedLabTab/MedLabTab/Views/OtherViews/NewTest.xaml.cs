@@ -22,6 +22,7 @@ namespace MedLabTab.Views.OtherViews
             PriceTextBox.PreviewTextInput += NumberValidationTextBox;
             _parentWindow = parentWindow;
             _currentUser = currentUser;
+            CategoryComboBox.SelectionChanged += CategoryComboBox_SelectionChanged;
         }
 
         private void InitializeCategories()
@@ -36,8 +37,12 @@ namespace MedLabTab.Views.OtherViews
                     Tag = cat.id
                 });
             }
-
-            if (CategoryComboBox.Items.Count > 0)
+            CategoryComboBox.Items.Add(new ComboBoxItem
+            {
+                Content = "Nowa kategoria...",
+                Tag = -1
+            });
+            if (CategoryComboBox.Items.Count > 1)
                 CategoryComboBox.SelectedIndex = 0;
         }
 
@@ -123,6 +128,104 @@ namespace MedLabTab.Views.OtherViews
             }
 
             return true;
+        }
+
+        private void ShowNewCategoryDialog()
+        {
+            var dialog = new Window
+            {
+                Title = "Nowa kategoria",
+                Width = 300,
+                Height = 150,
+                WindowState = WindowState.Normal,
+                ResizeMode = ResizeMode.NoResize,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = this
+            };
+
+            var stackPanel = new StackPanel { Margin = new Thickness(10) };
+            var textBoxStyle = this.FindResource("TextBox") as Style;
+            var textBox = new TextBox { Margin = new Thickness(0, 0, 0, 10),
+                                        Style = textBoxStyle};
+            var buttonStyle = this.FindResource("NavButtonStyle2") as Style;
+            var deletebuttonStyle = this.FindResource("DeleteButtonStyle") as Style;
+            var buttonPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+
+            var Okbutton = new Button
+            {
+                Content = "Zapisz",
+                Margin = new Thickness(5, 0, 0, 0),
+                Width = 100,
+                Style = buttonStyle
+            };
+
+            var Cancelbutton = new Button
+            {
+                Content = "Anuluj",
+                Margin = new Thickness(5, 0, 0, 0),
+                Width = 100,
+                Style = deletebuttonStyle
+            };
+            buttonPanel.Children.Add(Okbutton);
+            buttonPanel.Children.Add(Cancelbutton);
+
+            Okbutton.Click += (s, e) =>
+            {
+                string newCategoryName = textBox.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(newCategoryName))
+                {
+                    MessageBox.Show("Nazwa kategorii nie może być pusta.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                bool exists = DbManager.GetCategories().Any(c =>
+                    string.Equals(c.CategoryName, newCategoryName, StringComparison.OrdinalIgnoreCase));
+
+                if (exists)
+                {
+                    MessageBox.Show("Kategoria o podanej nazwie już istnieje.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                bool added = DbManager.AddCategory(newCategoryName);
+
+                if (added)
+                {
+                    MessageBox.Show("Nowa kategoria została dodana.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                    InitializeCategories(); 
+                    dialog.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Wystąpił błąd podczas dodawania kategorii.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            };
+
+            Cancelbutton.Click += (s, e) => dialog.Close();
+
+            stackPanel.Children.Add(new TextBlock { Text = "Wprowadź nazwę nowej kategorii:" });
+            stackPanel.Children.Add(textBox);
+            stackPanel.Children.Add(buttonPanel);
+            dialog.Content = stackPanel;
+
+            dialog.ShowDialog();
+        }
+
+        private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CategoryComboBox.SelectedItem is ComboBoxItem selectedItem && (int)selectedItem.Tag == -1)
+            {
+                ShowNewCategoryDialog();
+                CategoryComboBox.SelectionChanged -= CategoryComboBox_SelectionChanged;
+                CategoryComboBox.SelectedIndex = 0;
+                CategoryComboBox.SelectionChanged += CategoryComboBox_SelectionChanged;
+            }
         }
 
 

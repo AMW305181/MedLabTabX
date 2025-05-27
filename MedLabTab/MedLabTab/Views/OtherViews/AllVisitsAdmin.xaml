@@ -484,7 +484,7 @@
                         <DataGridTextColumn Header="Pacjent" Binding="{Binding Patient}" Width="*" />
                         <DataGridTextColumn Header="Pielęgniarka" Binding="{Binding Nurse}" Width="*" />
                         <DataGridTextColumn Header="Status płatności" Binding="{Binding PaymentStatus}" Width="*" />
-                        <DataGridTemplateColumn Header="Badanie aktywne" Width="*">
+                        <DataGridTemplateColumn Header="Wizyta aktywna" Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock>
