@@ -104,6 +104,14 @@ namespace MedLabTab.DatabaseManager
                 catch { return false; }
             }
         }
+
+
+        public static void InitForTesting(MedLabContext testContext)
+        {
+            db = testContext;
+        }
+
     }
+
 }
 
