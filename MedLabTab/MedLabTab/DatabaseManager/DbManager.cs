@@ -107,6 +107,12 @@ namespace MedLabTab.DatabaseManager
             }
         }
 
+        public static void InitForTesting(MedLabContext testContext)
+        {
+            db = testContext;
+        }
+
+
        public static bool AddCategory(string category)
         {
             using (var context = new MedLabContext())
@@ -132,6 +138,8 @@ namespace MedLabTab.DatabaseManager
                 catch { return false; }
             }
         }
+
     }
+
 }
 
