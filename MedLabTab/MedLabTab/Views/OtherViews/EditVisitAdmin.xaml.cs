@@ -28,7 +28,7 @@ namespace MedLabTab.Views.OtherViews
         private User _currentUser;
         private float visitCost;
         private int visitTime=15;
-        int selectedSchedule = -1;
+        private int selectedSchedule = -1;
         public EditVisitAdmin(Visit visitToEdit, User currentUser,AllVisitsAdmin parentWindow)
         {
             InitializeComponent();
@@ -39,10 +39,15 @@ namespace MedLabTab.Views.OtherViews
 
             switch (_currentUser.UserType)
             {
+                case 1:
+                    IsPaidCheckBox.Visibility = Visibility.Visible;
+                    IsActiveCheckBox.Visibility = Visibility.Visible;
+                    PatientComboBox.IsEnabled = true;
+                    break;
                 case 4:
                     IsPaidCheckBox.Visibility = Visibility.Collapsed;
+                    IsActiveCheckBox.Visibility = Visibility.Collapsed;
                     PatientComboBox.IsEnabled = false;
-                    
                     break;
             }
         }
@@ -68,7 +73,6 @@ namespace MedLabTab.Views.OtherViews
         {
             visitCost = _originalVisit.Cost;
            
-
             //załadowanie listy pacjentów
             PatientComboBox.Items.Clear();
             var users = DbManager.GetActivePatients();
@@ -108,7 +112,7 @@ namespace MedLabTab.Views.OtherViews
 
             if (TestsComboBox.Items.Count > 0)
                 TestsComboBox.SelectedIndex = 0;
-            
+
             //załadowanie badań
             TestsListBox.Items.Clear();
             var selectedTests = DbManager.GetTestsInVisit(_originalVisit.id)
@@ -124,44 +128,23 @@ namespace MedLabTab.Views.OtherViews
 
             UpdateValues();
 
-            //załadowanie listy dostepnych terminow
-            DateComboBox.Items.Clear();
-            var dates = DbManager.GetAvailableSlotsForDate(date); 
-            int selectedSchedule = -1;
+
+            // Ustaw kalendarz (z datą i godziną z wizyty)
             if (_originalVisit.TimeSlotId.HasValue)
             {
                 var schedule = DbManager.GetSchedule(_originalVisit.TimeSlotId.Value);
                 if (schedule != null)
                 {
-                    selectedSchedule = schedule.id;
+                    var fullVisitDate = schedule.Date.ToDateTime(schedule.Time);
+                    VisitCalendar.SelectedDate = fullVisitDate;
+                    VisitCalendar.DisplayDate = fullVisitDate;
                 }
             }
-            //foreach (var date in dates)
-            //{
-            //    var item = new ComboBoxItem
-            //    {
-            //        Content = date.Date + " " + date.Time,
-            //        Tag = date.id
-            //    };
 
-            //    DateComboBox.Items.Add(item);
 
-            //    if (date.id == selectedSchedule)
-            //    {
-            //        DateComboBox.SelectedItem = item;
-            //    }
-            //}
-            foreach (var date in dates)
-            {
-                DateComboBox.Items.Add(new ComboBoxItem
-                {
-                    Content = date.Date + " " + date.Time,
-                    Tag = date.id
-                });
-            }
-
-            if (DateComboBox.Items.Count > 0)
-                DateComboBox.SelectedIndex = 0;
+            // Załaduj sloty czasowe zgodne z datą wizyty
+            DateOnly visitDateOnly = _originalVisit.TimeSlot?.Date ?? DateOnly.FromDateTime(DateTime.Today);
+            UpdateAvailableTimeSlots(visitDateOnly);
 
             IsActiveCheckBox.IsChecked = _originalVisit.IsActive;
             IsPaidCheckBox.IsChecked = _originalVisit.PaymentStatus;
@@ -186,21 +169,29 @@ namespace MedLabTab.Views.OtherViews
                 string patientPESEL = (string)selectedPatient.Tag;
 
                 var selectedTimeSlot = (ComboBoxItem)DateComboBox.SelectedItem;
+                int timeSlotId = (int)selectedTimeSlot.Tag;
+
                 bool editedVisit = false;
-                if (selectedTimeSlot.Tag is int timeId)
+
+                bool isPaid = IsPaidCheckBox.IsChecked == true;
+
+                if (_currentUser.UserType == 4)
                 {
+                    isPaid = _originalVisit.PaymentStatus;
+                }
+
                     var newVisit = new Visit
                     {
-                        //id = _originalVisit.id,
+                        id = _originalVisit.id,
                         Cost = visitCost,
-                        PaymentStatus = IsPaidCheckBox.IsChecked == true,
+                        PaymentStatus = isPaid,
                         IsActive = IsActiveCheckBox.IsChecked == true,
                         PatientId = (DbManager.GetUser(patientPESEL)).id,
-                        TimeSlotId = timeId,
+                        TimeSlotId = timeSlotId,
 
                     };
-                     editedVisit= DbManager.EditVisit(_originalVisit, newVisit);
-                }
+                    editedVisit = DbManager.EditVisit(_originalVisit, newVisit);
+
   
                 bool addedAllTests = true;
 
@@ -214,12 +205,12 @@ namespace MedLabTab.Views.OtherViews
                         {
                             var test = DbManager.GetTest(testId);
 
-                            var newTestHistory = new TestHistory
+                            TestHistory newTestHistory = new TestHistory
                             {
                                 VisitId = _originalVisit.id,
                                 TestId = test.id,
                                 PatientId = DbManager.GetUser(patientPESEL).id,
-                                Status = IsPaidCheckBox.IsChecked == true ? 2 : 1, // jezeli jest zaplacone to do etapu 2 a jak nie to czeka na 1
+                                Status = isPaid ? 2 : 1,
                                 AnalystId = null,
                             };
 
@@ -236,6 +227,16 @@ namespace MedLabTab.Views.OtherViews
                 if (editedVisit && addedAllTests)
                 {
                     MessageBox.Show("Wizyta została zedytowana pomyślnie!", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    //aktualizacja widoku
+                    if (_parentWindow is AllVisitsAdmin allVisitsWindow)
+                    {
+                        allVisitsWindow.LoadVisits();
+                    }
+                    else if (_parentWindow is MyVisits myVisitsWindow)
+                    {
+                        myVisitsWindow.LoadVisits();
+                    }
                     this.Close();
                     _parentWindow?.Show();
                 }
@@ -260,7 +261,6 @@ namespace MedLabTab.Views.OtherViews
                 });
 
                 Test test = DbManager.GetTest(testId);
-
                 visitCost += test.Price;
 
                 UpdateValues();
@@ -324,6 +324,36 @@ namespace MedLabTab.Views.OtherViews
                 DateComboBox.Items.Clear();
             }
         }
+        //private void UpdateAvailableTimeSlots(DateOnly date)
+        //{
+        //    DateComboBox.Items.Clear();
+        //    List<Schedule> availableTimeSlots = DbManager.GetAvailableSlotsForDate(date);
+
+        //    if (availableTimeSlots == null || availableTimeSlots.Count == 0)
+        //    {
+        //        // Wyświetl MessageBox z informacją o braku terminów
+        //        MessageBox.Show("Brak terminów tego dnia", "Informacja",
+        //                        MessageBoxButton.OK, MessageBoxImage.Information);
+        //        return;
+        //    }
+        //    foreach (var timeSlot in availableTimeSlots)
+        //    {
+        //        string timeString = timeSlot.Time.ToString("HH:mm");
+        //        string displayText = timeString;
+        //        ComboBoxItem item = new ComboBoxItem
+        //        {
+        //            Content = displayText,
+        //            Tag = timeSlot.id,
+        //        };
+        //        DateComboBox.Items.Add(item);
+        //    }
+
+        //    if (DateComboBox.Items.Count > 0)
+        //    {
+        //        DateComboBox.SelectedIndex = 0;
+        //    }
+        //}
+
         private void UpdateAvailableTimeSlots(DateOnly date)
         {
             DateComboBox.Items.Clear();
@@ -336,22 +366,41 @@ namespace MedLabTab.Views.OtherViews
                                 MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-            foreach (var timeSlot in availableTimeSlots)
+
+            Schedule? originalSchedule = null;
+
+            originalSchedule = DbManager.GetSchedule(_originalVisit.TimeSlotId.Value);
+
+            if (originalSchedule != null && originalSchedule.Date == date) 
             {
-                string timeString = timeSlot.Time.ToString("HH:mm");
-                string displayText = timeString;
+                availableTimeSlots.Add(originalSchedule);
+            }
+
+            // Sortowanie i dodanie do ComboBox
+            foreach (var timeSlot in availableTimeSlots.OrderBy(s => s.Time))
+            {
+                string displayText = timeSlot.Time.ToString("HH:mm");
+
                 ComboBoxItem item = new ComboBoxItem
                 {
                     Content = displayText,
                     Tag = timeSlot.id,
                 };
+
                 DateComboBox.Items.Add(item);
+
+                if (item.Tag is int id && id == _originalVisit.TimeSlotId)
+                {
+                    DateComboBox.SelectedItem = item;
+                }
             }
 
-            if (DateComboBox.Items.Count > 0)
+            // jeśli nie udało się znaleźć, ustaw pierwszy
+            if (DateComboBox.SelectedItem == null && DateComboBox.Items.Count > 0)
             {
                 DateComboBox.SelectedIndex = 0;
             }
         }
+
     }
 }

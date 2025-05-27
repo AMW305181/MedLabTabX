@@ -23,11 +23,11 @@ namespace MedLabTab.Views.OtherViews
     public partial class EditSchedule : Window
     {
         TimeOnly StartTime, EndTime;
-        private User currentUser;
+        private SignedInUser currentUser;
         private User _selectedNurse;
         private bool _isInitialLoad = true;
         private List<Schedule> _availableSlots;
-        public EditSchedule(User user)
+        public EditSchedule(SignedInUser user)
         {
             InitializeComponent();
             InitializeTimeComboBoxes();

@@ -34,11 +34,12 @@ public partial class Visit
 
 
     public string DisplayDate => TimeSlot?.Date.ToString("dd.MM.yyyy") ?? "Brak daty";
-    public string DisplayTime => TimeSlot?.Time.ToString("hh\\:mm") ?? "Brak godziny";
+    public string DisplayTime => TimeSlot?.Time.ToString("HH\\:mm") ?? "Brak godziny";
     public string DisplayNurse => $"{TimeSlot?.Nurse?.Name} {TimeSlot?.Nurse?.Surname}" ?? "Nie przypisano";
     public string DisplayTests => TestHistories?.Any() == true
         ? string.Join(", ", TestHistories.Select(th => th.Test?.TestName ?? "Nieznane badanie"))
         : "Brak badań";
     public string DisplayCost => Cost.ToString("0.00") + " zł";
+    public string DisplayPatient => $"{Patient?.Name} {Patient?.Surname}" ?? "Nieznany pacjent";
 
 }

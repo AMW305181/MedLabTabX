@@ -21,14 +21,14 @@ namespace MedLabTab.Views.OtherViews
 {
     public partial class AllVisitsAdmin : Window
     {
-        private SignedInUser _currentUser;
+        public SignedInUser _currentUser;
         private List<dynamic> _allVisits;  
         private List<dynamic> _filteredVisits;
 
         public AllVisitsAdmin(SignedInUser currentUser)
         {
             InitializeComponent();
-            LoadVisits(); // Załaduj dane po inicjalizacji okna
+            LoadVisits();
             _currentUser = currentUser;
             txtSearch.TextChanged += TxtSearch_TextChanged;
             switch (_currentUser.UserType)
@@ -63,10 +63,11 @@ namespace MedLabTab.Views.OtherViews
                     PaymentStatus = (v.PaymentStatus == true) ? "Opłacona" : "Nieopłacona",
                     v.IsActive,
                     OriginalVisit = v,
+                    CanDelete = v.IsActive
                 }).ToList<dynamic>();
 
                 _filteredVisits = new List<dynamic>(_allVisits);
-                VisitsDataGrid.ItemsSource = _allVisits;
+                VisitsDataGrid.ItemsSource = _filteredVisits;
             }
             else
             {
@@ -78,25 +79,37 @@ namespace MedLabTab.Views.OtherViews
         {
             Button button = sender as Button;
 
-            Visit selectedVisit = (sender as Button)?.CommandParameter as Visit;
+            Visit selectedVisit = button?.CommandParameter as Visit;
 
-            if (selectedVisit.TestHistories.Any(t => t.Status <= 2))
+            if (selectedVisit == null)
             {
-                if (selectedVisit != null)
-                {
-                    var editVisitWindow = new EditVisitAdmin(selectedVisit,_currentUser, this);
-                    editVisitWindow.Show();
-                    this.Hide();
-                }
-                else
-                {
-                    MessageBox.Show("Nie udało się wczytać danych wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                MessageBox.Show("Nie udało się wczytać danych wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
+
+            // Sprawdzenie, czy czas wizyty już nie minął
+            DateTime visitDateTime = selectedVisit.TimeSlot.Date.ToDateTime(selectedVisit.TimeSlot.Time);
+
+            if (visitDateTime < DateTime.Now)
+            {
+                MessageBox.Show("Nie można edytować wizyty, której czas już minął.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+
+            if (selectedVisit.TestHistories.All(t => t.Status <= 1))
+            {
+                EditVisitAdmin editVisitAdmin = new EditVisitAdmin(selectedVisit, _currentUser, this);
+                editVisitAdmin.Show();
+                this.Hide();
+            }
+
             else
             {
-                MessageBox.Show("Nie można edytować już odbytej wizyty.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Nie można edytować już opłaconej wizyty.", "Błąd",
+                          MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+
         }
 
         private void Deactivate_Click(object sender, RoutedEventArgs e)
@@ -107,7 +120,7 @@ namespace MedLabTab.Views.OtherViews
             if (selectedVisit != null)
             {
                 var result = MessageBox.Show(
-                    $"Czy na pewno chcesz anulować wizytę \"{selectedVisit.id}\"?",
+                    $"Czy na pewno chcesz anulować wizytę pacjenta {selectedVisit.DisplayPatient} z dnia {selectedVisit.DisplayDate} {selectedVisit.DisplayTime}?",
                     "Potwierdzenie anulowania",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
@@ -119,7 +132,10 @@ namespace MedLabTab.Views.OtherViews
                     if (deleted)
                     {
                         MessageBox.Show("Wizyta została anulowana.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-                        LoadVisits(); // Odświeżenie tabeli
+                        LoadVisits();
+                        VisitsDataGrid.ItemsSource = null;
+                        VisitsDataGrid.ItemsSource = _filteredVisits;
+
                     }
                     else
                     {
