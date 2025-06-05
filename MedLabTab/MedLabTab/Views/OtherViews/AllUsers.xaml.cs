@@ -28,14 +28,29 @@ namespace MedLabTab.Views.OtherViews
         private SignedInUser _currentUser;
         private List<User> _allUsers;
         private List<User> _filteredUsers;
+        
         public AllUsers(SignedInUser currentUser)
         {
             InitializeComponent();
             _currentUser = currentUser;
+            _allUsers = GetAllUsers() ?? new List<User>(); ;
+            _filteredUsers = new List<User>(_allUsers);
             LoadUsers();
             txtSearch.TextChanged += TxtSearch_TextChanged;
         }
 
+        public List<User> GetAllUsers()
+        {
+            using (var db = new MedLabContext())
+            {
+                try
+                {
+                    List<User> AllUsers = db.Users.ToList();
+                    return AllUsers;
+                }
+                catch { return null; }
+            }
+        }
 
         public void LoadUsers()
         {

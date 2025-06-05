@@ -168,7 +168,7 @@ namespace MedLabTab.Views.OtherViews
                     string date = vw.Date != null
                     ? $"{vw.Date:yyyy-MM-dd}|{vw.Date:d}|{vw.Date:dd.MM.yyyy}".ToLower()
                     : "";
-                    string time = vw.Time?.ToString(@"HH\:mm") ?? "";
+                    string time = (vw.Time as string)?.ToLower() ?? "";
                     string tests = (vw.Tests as string)?.ToLower() ?? "";
                     string patient = (vw.Patient as string)?.ToLower() ?? "";
                     string nurse = (vw.Nurse as string)?.ToLower() ?? "";
