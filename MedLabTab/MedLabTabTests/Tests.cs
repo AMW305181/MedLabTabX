@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using MedLabTab.DatabaseModels;
 using MedLabTab.DatabaseManager;
+using MedLabTab.ViewModels;
 
 namespace MedLabTabTests
 {
@@ -14,10 +15,29 @@ namespace MedLabTabTests
         [TestInitialize]
         public void Setup()
         {
-            // Inicjalizacja InMemoryDb
             _contextOptions = new DbContextOptionsBuilder<MedLabContext>()
                 .UseInMemoryDatabase(databaseName: $"TestDb_{System.Guid.NewGuid()}")
                 .Options;
+        }
+
+        private User CreateUser(MedLabContext context, string login, string name, string surname, string pesel, string phone, string password, int userType)
+        {
+            var user = new User
+            {
+                Login = login,
+                Password = password,
+                UserType = userType,
+                IsActive = true,
+                Name = name,
+                Surname = surname,
+                PESEL = pesel,
+                PhoneNumber = phone,
+            };
+
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            return user;
         }
 
         [TestMethod]
@@ -41,33 +61,8 @@ namespace MedLabTabTests
             context.Tests.Add(test);
             context.SaveChanges();
 
-            var patient = new User
-            {
-                Login = "pacjent_testowy",
-                Password = "haslo123",
-                UserType = 4,
-                IsActive = true,
-                Name = "Jan",
-                Surname = "Kowalski",
-                PESEL = "12345678901",
-                PhoneNumber = "1234567890",
-            };
-            context.Users.Add(patient);
-            context.SaveChanges();
-
-            var nurse = new User
-            {
-                Login = "nurse_testowa",
-                Password = "haslo123",
-                UserType = 2,
-                IsActive = true,
-                Name = "Anna",
-                Surname = "Nowak",
-                PESEL = "98765432101",
-                PhoneNumber = "1234567890",
-            };
-            context.Users.Add(nurse);
-            context.SaveChanges();
+            var patient = CreateUser(context, "pacjent_testowy", "Jan", "Kowalski", "12345678901", "1234567890", "haslo123", 4);
+            var nurse = CreateUser(context, "nurse_testowa", "Anna", "Nowak", "98765432101", "1234567890", "haslo123", 2);
 
             var scheduleSlot = new Schedule
             {
@@ -122,7 +117,6 @@ namespace MedLabTabTests
         {
             using var context = new MedLabContext(_contextOptions);
 
-            // Init test context
             DbManager.InitForTesting(context);
 
             var category = new CategoryDictionary { CategoryName = "Diagnostyka" };
@@ -139,17 +133,14 @@ namespace MedLabTabTests
                 IsActive = true
             };
 
-            // Act
             var nameTaken = DbManager.IsTestNameTaken(testName);
-            Assert.IsFalse(nameTaken, "Nazwa testu powinna byæ wolna");
+            Assert.IsFalse(nameTaken);
 
             var result = DbManager.AddTest(test);
 
-            // Assert
-            Assert.IsTrue(result, "Dodanie testu przez DbManager powinno siê powieœæ");
-
+            Assert.IsTrue(result);
             var savedTest = context.Tests.FirstOrDefault(t => t.TestName == testName);
-            Assert.IsNotNull(savedTest, "Test powinien zostaæ zapisany w bazie");
+            Assert.IsNotNull(savedTest);
             Assert.AreEqual("Opis testu integracyjnego", savedTest.Description);
             Assert.AreEqual(category.id, savedTest.Category);
         }
@@ -157,13 +148,11 @@ namespace MedLabTabTests
         [TestMethod]
         public void IntegrationTest_ShouldAddNewUser_WhenValidInputs()
         {
-            // Arrange
             using var context = new MedLabContext(_contextOptions);
 
-            // Init test context
             DbManager.InitForTesting(context);
 
-            // Dane testowe, symuluj¹ce dane z formularza
+            // Dane testowe
             string name = "Jan";
             string surname = "Kowalski";
             string pesel = "12345678901";
@@ -173,7 +162,6 @@ namespace MedLabTabTests
             string repeatPassword = "haslo123";
             int userType = 4; // Pacjent
 
-            // Symulacja walidacji
             bool valid = !string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(surname)
                 && !string.IsNullOrWhiteSpace(pesel)
@@ -187,11 +175,9 @@ namespace MedLabTabTests
 
             Assert.IsTrue(valid, "Walidacja danych powinna przejœæ.");
 
-            // Sprawdzenie, czy login i PESEL s¹ wolne
             Assert.IsFalse(DbManager.IsLoginTaken(login), "Login nie powinien byæ zajêty.");
             Assert.IsFalse(DbManager.IsPESELTaken(pesel), "PESEL nie powinien byæ zajêty.");
 
-            // Utworzenie u¿ytkownika
             var newUser = new User
             {
                 Name = name,
@@ -199,23 +185,27 @@ namespace MedLabTabTests
                 PESEL = pesel,
                 PhoneNumber = phone,
                 Login = login,
-                Password = password,
+                Password = password, 
                 UserType = userType,
                 IsActive = true
             };
 
-            // Act – dodanie u¿ytkownika do bazy
+            // Act
             bool result = DbManager.AddUser(newUser);
 
             // Assert
             Assert.IsTrue(result, "U¿ytkownik powinien zostaæ poprawnie dodany.");
+
             var savedUser = context.Users.FirstOrDefault(u => u.Login == login);
-            Assert.IsNotNull(savedUser);
+            Assert.IsNotNull(savedUser, "U¿ytkownik powinien istnieæ w bazie.");
             Assert.AreEqual(name, savedUser.Name);
             Assert.AreEqual(surname, savedUser.Surname);
             Assert.AreEqual(pesel, savedUser.PESEL);
             Assert.AreEqual(phone, savedUser.PhoneNumber);
             Assert.AreEqual(userType, savedUser.UserType);
+            string hashedPassword = DbManager.GetHashedPassword(login);
+            Assert.IsNotNull(hashedPassword, "Zapisane has³o powinno istnieæ.");
+            Assert.IsTrue(PasswordHasher.Verify(password, hashedPassword), "Zapisane has³o powinno byæ poprawne.");
         }
 
     }
