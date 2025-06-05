@@ -309,21 +309,20 @@
                         <Label Content="Wybierz termin:" FontSize="14" FontWeight="SemiBold" Margin="0,5"/>
 
                         <!-- Kalendarz -->
-                        <!-- Kalendarz -->
-                        <Calendar x:Name="VisitCalendar" 
-                              Margin="0,5" 
-                              Width="452" 
-                              Height="282"
-                              SelectedDatesChanged="VisitCalendar_SelectedDatesChanged"
-                              DisplayMode="Month" 
-                              SelectionMode="SingleDate">
-                            <Calendar.Resources>
-                                <!-- Kolor wybranego dnia -->
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF69B4"/>
-                                <!-- Kolor tekstu wybranego dnia -->
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
-                            </Calendar.Resources>
-                        </Calendar>
+                        <Border Margin="10,10" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="5"
+                        Height="300" Width="350">
+                            <Viewbox Stretch="Uniform">
+                                <Calendar x:Name="VisitCalendar" 
+                                SelectedDatesChanged="VisitCalendar_SelectedDatesChanged"
+                                DisplayMode="Month" 
+                                SelectionMode="SingleDate">
+                                    <Calendar.Resources>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF69B4"/>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
+                                    </Calendar.Resources>
+                                </Calendar>
+                            </Viewbox>
+                        </Border>
 
                         <!-- Dostępne godziny -->
                         <Label Content="Dostępne godziny:" FontSize="14" FontWeight="SemiBold" Margin="0,15,0,5"/>
