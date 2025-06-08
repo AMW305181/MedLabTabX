@@ -155,12 +155,17 @@ namespace MedLabTab.Views.OtherViews
                                     foreach (ListBoxItem item in TestsListBox.Items)
                                     {
                                         int testId = (int)item.Tag;
+                                        int status = 1;
+                                        if (testPaymentStatus)
+                                        {
+                                            status = 2;
+                                        }
                                         TestHistory testHistory = new TestHistory
                                         {
                                             VisitId = visitId,
                                             TestId = testId,
                                             PatientId = testPatientId,
-                                            Status = 1, // Default status
+                                            Status = status,
                                             AnalystId = null // Default null
                                         };
                                         db.TestHistories.Add(testHistory);
@@ -216,11 +221,11 @@ namespace MedLabTab.Views.OtherViews
                 {
                     foreach (var slot in _AvaibleSlots)
                     {
-                        string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
+                        //string nurseInfo = $"{slot.Nurse.Name} {slot.Nurse.Surname}";
                         string timeInfo = slot.Time.ToString("HH:mm");
                         ListBoxItem item = new ListBoxItem
                         {
-                            Content = $"{timeInfo} - {nurseInfo}",
+                            Content = $"{timeInfo}",
                             Tag = slot.id
                         };
                         TimeComboBox.Items.Add(item);

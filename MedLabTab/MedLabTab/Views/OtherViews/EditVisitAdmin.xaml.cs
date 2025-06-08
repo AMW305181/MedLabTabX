@@ -204,13 +204,17 @@ namespace MedLabTab.Views.OtherViews
                         if (item.Tag is int testId)
                         {
                             var test = DbManager.GetTest(testId);
-
+                            int status = 1;
+                            if (isPaid)
+                            {
+                                status = 2;
+                            }
                             TestHistory newTestHistory = new TestHistory
                             {
                                 VisitId = _originalVisit.id,
                                 TestId = test.id,
                                 PatientId = DbManager.GetUser(patientPESEL).id,
-                                Status = isPaid ? 2 : 1,
+                                Status = status,
                                 AnalystId = null,
                             };
 
